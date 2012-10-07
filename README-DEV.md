@@ -1,9 +1,9 @@
 #Setting up a Dev Environment
-I highly recommend using linux for development, preferable Ubuntu 12.04, since
+I highly recommend using linux for development, preferably Ubuntu 12.04, since
 all of the commands I'll list were tested on it. Even if you don't have Ubuntu, 
 installing it in virtualbox would take far less time than figuring out how
-to get all of this to work on your current machine. Your choice. I'm assuming
-you have Python 2.7.x already installed. Django is not compatible with
+to get all of this to work on your current machine. I'm assuming
+you have Python 2.7.x already installed -- Django is not compatible with
 Python 3.x
 
 The only things you'll need to install outside of your virtual environment
@@ -46,26 +46,28 @@ Then edit the Postgres permissions file (as root) in
 `/etc/postgresql/9.1/main/pg_hba.conf` and add the following:
 
      local      django_db   django_login   md5
-     # if that doesn't work, try
+     # if that doesn't work (errors running syncdb later), try
      local      all         all            md5
 
 Finally, restart postgres:
 
      sudo /etc/init.d/postgresql restart
 
-Note: when setting up the python psycopg module (it's now in the
+Note: when setting up the python psycopg module (for postgres - it's now in the
 requirements.txt), I encountered an error. It was resolved
 by running
 
      sudo apt-get install libpq-dev python-dev # for Ubuntu
 
-See [this](http://stackoverflow.com/questions/5420789/how-to-install-psycopg2-with-pip-on-python) for Windows / Mac installation instructions.
+See [this](http://stackoverflow.com/questions/5420789/how-to-install-psycopg2-with-pip-on-python)
+for Windows / Mac psycopg2 installation instructions.
 
 ## virtualenv and Python Dependencies
 Virtual environments allow you to install python packages locally for 
-each project. That way you can work with different versions of python,
-django, etc. and not have to worry about conflicts. This is also the
-recommended way to setup a project that will be deployed to Heroku.
+each project. You can then work with different versions of python,
+django, etc. and not worry about conflicts. This is also the
+recommended way to setup a project that will be deployed to Heroku. So, 
+install virtualenv:
 
      sudo apt-get install python-virtualenv
 
@@ -126,7 +128,7 @@ webserver. This is specified in the `Procfile`. If you want to use gunicorn
 locally, you can run `foreman start`.
 
 #Deployment
-If you don't already have the Heroku login info, send me an email.
+If you need a Heroku collaborator invite, send me an email.
 To deploy, you'll need to install the
 [Heroku Toolbelt](https://toolbelt.heroku.com/). There's a Ruby gem
 you can use if you're not on Debian/Ubuntu. Otherwise:
@@ -145,6 +147,10 @@ and running the following command:
      git push heroku master
 
 Check it out at [http://tiletothetop.herokuapp.com](http://tiletothetop.herokuapp.com)
+
+It may take a few seconds to load initially. This is because we're on a free plan
+and Heroku idles our dyno after an hour of inactivity. It should only cause
+a few seconds delay for the first request as the dyno starts up.
 
 #TODO
 * Currently gunicorn isn't being used as the production webserver because it doesn't find
