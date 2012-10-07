@@ -8,9 +8,14 @@ import os
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 GAME_ROOT = os.path.join(os.path.dirname(SITE_ROOT), "game/")
 
-# these are for Heroku
+# Heroku - Load database config info form DATABASE_URL environment variable, if
+# set. Otherwise use our default locally.
 import dj_database_url
-DATABASES = {'default': dj_database_url.config(default='postgres://localhost')}
+
+if not os.environ.has_key('DATABASE_URL'):
+    os.environ['DATABASE_URL'] = 'postgres://django_login:password@localhost/django_db'
+
+DATABASES = {'default': dj_database_url.config(default=os.environ['DATABASE_URL'])}
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -18,6 +23,8 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+"""
+# Not using this anymore
 DATABASES = {
     'default': {
         # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
@@ -29,6 +36,7 @@ DATABASES = {
         'PORT': '',                # Set to empty string for default. Not used with sqlite3.
     }
 }
+"""
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -80,10 +88,6 @@ STATICFILES_DIRS = (
     os.path.join(SITE_ROOT, "static/"),
     os.path.join(GAME_ROOT, "static/"),
 )
-
-print("STATIC DIRS")
-print(os.path.join(SITE_ROOT, "static/"))
-print(os.path.join(GAME_ROOT, "static/"))
 
 # List of finder classes that know how to find static files in
 # various locations.
@@ -170,3 +174,9 @@ LOGGING = {
         },
     }
 }
+
+try:
+     from dev_settings import *
+except ImportError:
+     pass
+
