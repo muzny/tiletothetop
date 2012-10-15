@@ -1,0 +1,902 @@
+[
+	{
+		"model": "game.Word",
+		"pk": 1,
+		"fields": {
+			"word": "abbreviate",
+			"definition": "to shorten, abridge",
+			"part_of_speech": "v"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 2,
+		"fields": {
+			"word": "abstinence",
+			"definition": "the act of refraining from pleasurable activity, e.g., eating or drinking",
+			"part_of_speech": "n"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 3,
+		"fields": {
+			"word": "adulation",
+			"definition": "high praise",
+			"part_of_speech": "n"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 4,
+		"fields": {
+			"word": "adversity",
+			"definition": "misfortune, an unfavorable turn of events",
+			"part_of_speech": "n"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 5,
+		"fields": {
+			"word": "aesthetic",
+			"definition": "pertaining to beauty or the arts",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 6,
+		"fields": {
+			"word": "amicable",
+			"definition": "friendly, agreeable",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 7,
+		"fields": {
+			"word": "anachronistic",
+			"definition": "out-of-date, not attributed to the correct historical period",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 8,
+		"fields": {
+			"word": "anecdote",
+			"definition": "short, usually funny account of an event",
+			"part_of_speech": "n"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 9,
+		"fields": {
+			"word": "anonymous",
+			"definition": "nameless, without a disclosed identity",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 10,
+		"fields": {
+			"word": "antagonist",
+			"definition": "foe, opponent, adversary",
+			"part_of_speech": "n"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 11,
+		"fields": {
+			"word": "arid",
+			"definition": "extremely dry or deathly boring",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 12,
+		"fields": {
+			"word": "assiduous",
+			"definition": "persistent, hard-working",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 13,
+		"fields": {
+			"word": "asylum",
+			"definition": "sanctuary, shelter, place of refuge",
+			"part_of_speech": "n"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 14,
+		"fields": {
+			"word": "benevolent",
+			"definition": "friendly and helpful",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 15,
+		"fields": {
+			"word": "camaraderie",
+			"definition": "trust, sociability amongst friends",
+			"part_of_speech": "n"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 16,
+		"fields": {
+			"word": "censure",
+			"definition": "to criticize harshly",
+			"part_of_speech": "v"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 17,
+		"fields": {
+			"word": "circuitous",
+			"definition": "indirect, taking the longest route",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 18,
+		"fields": {
+			"word": "clairvoyant",
+			"definition": "exceptionally insightful, able to foresee the future",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 19,
+		"fields": {
+			"word": "collaborate",
+			"definition": "to cooperate, work together",
+			"part_of_speech": "v"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 20,
+		"fields": {
+			"word": "compassion",
+			"definition": "sympathy, helpfulness or mercy",
+			"part_of_speech": "n"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 21,
+		"fields": {
+			"word": "compromise",
+			"definition": "to settle a dispute by terms agreeable to both sides",
+			"part_of_speech": "v"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 22,
+		"fields": {
+			"word": "condescending",
+			"definition": "possessing an attitude of superiority, patronizing",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 23,
+		"fields": {
+			"word": "conditional",
+			"definition": "depending on a condition, e.g., in a contract",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 24,
+		"fields": {
+			"word": "conformist",
+			"definition": "person who complies with accepted rules and customs",
+			"part_of_speech": "n"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 25,
+		"fields": {
+			"word": "congregation",
+			"definition": "a crowd of people, an assembly",
+			"part_of_speech": "n"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 26,
+		"fields": {
+			"word": "convergence",
+			"definition": "the state of separate elements joining or coming together",
+			"part_of_speech": "n"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 27,
+		"fields": {
+			"word": "deleterious",
+			"definition": "harmful, destructive, detrimental",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 28,
+		"fields": {
+			"word": "demagogue",
+			"definition": "leader, rabble-rouser, usually appealing to emotion or prejudice",
+			"part_of_speech": "n"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 29,
+		"fields": {
+			"word": "digression",
+			"definition": "the act of turning aside, straying from the main point, esp. in a speech or argument",
+			"part_of_speech": "n"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 30,
+		"fields": {
+			"word": "diligent",
+			"definition": "careful and hard-working",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 31,
+		"fields": {
+			"word": "discredit",
+			"definition": "to harm the reputation of, dishonor or disgrace",
+			"part_of_speech": "v"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 32,
+		"fields": {
+			"word": "disdain",
+			"definition": "to regard with scorn or contempt",
+			"part_of_speech": "v"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 33,
+		"fields": {
+			"word": "divergent",
+			"definition": "separating, moving in different directions from a particular point",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 34,
+		"fields": {
+			"word": "empathy",
+			"definition": "identification with the feelings of others",
+			"part_of_speech": "n"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 35,
+		"fields": {
+			"word": "emulate",
+			"definition": "to imitate, follow an example",
+			"part_of_speech": "v"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 36,
+		"fields": {
+			"word": "enervating",
+			"definition": "weakening, tiring",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 37,
+		"fields": {
+			"word": "enhance",
+			"definition": "to improve, bring to a greater level of intensity",
+			"part_of_speech": "v"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 38,
+		"fields": {
+			"word": "ephemeral",
+			"definition": "momentary, transient, fleeting",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 39,
+		"fields": {
+			"word": "evanescent",
+			"definition": "quickly fading, short-lived, esp. an image",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 40,
+		"fields": {
+			"word": "exasperation",
+			"definition": "irritation, frustration",
+			"part_of_speech": "n"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 41,
+		"fields": {
+			"word": "exemplary",
+			"definition": "outstanding, an example to others",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 42,
+		"fields": {
+			"word": "extenuating",
+			"definition": "excusing, lessening the seriousness of guilt or crime, e.g., of mitigating factors",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 43,
+		"fields": {
+			"word": "florid",
+			"definition": "red-colored, flushed; gaudy, ornate",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 44,
+		"fields": {
+			"word": "fortuitous",
+			"definition": "happening by luck, fortunate",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 45,
+		"fields": {
+			"word": "frugal",
+			"definition": "thrifty, cheap",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 46,
+		"fields": {
+			"word": "hackneyed",
+			"definition": "cliched, worn out by overuse",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 47,
+		"fields": {
+			"word": "haughty",
+			"definition": "arrogant and condescending",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 48,
+		"fields": {
+			"word": "hedonist",
+			"definition": "person who pursues pleasure as a goal",
+			"part_of_speech": "n"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 49,
+		"fields": {
+			"word": "hypothesis",
+			"definition": "assumption, theory requiring proof",
+			"part_of_speech": "n"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 50,
+		"fields": {
+			"word": "impetuous",
+			"definition": "rash, impulsive, acting without thinking",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 51,
+		"fields": {
+			"word": "impute",
+			"definition": "to attribute an action to particular person or group",
+			"part_of_speech": "v"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 52,
+		"fields": {
+			"word": "incompatible",
+			"definition": "opposed in nature, not able to live or work together",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 53,
+		"fields": {
+			"word": "inconsequential",
+			"definition": "unimportant, trivial",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 54,
+		"fields": {
+			"word": "inevitable",
+			"definition": "certain, unavoidable",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 55,
+		"fields": {
+			"word": "integrity",
+			"definition": "decency, honesty, wholeness",
+			"part_of_speech": "n"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 56,
+		"fields": {
+			"word": "intrepid",
+			"definition": "fearless, adventurous",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 57,
+		"fields": {
+			"word": "intuitive",
+			"definition": "instinctive, untaught",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 58,
+		"fields": {
+			"word": "jubilation",
+			"definition": "joy, celebration, exultation",
+			"part_of_speech": "n"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 59,
+		"fields": {
+			"word": "lobbyist",
+			"definition": "person who seeks to influence political events",
+			"part_of_speech": "n"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 60,
+		"fields": {
+			"word": "longevity",
+			"definition": "long life",
+			"part_of_speech": "n"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 61,
+		"fields": {
+			"word": "mundane",
+			"definition": "ordinary, commonplace",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 62,
+		"fields": {
+			"word": "nonchalant",
+			"definition": "calm, casual, seeming unexcited",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 63,
+		"fields": {
+			"word": "novice",
+			"definition": "apprentice, beginner",
+			"part_of_speech": "n"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 64,
+		"fields": {
+			"word": "opulent",
+			"definition": "wealthy",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 65,
+		"fields": {
+			"word": "orator",
+			"definition": "lecturer, speaker",
+			"part_of_speech": "n"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 66,
+		"fields": {
+			"word": "ostentatious",
+			"definition": "showy, displaying wealth",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 67,
+		"fields": {
+			"word": "parched",
+			"definition": "dried up, shriveled",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 68,
+		"fields": {
+			"word": "perfidious",
+			"definition": "faithless, disloyal, untrustworthy",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 69,
+		"fields": {
+			"word": "precocious",
+			"definition": "unusually advanced or talented at an early age",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 70,
+		"fields": {
+			"word": "pretentious",
+			"definition": "pretending to be important, intelligent or cultured",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 71,
+		"fields": {
+			"word": "procrastinate",
+			"definition": "to unnecessarily delay, postpone, put off",
+			"part_of_speech": "v"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 72,
+		"fields": {
+			"word": "prosaic",
+			"definition": "relating to prose; dull, commonplace",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 73,
+		"fields": {
+			"word": "prosperity",
+			"definition": "wealth or success",
+			"part_of_speech": "n"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 74,
+		"fields": {
+			"word": "provocative",
+			"definition": "tending to provoke a response, e.g., anger or disagreement",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 75,
+		"fields": {
+			"word": "prudent",
+			"definition": "careful, cautious",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 76,
+		"fields": {
+			"word": "querulous",
+			"definition": "complaining, irritable",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 77,
+		"fields": {
+			"word": "rancorous",
+			"definition": "bitter, hateful",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 78,
+		"fields": {
+			"word": "reclusive",
+			"definition": "preferring to live in isolation",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 79,
+		"fields": {
+			"word": "reconciliation",
+			"definition": "the act of agreement after a quarrel, the resolution of a dispute",
+			"part_of_speech": "n"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 80,
+		"fields": {
+			"word": "renovation",
+			"definition": "repair, making something new again",
+			"part_of_speech": "n"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 81,
+		"fields": {
+			"word": "resilient",
+			"definition": "quick to recover, bounce back",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 82,
+		"fields": {
+			"word": "restrained",
+			"definition": "controlled, repressed, restricted",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 83,
+		"fields": {
+			"word": "reverence",
+			"definition": "worship, profound respect",
+			"part_of_speech": "n"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 84,
+		"fields": {
+			"word": "sagacity",
+			"definition": "wisdom",
+			"part_of_speech": "n"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 85,
+		"fields": {
+			"word": "scrutinize",
+			"definition": "to observe carefully",
+			"part_of_speech": "v"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 86,
+		"fields": {
+			"word": "spontaneity",
+			"definition": "impulsive action, unplanned events",
+			"part_of_speech": "n"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 87,
+		"fields": {
+			"word": "spurious",
+			"definition": "lacking authenticity, false",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 88,
+		"fields": {
+			"word": "submissive",
+			"definition": "tending to meekness, to submit to the will of others",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 89,
+		"fields": {
+			"word": "substantiate",
+			"definition": "to verify, confirm, provide supporting evidence",
+			"part_of_speech": "v"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 90,
+		"fields": {
+			"word": "subtle",
+			"definition": "hard to detect or describe; perceptive",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 91,
+		"fields": {
+			"word": "superficial",
+			"definition": "shallow, lacking in depth",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 92,
+		"fields": {
+			"word": "superfluous",
+			"definition": "extra, more than enough, redundant",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 93,
+		"fields": {
+			"word": "suppress",
+			"definition": "to end an activity, e.g., to prevent the dissemination of information",
+			"part_of_speech": "v"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 94,
+		"fields": {
+			"word": "surreptitious",
+			"definition": "secret, stealthy",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 95,
+		"fields": {
+			"word": "tactful",
+			"definition": "considerate, skillful in acting to avoid offense to others",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 96,
+		"fields": {
+			"word": "tenacious",
+			"definition": "determined, keeping a firm grip on",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 97,
+		"fields": {
+			"word": "transient",
+			"definition": "temporary, short-lived, fleeting",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 98,
+		"fields": {
+			"word": "venerable",
+			"definition": "respected because of age",
+			"part_of_speech": "adj"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 99,
+		"fields": {
+			"word": "vindicate",
+			"definition": "to clear from blame or suspicion",
+			"part_of_speech": "v"
+		}
+	},
+	{
+		"model": "game.Word",
+		"pk": 100,
+		"fields": {
+			"word": "wary",
+			"definition": "careful, cautious",
+			"part_of_speech": "adj"
+		}
+	}
+]

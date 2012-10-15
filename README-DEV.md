@@ -53,6 +53,7 @@ Finally, restart postgres:
 
      sudo /etc/init.d/postgresql restart
 
+###Additional Postgres trouble
 Note: when setting up the python psycopg module (for postgres - it's now in the
 requirements.txt), I encountered an error. It was resolved
 by running
@@ -61,6 +62,9 @@ by running
 
 See [this](http://stackoverflow.com/questions/5420789/how-to-install-psycopg2-with-pip-on-python)
 for Windows / Mac psycopg2 installation instructions.
+
+If you ever get a `Postgres failed to start` error complaining about `SHMMAX`,
+check out [this stackoverflow thread](http://askubuntu.com/questions/44373/how-to-fix-postgresql-installation).
 
 ## virtualenv and Python Dependencies
 Virtual environments allow you to install python packages locally for 

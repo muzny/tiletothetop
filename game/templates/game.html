@@ -2,13 +2,35 @@
 {% load staticfiles %}
 
 {% block css %}
-<link rel="stylesheet" href="{% static "css/game.css" %}">
+        <link rel="stylesheet" href="{% static "css/game.css" %}">
 {% endblock %}
 
 {% block content %}
-<p>Game goes here.</p>
+            <ul id="words"></ul>
 {% endblock %}
 
 {% block js %}
-<script src="{% static "js/game.js" %}"></script>
+        <script src="{% static "js/game.js" %}"></script>
+        <script>
+            $(function() {
+                var DEBUG = true;
+                $.ajax({
+                    url: "/game/random-words/",
+                    type: "GET",
+                    dataType: "json",
+                    data: {"word_count" : 10},
+                    success: function(data) {
+                        $.each(data, function(index) {
+                            $("#words").append("<li>" +
+                                data[index]["word"] + " - " +
+                                data[index]["definition"] + "</li>");
+                        });
+                    },
+                    error: function(data) {
+                        if (DEBUG)
+                            alert("ajax error");
+                    }
+                });
+            });
+        </script>
 {% endblock %}
