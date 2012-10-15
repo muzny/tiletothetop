@@ -54,9 +54,10 @@ Finally, restart postgres:
      sudo /etc/init.d/postgresql restart
 
 ###Additional Postgres trouble
-Note: when setting up the python psycopg module (for postgres - it's now in the
-requirements.txt), I encountered an error. It was resolved
-by running
+
+Note: when setting up the python psycopg module (it's referenced in the
+requirements.txt -- see the next section), I encountered an error.
+It was resolved by running
 
      sudo apt-get install libpq-dev python-dev # for Ubuntu
 
@@ -107,15 +108,15 @@ Whenever you get changes from the repo, you'll need to migrate your
 database if anyone made changes to the database schema (by changing
 a models.py, for instance). Run this just to be safe:
 
-     python manage.py migrate game
+     python manage.py migrate
 
-This will migrate the game app. `./manage.py migrate` will migrate
-all apps.
+You could also specify the app name, but we're currently using only a
+single app.
 
 If you're the one changing the schema, you'll need to add a new entry
 to the migration history:
 
-     python manage.py schemamigration game --auto
+     python manage.py schemamigration tiletothetop --auto
 
 You'll see the `syncdb` command in the django tutorials, but you won't need
 to use it anymore unless you add to the INSTALLED_APPS in `settings.py`.
