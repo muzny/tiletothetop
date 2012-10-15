@@ -6,7 +6,6 @@ TEMPLATE_DEBUG = DEBUG
 import os
 # SITE_ROOT is the directory containing this file
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
-GAME_ROOT = os.path.join(os.path.dirname(SITE_ROOT), "game/")
 
 # Heroku - Load database config info form DATABASE_URL environment variable, if
 # set. Otherwise use our default locally.
@@ -86,7 +85,6 @@ STATICFILES_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     os.path.join(SITE_ROOT, "static/"),
-    os.path.join(GAME_ROOT, "static/"),
 )
 
 # List of finder classes that know how to find static files in
@@ -127,7 +125,6 @@ TEMPLATE_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     os.path.join(SITE_ROOT, "templates/"),
-    os.path.join(GAME_ROOT, "templates/"),
 )
 
 INSTALLED_APPS = (
@@ -137,9 +134,9 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'tiletothetop',
     'gunicorn',
     'south',
-    'game',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:

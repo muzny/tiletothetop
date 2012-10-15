@@ -6,5 +6,5 @@ class Word(models.Model):
     part_of_speech = models.CharField(max_length=10)
 
     def __unicode__(self):
-        return "%s -- (%s) %s." % (self.word, self.definition, self.part_of_speech)
+        return "%s -- (%s) %s" % (self.word, self.part_of_speech, self.definition)
 
