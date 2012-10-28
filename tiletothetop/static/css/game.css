@@ -28,8 +28,8 @@ td {
 }
 
 .definition, .answer {
-    width: 49%;
     height: 75px;
+    width: 100%;
 }
 
 .definition {
@@ -48,6 +48,7 @@ td {
     height: 50px;
     width: 50px;
     background-color: orange;
+    border-radius: 10px;
 }
 
 #game-area {
@@ -61,6 +62,16 @@ td {
 #definitions-answers-area {
     background-color: yellow;
     overflow: hidden;
+}
+
+.left-col {
+    float: left;
+    width: 48%;
+}
+
+.right-col {
+    float: right;
+    width: 48%;
 }
 
 #tiles-area {

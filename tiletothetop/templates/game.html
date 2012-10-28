@@ -7,41 +7,9 @@
 
 {% block content %}
 	<div id=game-area>
-	  <div id=definitions-answers-area>
-	  </div>
-	  <div id=tiles-area>
-	    <div class=tile>
-	    </div>
-	  </div>
 	</div>
 {% endblock %}
 
-
 {% block js %}
         <script src="{% static "js/game.js" %}"></script>
-        <script>
-            $(function() {
-                var DEBUG = true;
-                $.ajax({
-                    url: "/random-words/",
-                    type: "GET",
-                    dataType: "json",
-                    data: {"word_count" : 4},
-                    success: function(data) {
-                        $.each(data, function(index) {
-                            $("#definitions-answers-area").append(
-	                      "<div class='definition'>" +
-	                      data[index]["definition"] + 
-	                      "</div><div class='answer'>" +
-                              data[index]["word"] +
-	                      "</div>");
-                        });
-                    },
-                    error: function(data) {
-                        if (DEBUG)
-                            alert("ajax error");
-                    }
-                });
-            });
-        </script>
 {% endblock %}
