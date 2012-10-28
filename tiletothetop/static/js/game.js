@@ -43,6 +43,12 @@ var Board = function(data) {
 
 var TileArea = function(letters) {
     var tilesArea = $("<div>").attr("id", "tiles-area");
+	tilesArea.attr({
+		"ondrop" : "dropTileInTileArea(event)",
+		"ondragover" : "dragTileOverTileArea(event)",
+		"ondraglevae" : "leaveTileArea(event)"
+	});
+	
     $("#game-area").append(tilesArea);
     // Can't go get these until we've added it to the page.
     var areaWidth = tilesArea.width();
@@ -54,6 +60,10 @@ var TileArea = function(letters) {
 	tile.addClass("tile");
 	tile.text(letters[index]);
 	tile.css({position: "absolute"});
+	//Setting the tile's id and making it draggable
+	tile.attr("id", "tile" + index);
+	tile.attr("draggable", "true");
+	tile.attr("ondragstart", "dragTile(event)");
 	var row = parseInt(index / numInRow);
 	var widthOff = (index % numInRow);
 	var heightOff = (10 + tile.height()) * row + 10;
@@ -62,6 +72,24 @@ var TileArea = function(letters) {
     });
 };
 
+//Saves the id of the currently dragged tile inside the dataTransfer so we can get it later in the dropTile(ev)
+function dragTile(ev) {
+	ev.dataTransfer.setData("Text", ev.target.id);
+}
+
+function dragTileOverTileArea(ev) {
+	ev.preventDefault();
+}
+
+function leaveTileArea(ev) {
+	
+}
+
+function dropTileInTileArea(ev) {
+	ev.preventDefault();
+	var data=ev.dataTransfer.getData("Text");
+	ev.target.appendChild(document.getElementById(data));
+}
 
 // Credit: http://sedition.com/perl/javascript-fy.html
 TileArea.prototype.shuffle = function(myArray){
