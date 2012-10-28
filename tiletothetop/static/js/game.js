@@ -58,6 +58,7 @@ var TileArea = function(letters) {
     $.each(letters, function(index) {
 	var tile = $("<div>");
 	tile.addClass("tile");
+	tilesArea.append(tile);
 	tile.text(letters[index]);
 	tile.css({position: "absolute"});
 	//Setting the tile's id and making it draggable
@@ -68,7 +69,7 @@ var TileArea = function(letters) {
 	var widthOff = (index % numInRow);
 	var heightOff = (10 + tile.height()) * row + 10;
 	tile.offset({top: off.top + heightOff, left: off.left + 10 + (widthOff * (tile.width() + 10))});
-	tilesArea.append(tile);
+
     });
 };
 
