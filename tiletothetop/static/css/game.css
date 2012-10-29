@@ -49,6 +49,14 @@ td {
     width: 50px;
     background-color: orange;
     border-radius: 10px;
+	text-align: center;
+}
+
+.emptyTileLoc {
+	height: 55px;
+	width: 55px;
+	background-color: grey;
+	border-radius: 10px;
 }
 
 #game-area {
