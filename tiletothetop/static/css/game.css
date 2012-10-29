@@ -88,3 +88,38 @@ td {
     clear: both;
     margin-top: 10px;
 }
+
+#start-screen {
+	background-color: red;
+	min-width: 500px;
+	min-height: 100%;
+}
+
+.simplemodal-container {
+	border: 0px;
+}
+
+.simplemodal-wrap {
+	border: 0px;
+}
+
+.simplemodal-data {
+	padding: 1em;
+	background-color: grey;
+	align: center;
+}
+
+#simplemodal-overlay {
+	background-color:#000;
+}
+
+#simplemodal-container {
+	background-color:#333; 
+	border:8px solid #444; 
+	padding:12px;
+}
+
+a, a:link, a:visited {
+	color: #0645AD;
+	text-decoration: none;
+}

@@ -7,7 +7,11 @@
 var board = null;
 
 $(window).load(function() {
-    var DEBUG = true;
+    new StartScreen();
+});
+
+function GetWords() {
+	var DEBUG = true;
     $.ajax({
         url: "/random-words/",
         type: "GET",
@@ -21,7 +25,53 @@ $(window).load(function() {
                 alert("ajax error");
         }
     });
-});
+}
+
+var StartScreen = function() {
+	var screen = $("<div>").attr("id", "start-screen");
+	var textBox = $("<p>").attr({
+		"width" : "100%",
+		"height": "100%",
+		"align" : "center"
+	});
+	textBox.html("Click anywhere to start!");
+	screen.append(textBox);
+	
+	// Clicking anywhere on the start screen should start the game
+	// by clearing out the game area and creating a new board
+	// with the Ajax data passed down.
+	screen.click(function () {
+		$("#game-area").html("");
+		GetWords();
+	});
+	
+	$("#game-area").append(screen);
+}
+
+/* Creates a modal popup that displays the given score and
+ * allows the user to restart the game.
+ */
+function TransitionScreen(score) {
+	// Create a new div with the score inside it.
+	var div1 = $("<div>").html("<h1>SCORE: " + score + "</h1>");
+	div1.attr({
+		"class"  : "score-box",
+		"height" : "100px",
+		"width"  : "100px"
+	});
+	
+	// Add a link to the score div that allows the user to
+	// restart the game.
+	var clickToRestart = $("<a>");
+	clickToRestart.attr("href", "");
+	
+	var scoreP = $("<p>").html("Click to restart");
+	scoreP.attr("align", "center")
+	clickToRestart.append(scoreP);
+	
+	div1.append(clickToRestart);
+	div1.modal();
+}
 
 var Board = function(data) {
     var definitions = new Array();
