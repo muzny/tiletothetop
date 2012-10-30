@@ -180,6 +180,12 @@ function dropTileInEmptyTile(ev) {
 		ev.target.appendChild(tile);
 		//recalculate the locations of the tiles that are still in the TileArea
 		reorganizeTileArea();
+		
+		//Check to see if game has been won
+		var gameWon = this.board.workspace.winCheck();
+		if(gameWon) {
+			alert("You Win!");
+		}
 	}
 }
 
@@ -219,6 +225,8 @@ var DefinitionArea = function(definitions) {
 };
 
 var Workspace = function(words) {
+	var solutions = words;
+	var self = this;
     var right = $("<div>").addClass("right-col");
 	$("#definitions-answers-area").append(right);
     $.each(words, function(index) {
@@ -244,4 +252,35 @@ var Workspace = function(words) {
 			emptyTile.offset({top: off.top + heightOff, left: off.left + 10 + widthOff});
 		}
     });
+	
+	//Checks to see if the solution has been found
+	this.winCheck = function() {
+		var children = right.children();
+		var gameWon = true;
+		for(index = 0; index < children.length; index++) {
+			var answerTiles = $(children[index]).children();
+			for(var i = 0; i < answerTiles.length; i++) {
+				var answerTile = $(answerTiles[i]);
+				var letter = $(answerTile.children()[0]).html();
+				var correctLetter = solutions[index][i];
+				if(letter != correctLetter) {
+					gameWon = false;
+				}
+			}
+		}
+		var holder = gameWon;
+		return gameWon;
+	}
+	
+	//Cheat to get solutions
+	document.onkeypress = function(ev) {
+		//Alert the solutions if the key pressed was 's'
+		if(ev.keyCode == 115) {
+			alert(self.getSolutions());
+		}
+	}
+	//Helper for solutions
+	this.getSolutions = function() {
+		return solutions;
+	}
 };
