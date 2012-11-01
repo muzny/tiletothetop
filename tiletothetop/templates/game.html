@@ -6,11 +6,70 @@
 {% endblock %}
 
 {% block content %}
-	<div id=game-area>
-	</div>
+    <div id="navbar">
+        {% if user.is_authenticated %}
+        <p>Hello, {{ user.username }}</a>
+        <a id="logout-button" href="{% url logout %}">Logout</a>
+        {% else %}
+        <a id="register-button" href="#">Sign Up</a>
+        <a id="login-button" href="#">Login</a>
+        {% endif %}
+    </div>
+
+    <div id=game-area></div>
+
+    <!-- Modals -->
+    <div id="login-modal" class="modal">
+        <a href="{% url socialauth_begin 'facebook' %}">Login with Facebook</a>
+        <hr />
+        <form action="{% url login %}" method="post">
+            {% csrf_token %}
+            {% if login_form.non_field_errors or login_errors %}
+            <ul class="errorlist">
+                {% for error in login_form.non_field_errors %}
+                <li>{{ error|escape }}</li>
+                {% endfor %}
+
+                {% for error in login_errors %}
+                <li>{{ error|escape }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+            {% for field in login_form %}
+            {{ field.label_tag }}{{ field }} {{ field.errors }}
+            {% endfor %}
+            <input type="submit" value="Login" />
+        </form>
+    </div>
+
+    <div id="register-modal" class="modal">
+        <a href="{% url socialauth_begin 'facebook' %}">Register with Facebook</a>
+        <hr />
+        <form action="{% url register %}" method="post">
+            {% csrf_token %}
+            {% if registration_form.non_field_errors or registration_errors %}
+            <ul class="errorlist">
+                {% for error in registration_form.non_field_errors %}
+                <li>{{ error|escape }}</li>
+                {% endfor %}
+
+                {% for error in registration_errors %}
+                <li>{{ error|escape }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+            {% for field in registration_form %}
+            {{ field.label_tag }} {{ field }} {{ field.errors }}
+            {% endfor %}
+            <input type="submit" value="Sign Up" />
+        </form>
+    </div>
 {% endblock %}
 
 {% block js %}
         <script src="{% static "js/game.js" %}"></script>
         <script src="{% static "js/jquery.simplemodal-1.4.3.js" %}"></script>
+        <script src="{% static "js/modals.js" %}"></script>
 {% endblock %}

@@ -1,9 +1,16 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import patterns, url, include
 
 urlpatterns = patterns('tiletothetop.views',
     url(r'^/?$', 'game', name='game'),
+
+    # user registration
+    url(r'', include('social_auth.urls')),
+    url(r'^register/$', 'register', name='register'),
+    url(r'^login/$', 'login', name='login'),
+    url(r'^logout/$', 'logout', name='logout'),
 
     # these two route ajax calls to the appropraite views (word services)
     url(r'^random-words/$', 'random_words', name='random_words'),
     url(r'^static-words/$', 'static_words', name='static_words'),
 )
+

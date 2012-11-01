@@ -123,3 +123,24 @@ a, a:link, a:visited {
 	color: #0645AD;
 	text-decoration: none;
 }
+
+
+/* Login/Register Modals */
+.modal {
+    display: none;
+    width: 600px;
+    float: left;
+}
+
+.modal label{
+    float: left;
+    clear: left;
+    width: 250px;
+    text-align: right;
+    margin-right: .5em;
+}
+
+.modal input {
+    float: left;
+}
+

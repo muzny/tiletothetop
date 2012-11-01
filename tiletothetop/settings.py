@@ -1,9 +1,15 @@
 # Django settings for tiletothetop project.
 
+import os
+
 DEBUG = True
+
+# already added 'DEV_ENV' environment variable to heroku dev environment with `heroku config:add`
+if os.environ.has_key('DEV_ENV'):
+    DEBUG = False
+
 TEMPLATE_DEBUG = DEBUG
 
-import os
 # SITE_ROOT is the directory containing this file
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 
@@ -21,21 +27,6 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
-
-"""
-# Not using this anymore
-DATABASES = {
-    'default': {
-        # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'django_db',       # Or path to database file if using sqlite3.
-        'USER': 'django_login',    # Not used with sqlite3.
-        'PASSWORD': 'password',    # Not used with sqlite3.
-        'HOST': 'localhost',                # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                # Set to empty string for default. Not used with sqlite3.
-    }
-}
-"""
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -137,10 +128,16 @@ INSTALLED_APPS = (
     'tiletothetop',
     'gunicorn',
     'south',
+    'social_auth',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
+)
+
+AUTHENTICATION_BACKENDS = (
+    'social_auth.backends.facebook.FacebookBackend',
+    'django.contrib.auth.backends.ModelBackend',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -173,6 +170,6 @@ LOGGING = {
 }
 
 try:
-     from dev_settings import *
+     from localsettings import *
 except ImportError:
      pass
