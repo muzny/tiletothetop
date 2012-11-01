@@ -123,7 +123,7 @@ def register(request):
 def render_main_page(request, lform=None, rform=None, lform_errors=None, rform_errors=None):
     """Utility method to redirect and render the main page with the given bound forms and their
     associated errors. lform_errors and rform_errors are additional errors that can't be detected
-    in their respective forms' clean methods.
+    in their respective form's clean methods.
     """
     # store them in the session data temporarily until we redirect
     # TODO - is there a better way to do this?
