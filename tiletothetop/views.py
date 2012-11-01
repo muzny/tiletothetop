@@ -1,3 +1,5 @@
+from random import randrange
+
 from django.shortcuts import render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
 from django.utils import simplejson
@@ -35,17 +37,40 @@ def random_words(request):
         return HttpResponse(status=400)
 
     MAXWORDS = 20
-    num_words = int(request.GET.get("word_count", MAXWORDS))
-    count = Word.objects.all().count()
-    num_words = min(num_words, count, MAXWORDS)
+    num_words = int(request.GET["word_count"])
+    num_words = min(num_words, MAXWORDS)
 
-    # get numWords random words
-    # Note: this can be really slow with a large db
-    words = Word.objects.all().order_by('?')[:num_words]
+    # if we recieved a difficulty, filter around that difficulty
+    # fails at the moment because the difficulty fields are empty in the database
+    if "difficulty" in request.GET:
+        difficulty = float(request.GET["difficulty"])
+        words = (Word.objects
+                .filter(difficulty__gt=difficulty-2)
+                .filter(difficulty__lt=difficulty+2))
+    else:
+        words = Word.objects.all()
+    words_size = len(words)
 
-    data = [dict(word=w.word, definition=w.definition, speech=w.part_of_speech)
-            for w in words]
+    # in the edge case where we have less than 20 words in the result set
+    if words_size < num_words:
+        num_words = words_size
+
+    # get a random number, use it as an index for the return set of words
+    # if its not in the data set, add it, and repeat
+    data = []
+    while(len(data) < num_words):
+        random_word = words[randrange(words_size)]
+        is_added = False
+        for word in data:
+            if word['word'] == random_word.word:
+                is_added = true
+        if not is_added:
+            data.append({'word': random_word.word,
+                         'definition': random_word.definition,
+                         'speech': random_word.part_of_speech})
+
     return HttpResponse(simplejson.dumps(data), mimetype="application/json")
+
 
 
 ##############################################################
