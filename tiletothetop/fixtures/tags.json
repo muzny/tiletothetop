@@ -1,0 +1,23 @@
+[
+	{
+		"model": "tiletothetop.Tag",
+		"pk": 1,
+		"fields": {
+			"name": "sat"
+		}
+	},
+	{
+		"model": "tiletothetop.Tag",
+		"pk": 2,
+		"fields": {
+			"name": "gre"
+		}
+	},
+	{
+		"model": "tiletothetop.Tag",
+		"pk": 3,
+		"fields": {
+			"name": "basic"
+		}
+	}
+]

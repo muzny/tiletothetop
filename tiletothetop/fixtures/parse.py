@@ -3,10 +3,14 @@
 # could've made this shorter but I wanted it to be human-readable
 def main():
     lines = open("data.txt").readlines()
-    json = open("initial_data.json", "w")
+    json = open("words_sat.json", "w")
     json.write("[\n")
     pk = 1
     data = []
+    
+    TAG = 1 # 'sat'
+    LVL = 130
+    
     for line in lines:
         datum = ""
         datum += "\t{\n"
@@ -24,7 +28,9 @@ def main():
 
         datum += ('\t\t\t"word": "%s",\n' % word)
         datum += ('\t\t\t"definition": "%s",\n' % defn)
-        datum += ('\t\t\t"part_of_speech": "%s"\n' % speech)
+        datum += ('\t\t\t"part_of_speech": "%s",\n' % speech)
+        datum += ('\t\t\t"tags": [%d],\n' % TAG)
+        datum += ('\t\t\t"difficulty": %d\n' % LVL)
         datum += ("\t\t}\n")
         datum += ("\t}")
         pk += 1
