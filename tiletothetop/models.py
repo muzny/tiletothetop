@@ -4,7 +4,7 @@ from django.db.models.signals import post_save
 
 class Tag(models.Model):
     name = models.CharField(max_length=50)
-    
+
     def __unicode__(self):
         return self.name
 
@@ -14,7 +14,7 @@ class Word(models.Model):
     part_of_speech = models.CharField(max_length=10)
     tags = models.ManyToManyField(Tag)
     difficulty = models.DecimalField(max_digits=15,decimal_places=10,null=True)
-    
+
     """
     class Meta:
         unique_together = ("word", "part_of_speech")
