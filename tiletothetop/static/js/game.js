@@ -5,6 +5,7 @@
 // Right now, this is what loads the game.
 
 var board = null;
+var tileSize = 60;
 
 $(window).load(function() {
     new StartScreen();
@@ -103,22 +104,35 @@ var TileArea = function(letters) {
     // Can't go get these until we've added it to the page.
     var areaWidth = tilesArea.width();
     var off = tilesArea.offset();
-    var numInRow = parseInt(areaWidth / (60));
+    var numInRow = parseInt(areaWidth / (tileSize + 10));
     this.shuffle(letters);
+    var numRows = Math.max(2, Math.ceil(letters.length / numInRow));
+    var row;
+    for(var i = 0; i < numRows * numInRow; i++) {
+	var rowNum = parseInt(i / numInRow);
+	var colNum = i % numInRow;
+	if (colNum == 0) {
+	    row = $("<div>").addClass("tile-row");
+	    tilesArea.append(row);
+	}
+	var tileBox = $("<div>");
+	tileBox.attr("id", "tileBox" + rowNum + "_" + colNum);
+	tileBox.addClass("tile-box");
+	row.append(tileBox);
+    }
     $.each(letters, function(index) {
-		var tile = $("<div>");
-		tile.addClass("tile");
-		tilesArea.append(tile);
-		tile.text(letters[index]);
-		tile.css({position: "absolute"});
-		//Setting the tile's id and making it draggable
-		tile.attr("id", "tile" + index);
-		tile.attr("draggable", "true");
-		tile.attr("ondragstart", "dragTile(event)");
-		var row = parseInt(index / numInRow);
-		var widthOff = (index % numInRow);
-		var heightOff = (10 + tile.height()) * row + 10;
-		tile.offset({top: off.top + heightOff, left: off.left + 10 + (widthOff * (tile.width() + 10))});
+	var tile = $("<div>");
+	tile.addClass("tile");
+	tile.addClass("inTileArea");
+	tile.text(letters[index]);
+	//Setting the tile's id and making it draggable
+	tile.attr("id", "tile" + index);
+	tile.attr("draggable", "true");
+	tile.attr("ondragstart", "dragTile(event)");
+	var row = parseInt(index / numInRow);
+	var col = index % numInRow;
+	var boxId = "#tileBox" + row + "_" + col;
+	$(boxId).append(tile)
     });
 };
 
@@ -140,11 +154,13 @@ function leaveTileArea(ev) {
 
 //Drops the tile into the TileArea
 function dropTileInTileArea(ev) {
-	ev.preventDefault();
-	var data=ev.dataTransfer.getData("Text");
-	ev.target.appendChild(document.getElementById(data));
-	//recalculate positions of all tiles
-	reorganizeTileArea();
+    ev.preventDefault();
+    var data=ev.dataTransfer.getData("Text");
+    var tile = document.getElementById(data)
+    ev.target.appendChild(tile);
+    if (!$(tile).hasClass("inTileArea")) {
+	$(tile).addClass("inTileArea");
+    }
 }
 
 //We can do special effects when the tile is hovered over the EmptyTile
@@ -165,41 +181,28 @@ function leaveEmptyTile(ev) {
 
 //Drops the tile into the EmptyTile
 function dropTileInEmptyTile(ev) {
-	var id = ev.target.id;
-	var numChildren = $("#" + id).children().length;
-	//This is broken currently...the ev.target will be the tile on top of the EmptyTile, not the EmptyTile itself...
-	//TODO: Fix so that you cannot drop 2 tiles onto 1 EmptyTile
-	if(numChildren == 0) {
-		ev.preventDefault();
-		var data=ev.dataTransfer.getData("Text");
-		var tile = document.getElementById(data);
-		//Set location
-		//Seems like the "absolute" layout will be relative to the parent's position if the parent's layout is also "absolute"
-		tile.style.top = "0";
-		tile.style.left = "0";
-		ev.target.appendChild(tile);
-		//recalculate the locations of the tiles that are still in the TileArea
-		reorganizeTileArea();
-		
-		//Check to see if game has been won
-		var gameWon = this.board.workspace.winCheck();
-		if(gameWon) {
-			alert("You Win!");
-		}
-	}
-}
+    var id = ev.target.id;
+    var numChildren = $("#" + id).children().length;
+    //This is broken currently...the ev.target will be the tile on top of the EmptyTile, not the EmptyTile itself...
+    //TODO: Fix so that you cannot drop 2 tiles onto 1 EmptyTile
+    if(numChildren == 0) {
+	ev.preventDefault();
+	var data=ev.dataTransfer.getData("Text");
+	var tile = document.getElementById(data);
+	//Set location
+	//Seems like the "absolute" layout will be relative to the parent's position if the parent's layout is also "absolute"
+	tile.style.top = "0";
+	tile.style.left = "0";
+	ev.target.appendChild(tile);
 
-//Recalculates the locations of the tiles in the TileArea
-function reorganizeTileArea() {
-	$("#tiles-area").children().each(function(index) {
-		var numInRow = parseInt($("#tiles-area").width() / (60));
-		var off = $("#tiles-area").offset();
-		var tile = $(this);
-		var row = parseInt(index / numInRow);
-		var widthOff = (index % numInRow);
-		var heightOff = (10 + tile.height()) * row + 10;
-		tile.offset({top: off.top + heightOff, left: off.left + 10 + (widthOff * (tile.width() + 10))});
-	});
+	// Tile is no longer in the tile area
+	$(tile).removeClass("inTileArea");
+	//Check to see if game has been won
+	var gameWon = this.board.workspace.winCheck();
+	if(gameWon) {
+	    alert("You Win!");
+	}
+    }
 }
 
 // Credit: http://sedition.com/perl/javascript-fy.html
@@ -215,6 +218,7 @@ TileArea.prototype.shuffle = function(myArray){
    }
 };
 
+// This is where the definitions of the word go.
 var DefinitionArea = function(definitions) {
     var left = $("<div>").addClass("left-col");
     $.each(definitions, function(index) {
@@ -224,63 +228,105 @@ var DefinitionArea = function(definitions) {
     $("#definitions-answers-area").append(left);
 };
 
+// This is the space where the empty boxes are so that tiles can go there.
 var Workspace = function(words) {
-	var solutions = words;
-	var self = this;
+    var solutions = words;
+    var self = this;
+
+    // TODO: make it so that tiles can't become clicked.
+    var emptyClick = function(e) {
+	var toggleSelf = !$(e.target).hasClass("clicked");
+	var prevClicked = $(".clicked");
+	$.each(prevClicked, function(index) {
+	    prevClicked.toggleClass("clicked");
+	});
+	$(e.target).toggleClass("clicked", toggleSelf);
+    };
+
     var right = $("<div>").addClass("right-col");
-	$("#definitions-answers-area").append(right);
+    $("#definitions-answers-area").append(right);
     $.each(words, function(index) {
-		var ans = $("<div>");
-		ans.addClass("answer");
-		right.append(ans);
-		//ans.text(words[index]);
-		var word = words[index];
-		for(var i = 0; i < word.length; i++) {
-			var emptyTile = $("<div>");
-			emptyTile.addClass("emptyTileLoc");
-			emptyTile.css({position: "absolute"});
-			emptyTile.attr({
-				"id" : "emptyTile" + index + "_" + i,
-				"ondrop" : "dropTileInEmptyTile(event)",
-				"ondragover" : "dragTileOverEmptyTile(event)",
-				"ondraglevae" : "leaveEmptyTile(event)"
-			});
-			ans.append(emptyTile);
-			var off = ans.offset();
-			var widthOff = (i * (emptyTile.width() + 10));
-			var heightOff = 10;
-			emptyTile.offset({top: off.top + heightOff, left: off.left + 10 + widthOff});
-		}
+	var ans = $("<div>");
+	ans.addClass("answer");
+	right.append(ans);
+	var word = words[index];
+	for(var i = 0; i < word.length; i++) {
+	    var emptyTile = $("<div>");
+	    emptyTile.addClass("emptyTileLoc");
+	    emptyTile.attr({
+		"id" : "emptyTile" + index + "_" + i,
+		"ondrop" : "dropTileInEmptyTile(event)",
+		"ondragover" : "dragTileOverEmptyTile(event)",
+		"ondraglevae" : "leaveEmptyTile(event)"
+	    });
+	    ans.append(emptyTile);
+	    emptyTile.bind('click', emptyClick);
+	    var off = ans.offset();
+	    var widthOff = (i * (emptyTile.width() + 10));
+	    var heightOff = 10;
+	    emptyTile.offset({top: off.top + heightOff, left: off.left + 10 + widthOff});
+	}
     });
-	
-	//Checks to see if the solution has been found
-	this.winCheck = function() {
-		var children = right.children();
-		var gameWon = true;
-		for(index = 0; index < children.length; index++) {
-			var answerTiles = $(children[index]).children();
-			for(var i = 0; i < answerTiles.length; i++) {
-				var answerTile = $(answerTiles[i]);
-				var letter = $(answerTile.children()[0]).html();
-				var correctLetter = solutions[index][i];
-				if(letter != correctLetter) {
-					gameWon = false;
-				}
-			}
+    
+    //Checks to see if the solution has been found
+    this.winCheck = function() {
+	var children = right.children();
+	var gameWon = true;
+	for(index = 0; index < children.length; index++) {
+	    var answerTiles = $(children[index]).children();
+	    for(var i = 0; i < answerTiles.length; i++) {
+		var answerTile = $(answerTiles[i]);
+		var letter = $(answerTile.children()[0]).html();
+		var correctLetter = solutions[index][i];
+		if(letter != correctLetter) {
+		    gameWon = false;
 		}
-		var holder = gameWon;
-		return gameWon;
+	    }
 	}
-	
-	//Cheat to get solutions
-	document.onkeypress = function(ev) {
-		//Alert the solutions if the key pressed was 's'
-		if(ev.keyCode == 115) {
-			alert(self.getSolutions());
+	var holder = gameWon;
+	return gameWon;
+    };
+    
+    //Cheat to get solutions
+    $(document).bind('keypress', function(e) {
+	// In firefox, e.which gets set instead of e.keypress
+	var num = e.keyCode;
+	if (num == 0) {
+	    num = e.which;
+	}
+	// One of the keys a - z was pressed.
+	if (num >= 97 && num <= 122) {
+	    var clicked = $(".clicked");
+	    if (clicked.length == 1) {
+		var t = getTileFromChar(String.fromCharCode(num));
+		if (t) {
+		    $(t).appendTo($(clicked[0]));
+		    $(t).removeClass("inTileArea");
+		    $(clicked[0]).removeClass("clicked");
+		    // TODO: check if the game has been won
 		}
+	    }
 	}
-	//Helper for solutions
-	this.getSolutions = function() {
-		return solutions;
+	if(num == 13) {
+	    alert(self.getSolutions());
 	}
+    });
+
+    //Helper for solutions
+    this.getSolutions = function() {
+	return solutions;
+    };
 };
+
+// Given a character, will return the first tile from the tile area
+// that matches.
+function getTileFromChar(tchar) {
+    var tiles = $(".inTileArea");
+    for (var i = 0; i < tiles.length; i++) {
+	if ($(tiles[i]).text() == tchar) {
+	    // return the tile in the box
+	    return $(tiles[i]);
+	}
+    }
+    return false;
+}

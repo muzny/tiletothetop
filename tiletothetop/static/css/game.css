@@ -49,14 +49,41 @@ td {
     width: 50px;
     background-color: orange;
     border-radius: 10px;
-	text-align: center;
+    text-align: center;
 }
+
+
+.tile-box {
+    display: table-cell;
+    border: 1px dotted red;
+    padding: 4px 6px;
+    width: 2%;
+    margin-bottom: 0;
+}
+
+.tile-row {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+    height: 75px;
+    border: none;
+}
+
 
 .emptyTileLoc {
 	height: 55px;
 	width: 55px;
 	background-color: grey;
 	border-radius: 10px;
+	float: left;
+}
+
+.clicked {
+    border: solid yellow 4px;
+}
+
+.inTileArea {
+    background-color: "red";
 }
 
 #game-area {
@@ -84,9 +111,10 @@ td {
 
 #tiles-area {
     background-color: yellow;
-    height: 250px;
+    width: 99%;
     clear: both;
     margin-top: 10px;
+    overflow: hidden;
 }
 
 #start-screen {
