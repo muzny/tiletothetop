@@ -9,6 +9,7 @@ var tileSize = 60;
 
 $(window).load(function() {
     new StartScreen();
+    GetWords();
 });
 
 function GetWords() {
@@ -42,11 +43,10 @@ var StartScreen = function() {
 	// by clearing out the game area and creating a new board
 	// with the Ajax data passed down.
 	screen.click(function () {
-		$("#game-area").html("");
-		GetWords();
+		$.modal.close();
 	});
 	
-	$("#game-area").append(screen);
+	screen.modal();
 }
 
 /* Creates a modal popup that displays the given score and
