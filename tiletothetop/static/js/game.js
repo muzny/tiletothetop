@@ -186,22 +186,22 @@ function dropTileInEmptyTile(ev) {
     //This is broken currently...the ev.target will be the tile on top of the EmptyTile, not the EmptyTile itself...
     //TODO: Fix so that you cannot drop 2 tiles onto 1 EmptyTile
     if(numChildren == 0) {
-	ev.preventDefault();
-	var data=ev.dataTransfer.getData("Text");
-	var tile = document.getElementById(data);
-	//Set location
-	//Seems like the "absolute" layout will be relative to the parent's position if the parent's layout is also "absolute"
-	tile.style.top = "0";
-	tile.style.left = "0";
-	ev.target.appendChild(tile);
+		ev.preventDefault();
+		var data=ev.dataTransfer.getData("Text");
+		var tile = document.getElementById(data);
+		//Set location
+		//Seems like the "absolute" layout will be relative to the parent's position if the parent's layout is also "absolute"
+		tile.style.top = "0";
+		tile.style.left = "0";
+		ev.target.appendChild(tile);
 
-	// Tile is no longer in the tile area
-	$(tile).removeClass("inTileArea");
-	//Check to see if game has been won
-	var gameWon = this.board.workspace.winCheck();
-	if(gameWon) {
-	    alert("You Win!");
-	}
+		// Tile is no longer in the tile area
+		$(tile).removeClass("inTileArea");
+		//Check to see if game has been won
+		var gameWon = window.board.workspace.winCheck();
+		if(gameWon) {
+			alert("You Win!");
+		}
     }
 }
 
@@ -304,6 +304,10 @@ var Workspace = function(words) {
 		    $(t).removeClass("inTileArea");
 		    $(clicked[0]).removeClass("clicked");
 		    // TODO: check if the game has been won
+			var gameWon = window.board.workspace.winCheck();
+			if(gameWon) {
+				alert("You Win!");
+			}
 		}
 	    }
 	}
