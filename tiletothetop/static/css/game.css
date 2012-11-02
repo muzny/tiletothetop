@@ -182,7 +182,9 @@ a, a:link, a:visited {
 }
 
 
-
+/* CSS Rules to disallow highlighting of any elements.
+ * The ::-moz-selection is firefox specific.
+ * */
 ::-moz-selection{
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
@@ -199,4 +201,23 @@ a, a:link, a:visited {
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
+}
+
+#options-area
+{
+	border: none;
+	display: inline;
+	text-align: center;
+}
+
+.options-button
+{
+	/* border: none; */
+	/*display: inline-block;*/
+	
+	border-radius: 10px;
+	width: 20%;
+	height: 50px;
+	text-align: center;
+	background-color: blue;
 }

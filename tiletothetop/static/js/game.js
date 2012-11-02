@@ -5,6 +5,8 @@
 // Right now, this is what loads the game.
 
 var board = null;
+var options = null;
+var score = 0;
 var tileSize = 60;
 
 $(window).load(function() {
@@ -13,6 +15,7 @@ $(window).load(function() {
 });
 
 function GetWords() {
+	// Do an ajax request to get words.
 	var DEBUG = true;
     $.ajax({
         url: "/random-words/",
@@ -44,9 +47,10 @@ var StartScreen = function() {
 	// with the Ajax data passed down.
 	screen.click(function () {
 		$.modal.close();
+		TransitionScreen(score);
 	});
 	
-	screen.modal();
+	screen.modal({closeHTML : "", overlayClose : true});
 }
 
 /* Creates a modal popup that displays the given score and
@@ -54,24 +58,25 @@ var StartScreen = function() {
  */
 function TransitionScreen(score) {
 	// Create a new div with the score inside it.
-	var div1 = $("<div>").html("<h1>SCORE: " + score + "</h1>");
-	div1.attr({
-		"class"  : "score-box",
-		"height" : "100px",
-		"width"  : "100px"
-	});
+	var scorediv = $("<div>").html("<h1>SCORE: " + score + "</h1>");
 	
 	// Add a link to the score div that allows the user to
 	// restart the game.
-	var clickToRestart = $("<a>");
-	clickToRestart.attr("href", "");
+	var scorebutton = $("<button>").html("Click to restart");
 	
-	var scoreP = $("<p>").html("Click to restart");
-	scoreP.attr("align", "center")
-	clickToRestart.append(scoreP);
+	scorebutton.click(function () { 
+		GetWords();
+		$.modal.close();
+		
+		// Clean up the board.
+		$("#game-area").html("");
+		if (options != null) {
+			options.remove();
+		}
+	});
 	
-	div1.append(clickToRestart);
-	div1.modal();
+	scorediv.append(scorebutton);
+	scorediv.modal();
 }
 
 var Board = function(data) {
@@ -90,6 +95,7 @@ var Board = function(data) {
 		letters = letters.concat(words[i].split(""));
     }
     this.tileArea = new TileArea(letters);
+    options = new OptionsArea();
 };
 
 var TileArea = function(letters) {
@@ -200,7 +206,7 @@ function dropTileInEmptyTile(ev) {
 		//Check to see if game has been won
 		var gameWon = window.board.workspace.winCheck();
 		if(gameWon) {
-			alert("You Win!");
+			TransitionScreen(score);
 		}
     }
 }
@@ -306,7 +312,7 @@ var Workspace = function(words) {
 		    // TODO: check if the game has been won
 			var gameWon = window.board.workspace.winCheck();
 			if(gameWon) {
-				alert("You Win!");
+				TransitionScreen(score);
 			}
 		}
 	    }
@@ -333,4 +339,52 @@ function getTileFromChar(tchar) {
 	}
     }
     return false;
+}
+
+var OptionsArea = function() {
+	var optionsArea = $("<div>").attr("id", "options-area");
+	
+	// Create the buttons for the different options
+	var levelSelect = $("<button>").attr("class", "options-button");
+	var customWords = $("<button>").attr("class", "options-button");
+	var scoreboard = $("<button>").attr("class", "options-button");
+	var account = $("<button>").attr("class", "options-button");
+	var about = $("<button>").attr("class", "options-button");
+	
+	// Add text to each of the buttons, and set them to display
+	// their options when clicked.
+	levelSelect.html("Level Select");
+	levelSelect.click(function () { DummyModalFunction("Level Select") });
+	
+	customWords.html("Custom Words");
+	customWords.click(function () { DummyModalFunction("Custom Words") });
+	
+	scoreboard.html("Scoreboard");
+	scoreboard.click(function () { DummyModalFunction("Scoreboard") });
+	
+	account.html("Account");
+	account.click(function () { DummyModalFunction("Account") });
+	
+	about.html("About");
+	about.click(function () { DummyModalFunction("About") });
+	
+	// Throw the buttons in the options area, and throw
+	// the options area in the body.
+	optionsArea.append(levelSelect);
+	optionsArea.append(customWords);
+	optionsArea.append(scoreboard);
+	optionsArea.append(account);
+	optionsArea.append(about);
+	$("body").append(optionsArea);
+	
+	return optionsArea;
+}
+
+/* Creates a dummy modal of a div with the text in it.
+ * Used for placeholding purposes. You can click
+ * anywhere outside of the modal to close it.
+ */
+function DummyModalFunction(text) {
+	var div = $("<div>").html(text);
+	div.modal({closeHTML : "", overlayClose : true});
 }
