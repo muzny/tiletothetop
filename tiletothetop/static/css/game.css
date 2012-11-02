@@ -169,7 +169,7 @@ a, a:link, a:visited {
     float: left;
 }
 
-.modal label{
+.modal label {
     float: left;
     clear: left;
     width: 250px;
@@ -177,10 +177,22 @@ a, a:link, a:visited {
     margin-right: .5em;
 }
 
+.modal input[type="submit"] {
+    clear: both;
+}
+
 .modal input {
     float: left;
 }
 
+.errorlist, .field-error {
+    color: red;
+}
+
+.field-error {
+    float: left;
+    margin-left: 275px;
+}
 
 /* CSS Rules to disallow highlighting of any elements.
  * The ::-moz-selection is firefox specific.
@@ -221,3 +233,4 @@ a, a:link, a:visited {
 	text-align: center;
 	background-color: blue;
 }
+

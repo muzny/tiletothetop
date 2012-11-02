@@ -8,11 +8,12 @@
 {% block content %}
     <div id="navbar">
         {% if user.is_authenticated %}
-        <p>Hello, {{ user.username }}</a>
+        Hello, {{ user.username }}</a> |
         <a id="logout-button" href="{% url logout %}">Logout</a>
         {% else %}
-        <a id="register-button" href="#">Sign Up</a>
-        <a id="login-button" href="#">Login</a>
+        <a id="register-button" href="#">Sign Up</a> |
+        <a id="login-button" href="#">Login</a> | or you can
+        <a href="{% url socialauth_begin 'facebook' %}">Sign Up / Login with Facebook</a>
         {% endif %}
     </div>
 
@@ -20,8 +21,6 @@
 
     <!-- Modals -->
     <div id="login-modal" class="modal">
-        <a href="{% url socialauth_begin 'facebook' %}">Login with Facebook</a>
-        <hr />
         <form action="{% url login %}" method="post">
             {% csrf_token %}
             {% if login_form.non_field_errors or login_errors %}
@@ -37,15 +36,13 @@
             {% endif %}
 
             {% for field in login_form %}
-            {{ field.label_tag }}{{ field }} {{ field.errors }}
+            {{ field.label_tag }}{{ field }}<span class="field-error">{{ field.errors.0 }}</span>
             {% endfor %}
             <input type="submit" value="Login" />
         </form>
     </div>
 
     <div id="register-modal" class="modal">
-        <a href="{% url socialauth_begin 'facebook' %}">Register with Facebook</a>
-        <hr />
         <form action="{% url register %}" method="post">
             {% csrf_token %}
             {% if registration_form.non_field_errors or registration_errors %}
@@ -61,7 +58,7 @@
             {% endif %}
 
             {% for field in registration_form %}
-            {{ field.label_tag }} {{ field }} {{ field.errors }}
+            {{ field.label_tag }} {{ field }}<span class="field-error">{{ field.errors.0 }}</span>
             {% endfor %}
             <input type="submit" value="Sign Up" />
         </form>

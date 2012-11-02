@@ -24,7 +24,7 @@ class Word(models.Model):
         return "%s -- (%s) %s [%s]" % (self.word, self.part_of_speech, self.definition,
                                         ", ".join([tag.name for tag in self.tags.all()]))
 
-#Our site-specific user profile data
+#Our site-specific user profile data goes here
 class UserProfile(models.Model):
     user = models.OneToOneField(User)  # provides our authentication info
     games_played = models.IntegerField(default=0)
@@ -36,4 +36,5 @@ class UserProfile(models.Model):
 def create_user_profile(sender, instance, created, **kwargs):
     if created:  # a new User was created, let's give him/her a profile
         UserProfile.objects.create(user=instance)
+
 post_save.connect(create_user_profile, sender=User)

@@ -63,7 +63,7 @@ def random_words(request):
         is_added = False
         for word in data:
             if word['word'] == random_word.word:
-                is_added = true
+                is_added = True
         if not is_added:
             data.append({'word': random_word.word,
                          'definition': random_word.definition,

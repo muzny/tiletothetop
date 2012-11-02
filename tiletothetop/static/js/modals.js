@@ -6,10 +6,20 @@ $(function () {
         $("#register-modal").modal();
     });
 
-    if ($("#register-modal").find(".errorlist").length > 0) {
+    var register_errors = $("#register-modal").find(".field-error");
+    var login_errors = $("#login-modal").find(".field-error");
+    if ($("#register-modal").find(".errorlist").length > 0
+        || $.grep(register_errors, function(e) { return $(e).html() != ""}).length > 0) {
         $("#register-modal").modal();
     }
-    else if ($("#login-modal").find(".errorlist").length > 0) {
+    else if ($("#login-modal").find(".errorlist").length > 0
+             || $.grep(login_errors, function(e) { return $(e).html() != ""}).length > 0)  {
         $("#login-modal").modal();
+    }
+
+    // this is just a quick fix to an old bug in facebook authentication where it appends
+    // #_=_ to the redirect url
+    if (window.location.hash == "#_=_" || window.location.hash == "#") {
+        window.location.hash = "";
     }
 });

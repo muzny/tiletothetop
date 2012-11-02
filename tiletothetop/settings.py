@@ -4,8 +4,8 @@ import os
 
 DEBUG = True
 
-# already added 'DEV_ENV' environment variable to heroku dev environment with `heroku config:add`
-if os.environ.has_key('DEV_ENV'):
+# already added 'LIVE_SITE' environment variable to heroku dev environment with `heroku config:add`
+if os.environ.has_key('LIVE_SITE'):
     DEBUG = False
 
 TEMPLATE_DEBUG = DEBUG
@@ -135,11 +135,6 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
 )
 
-AUTHENTICATION_BACKENDS = (
-    'social_auth.backends.facebook.FacebookBackend',
-    'django.contrib.auth.backends.ModelBackend',
-)
-
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
 # the site admins on every HTTP 500 error when DEBUG=False.
@@ -169,7 +164,22 @@ LOGGING = {
     }
 }
 
+AUTH_PROFILE_MODULE = "tiletothetop.UserProfile"
+
+LOGIN_URL = "/"
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_URL = "/"
+
+# django-social-auth stuff
+AUTHENTICATION_BACKENDS = (
+    'social_auth.backends.facebook.FacebookBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_COMPLETE_URL_NAME  = 'socialauth_complete'
+
 try:
      from local_settings import *
 except ImportError:
      pass
+
