@@ -42,9 +42,6 @@ var StartScreen = function() {
 	textBox.html("Click anywhere to start!");
 	screen.append(textBox);
 	
-	// Clicking anywhere on the start screen should start the game
-	// by clearing out the game area and creating a new board
-	// with the Ajax data passed down.
 	screen.click(function () {
 		$.modal.close();
 		//TransitionScreen(score);
@@ -366,7 +363,7 @@ var OptionsArea = function() {
 	account.click(function () { DummyModalFunction("Account") });
 	
 	about.html("About");
-	about.click(function () { DummyModalFunction("About") });
+	about.click(AboutModal);
 	
 	// Throw the buttons in the options area, and throw
 	// the options area in the body.
@@ -387,4 +384,22 @@ var OptionsArea = function() {
 function DummyModalFunction(text) {
 	var div = $("<div>").html(text);
 	div.modal({closeHTML : "", overlayClose : true});
+}
+
+/* Pop up a modal with our "About" information.
+ * 
+ */
+function AboutModal()
+{	
+	var aboutDiv = $("<div>");
+	var names = new Array("Laura Dong", "Rowan Hale", "Adam Kalman", "Justin McManus", "Grace Muzny", "Steve Seedall", "Cullen Su");
+	
+	
+	for (var i = 0; i < names.length; ++i)
+	{
+		var nameDiv = $("<p>").html(names[i]);
+		aboutDiv.append(nameDiv);
+	}
+	 
+	aboutDiv.modal({closeHTML : "", overlayClose : true});
 }
