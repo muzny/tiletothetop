@@ -5,32 +5,16 @@
 // Right now, this is what loads the game.
 
 var board = null;
+var messenger = null;
 var options = null;
 var score = 0;
 var tileSize = 60;
 
 $(window).load(function() {
     new StartScreen();
-    GetWords();
+	messenger = new Messenger();
+    messenger.getWords();
 });
-
-function GetWords() {
-	// Do an ajax request to get words.
-	var DEBUG = true;
-    $.ajax({
-        url: "/random-words/",
-        type: "GET",
-        dataType: "json",
-        data: {"word_count" : 4},
-        success: function(data) {
-	    board = new Board(data);
-        },
-        error: function(data) {
-            if (DEBUG)
-                alert("ajax error");
-        }
-    });
-}
 
 var StartScreen = function() {
 	var screen = $("<div>").attr("id", "start-screen");
@@ -62,7 +46,7 @@ function TransitionScreen(score) {
 	var scorebutton = $("<button>").html("Click to restart");
 	
 	scorebutton.click(function () { 
-		GetWords();
+		messenger.getWords();
 		$.modal.close();
 		
 		// Clean up the board.
