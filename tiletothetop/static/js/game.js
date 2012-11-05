@@ -47,7 +47,7 @@ var StartScreen = function() {
 	// with the Ajax data passed down.
 	screen.click(function () {
 		$.modal.close();
-		TransitionScreen(score);
+		//TransitionScreen(score);
 	});
 	
 	screen.modal({closeHTML : "", overlayClose : true});
