@@ -1,4 +1,6 @@
 from django.conf.urls import patterns, url, include
+from django.conf import settings
+from django.views.static import serve
 
 urlpatterns = patterns('tiletothetop.views',
     url(r'^/?$', 'game', name='game'),
@@ -13,4 +15,10 @@ urlpatterns = patterns('tiletothetop.views',
     url(r'^random-words/$', 'random_words', name='random_words'),
     url(r'^static-words/$', 'static_words', name='static_words'),
 )
+
+
+if not settings.DEBUG: # not ideal - just a quick fix to get deployment working
+    urlpatterns += patterns('',
+        url(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
+    )
 
