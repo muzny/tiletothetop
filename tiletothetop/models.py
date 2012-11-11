@@ -24,6 +24,20 @@ class Word(models.Model):
         return "%s -- (%s) %s [%s]" % (self.word, self.part_of_speech, self.definition,
                                         ", ".join([tag.name for tag in self.tags.all()]))
 
+# Record of each games completed successfully
+class GameHistory(models.Model):
+    user  = models.ForeignKey(User)
+    score = models.IntegerField(default=0)
+    
+    # list of difficulty values of words solved in the game
+    # (will probably replace with something more usable later
+    # same as a string, just does extra validation on comma separation)
+    # to use as tuple: eval(game_history_instance.word_difficulties)
+    word_difficulties = models.CommaSeparatedIntegerField(max_length=256)
+
+    def __unicode__(self):
+        return "User %d; Score %d; Word Difficulties %s" % (self.user.id, self.score, self.word_difficulties)
+
 #Our site-specific user profile data goes here
 class UserProfile(models.Model):
     user = models.OneToOneField(User)  # provides our authentication info
