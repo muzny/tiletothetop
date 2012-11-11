@@ -81,11 +81,11 @@ var Board = function(data) {
 
 var TileArea = function(letters) {
     var tilesArea = $("<div>").attr("id", "tiles-area");
-	tilesArea.attr({
+	/*tilesArea.attr({
 		"ondrop" : "dropTileInTileArea(event)",
 		"ondragover" : "dragTileOverTileArea(event)",
-		"ondraglevae" : "leaveTileArea(event)"
-	});
+		"ondragleave" : "leaveTileArea(event)"
+	});*/
 	
     $("#game-area").append(tilesArea);
     // Can't go get these until we've added it to the page.
@@ -96,37 +96,48 @@ var TileArea = function(letters) {
     var numRows = Math.max(2, Math.ceil(letters.length / numInRow));
     var row;
     for(var i = 0; i < numRows * numInRow; i++) {
-	var rowNum = parseInt(i / numInRow);
-	var colNum = i % numInRow;
-	if (colNum == 0) {
-	    row = $("<div>").addClass("tile-row");
-	    tilesArea.append(row);
-	}
-	var tileBox = $("<div>");
-	tileBox.attr("id", "tileBox" + rowNum + "_" + colNum);
-	tileBox.addClass("tile-box");
-	row.append(tileBox);
+		var rowNum = parseInt(i / numInRow);
+		var colNum = i % numInRow;
+		if (colNum == 0) {
+			row = $("<div>").addClass("tile-row");
+			tilesArea.append(row);
+		}
+		var tileBox = $("<div>");
+		tileBox.attr("id", "tileBox" + rowNum + "_" + colNum);
+		tileBox.addClass("tile-box");
+		tileBox.attr({
+			"ondrop" : "dropTileInTileArea(event)",
+			"ondragover" : "dragTileOverTileArea(event)",
+			"ondragleave" : "leaveTileArea(event)"
+		});
+		row.append(tileBox);
     }
     $.each(letters, function(index) {
-	var tile = $("<div>");
-	tile.addClass("tile");
-	tile.addClass("inTileArea");
-	tile.text(letters[index]);
-	//Setting the tile's id and making it draggable
-	tile.attr("id", "tile" + index);
-	tile.attr("draggable", "true");
-	tile.attr("ondragstart", "dragTile(event)");
-	var row = parseInt(index / numInRow);
-	var col = index % numInRow;
-	var boxId = "#tileBox" + row + "_" + col;
-	$(boxId).append(tile)
+		var tile = $("<div>");
+		tile.addClass("tile");
+		tile.addClass("inTileArea");
+		tile.text(letters[index]);
+		//Setting the tile's id and making it draggable
+		tile.attr("id", "tile" + index);
+		tile.attr("draggable", "true");
+		tile.attr("ondragstart", "dragTile(event)");
+		//tile.disableSelection();
+		var row = parseInt(index / numInRow);
+		var col = index % numInRow;
+		var boxId = "#tileBox" + row + "_" + col;
+		$(boxId).append(tile)
+		//Adding check for IE9 or above
+		if($.browser.msie && parseInt($.browser.version, 10) >= 9)
+		{
+			document.getElementById(tile.attr("id")).addEventListener("dragStart", dragTile, false);
+		}
     });
 };
 
 //Called every time the tile is dragged
 function dragTile(ev) {
 	//Saves the id of the currently dragged tile inside the dataTransfer so we can get it later in the dropTile(ev)
-	ev.dataTransfer.setData("Text", ev.target.id);
+	ev.dataTransfer.setData("Text", ev.currentTarget.id);
 }
 
 //We can do special effects when the tile is hovered over the TileArea
@@ -141,13 +152,18 @@ function leaveTileArea(ev) {
 
 //Drops the tile into the TileArea
 function dropTileInTileArea(ev) {
-    ev.preventDefault();
-    var data=ev.dataTransfer.getData("Text");
-    var tile = document.getElementById(data)
-    ev.target.appendChild(tile);
-    if (!$(tile).hasClass("inTileArea")) {
-	$(tile).addClass("inTileArea");
-    }
+	var id = ev.currentTarget.id;
+    var numChildren = $("#" + id).children().length;
+    //Check if there are any children
+    if(numChildren == 0) {
+		ev.preventDefault();
+		var data=ev.dataTransfer.getData("Text");
+		var tile = document.getElementById(data)
+		ev.currentTarget.appendChild(tile);
+		if (!$(tile).hasClass("inTileArea")) {
+		$(tile).addClass("inTileArea");
+		}
+	}
 }
 
 //We can do special effects when the tile is hovered over the EmptyTile
@@ -155,7 +171,6 @@ function dragTileOverEmptyTile(ev) {
 	//Check to make sure there are no tiles on this EmptyTile
 	var id = ev.target.id;
 	var numChildren = $("#" + id).children().length;
-	//This is broken currently...the ev.target will be the Tile on top of the EmptyTile, not the EmptyTile itself...
 	if(numChildren == 0) {
 		ev.preventDefault();
 	}
@@ -168,10 +183,9 @@ function leaveEmptyTile(ev) {
 
 //Drops the tile into the EmptyTile
 function dropTileInEmptyTile(ev) {
-    var id = ev.target.id;
+    var id = ev.currentTarget.id;
     var numChildren = $("#" + id).children().length;
-    //This is broken currently...the ev.target will be the tile on top of the EmptyTile, not the EmptyTile itself...
-    //TODO: Fix so that you cannot drop 2 tiles onto 1 EmptyTile
+    //Check if any children exist
     if(numChildren == 0) {
 		ev.preventDefault();
 		var data=ev.dataTransfer.getData("Text");
@@ -180,7 +194,7 @@ function dropTileInEmptyTile(ev) {
 		//Seems like the "absolute" layout will be relative to the parent's position if the parent's layout is also "absolute"
 		tile.style.top = "0";
 		tile.style.left = "0";
-		ev.target.appendChild(tile);
+		ev.currentTarget.appendChild(tile);
 
 		// Tile is no longer in the tile area
 		$(tile).removeClass("inTileArea");
@@ -220,14 +234,13 @@ var Workspace = function(words) {
     var solutions = words;
     var self = this;
 
-    // TODO: make it so that tiles can't become clicked.
     var emptyClick = function(e) {
-	var toggleSelf = !$(e.target).hasClass("clicked");
-	var prevClicked = $(".clicked");
-	$.each(prevClicked, function(index) {
-	    prevClicked.toggleClass("clicked");
-	});
-	$(e.target).toggleClass("clicked", toggleSelf);
+		var toggleSelf = !$(this).hasClass("clicked");
+		var prevClicked = $(".clicked");
+		$.each(prevClicked, function(index) {
+			prevClicked.toggleClass("clicked");
+		});
+		$(this).toggleClass("clicked", toggleSelf);
     };
 
     var right = $("<div>").addClass("right-col");
@@ -244,7 +257,7 @@ var Workspace = function(words) {
 		"id" : "emptyTile" + index + "_" + i,
 		"ondrop" : "dropTileInEmptyTile(event)",
 		"ondragover" : "dragTileOverEmptyTile(event)",
-		"ondraglevae" : "leaveEmptyTile(event)"
+		"ondragleave" : "leaveEmptyTile(event)"
 	    });
 	    ans.append(emptyTile);
 	    emptyTile.bind('click', emptyClick);
@@ -285,17 +298,21 @@ var Workspace = function(words) {
 	if (num >= 97 && num <= 122) {
 	    var clicked = $(".clicked");
 	    if (clicked.length == 1) {
-		var t = getTileFromChar(String.fromCharCode(num));
-		if (t) {
-		    $(t).appendTo($(clicked[0]));
-		    $(t).removeClass("inTileArea");
-		    $(clicked[0]).removeClass("clicked");
-		    // TODO: check if the game has been won
-			var gameWon = window.board.workspace.winCheck();
-			if(gameWon) {
-				TransitionScreen(score);
+			var t = getTileFromChar(String.fromCharCode(num));
+			if (t) {
+				//Check if any children exist on the clicked box
+				var numChildren = clicked.children().length;
+				if(numChildren == 0) {
+					$(t).appendTo($(clicked[0]));
+					$(t).removeClass("inTileArea");
+					$(clicked[0]).removeClass("clicked");
+					// TODO: check if the game has been won
+					var gameWon = window.board.workspace.winCheck();
+					if(gameWon) {
+						TransitionScreen(score);
+					}
+				}
 			}
-		}
 	    }
 	}
 	if(num == 13) {
@@ -314,10 +331,10 @@ var Workspace = function(words) {
 function getTileFromChar(tchar) {
     var tiles = $(".inTileArea");
     for (var i = 0; i < tiles.length; i++) {
-	if ($(tiles[i]).text() == tchar) {
-	    // return the tile in the box
-	    return $(tiles[i]);
-	}
+		if ($(tiles[i]).text() == tchar) {
+			// return the tile in the box
+			return $(tiles[i]);
+		}
     }
     return false;
 }
