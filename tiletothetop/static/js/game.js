@@ -244,43 +244,48 @@ var Workspace = function(words) {
     };
 
     var answerClick = function(e) {
-	// If none of the children of this answer are clicked, then go
-	// through with it
-	var children = $(this).children();
-	for (var i = 0; i < children.length; i++) {
-	    if ($(children[i]).hasClass("clicked")) {
-		return false;
-	    }	
-	}
-	// Get the first empty one
-	var next = getNextEmpty($(children[0]).attr("id"));
-	$(next).triggerHandler("click")
+		// If none of the children of this answer are clicked, then go
+		// through with it
+		var target = e.target;
+		//Making sure that the user clicked the answer portion and not an EmptyTile
+		if(target == this)
+		{
+			var children = $(this).children();
+			for (var i = 0; i < children.length; i++) {
+				if ($(children[i]).hasClass("clicked")) {
+				return false;
+				}	
+			}
+			// Get the first empty one
+			var next = getNextEmpty($(children[0]).attr("id"));
+			$(next).triggerHandler("click")
+		}
     }
     
     var right = $("<div>").addClass("right-col");
     $("#definitions-answers-area").append(right);
     $.each(words, function(index) {
-	var ans = $("<div>");
-	ans.addClass("answer");
-	ans.bind('click', answerClick)
-	right.append(ans);
-	var word = words[index];
-	for(var i = 0; i < word.length; i++) {
-	    var emptyTile = $("<div>");
-	    emptyTile.addClass("emptyTileLoc");
-	    emptyTile.attr({
-		"id" : "emptyTile_" + index + "_" + i,
-		"ondrop" : "dropTileInEmptyTile(event)",
-		"ondragover" : "dragTileOverEmptyTile(event)",
-		"ondragleave" : "leaveEmptyTile(event)"
-	    });
-	    ans.append(emptyTile);
-	    emptyTile.bind('click', emptyClick);
-	    var off = ans.offset();
-	    var widthOff = (i * (emptyTile.width() + 10));
-	    var heightOff = 10;
-	    emptyTile.offset({top: off.top + heightOff, left: off.left + 10 + widthOff});
-	}
+		var ans = $("<div>");
+		ans.addClass("answer");
+		ans.bind('click', answerClick)
+		right.append(ans);
+		var word = words[index];
+		for(var i = 0; i < word.length; i++) {
+			var emptyTile = $("<div>");
+			emptyTile.addClass("emptyTileLoc");
+			emptyTile.attr({
+			"id" : "emptyTile_" + index + "_" + i,
+			"ondrop" : "dropTileInEmptyTile(event)",
+			"ondragover" : "dragTileOverEmptyTile(event)",
+			"ondragleave" : "leaveEmptyTile(event)"
+			});
+			ans.append(emptyTile);
+			emptyTile.bind('click', emptyClick);
+			var off = ans.offset();
+			var widthOff = (i * (emptyTile.width() + 10));
+			var heightOff = 10;
+			emptyTile.offset({top: off.top + heightOff, left: off.left + 10 + widthOff});
+		}
     });
     
     //Checks to see if the solution has been found
@@ -290,12 +295,12 @@ var Workspace = function(words) {
 	for(index = 0; index < children.length; index++) {
 	    var answerTiles = $(children[index]).children();
 	    for(var i = 0; i < answerTiles.length; i++) {
-		var answerTile = $(answerTiles[i]);
-		var letter = $(answerTile.children()[0]).html();
-		var correctLetter = solutions[index][i];
-		if(letter != correctLetter) {
-		    gameWon = false;
-		}
+			var answerTile = $(answerTiles[i]);
+			var letter = $(answerTile.children()[0]).html();
+			var correctLetter = solutions[index][i];
+			if(letter != correctLetter) {
+				gameWon = false;
+			}
 	    }
 	}
 	var holder = gameWon;
@@ -304,40 +309,40 @@ var Workspace = function(words) {
     
     // Typing controls for the empty boxes
     $(document).bind('keypress', function(e) {
-	// In firefox, e.which gets set instead of e.keypress
-	var num = e.keyCode;
-	if (num == 0) {
-	    num = e.which;
-	}
-	// One of the keys a - z was pressed.
-	if (num >= 97 && num <= 122) {
-	    var clicked = $(".clicked");
-	    if (clicked.length == 1) {
-			var t = getTileFromChar(String.fromCharCode(num));
-			if (t) {
-				//Check if any children exist on the clicked box
-				var numChildren = clicked.children().length;
-				if(numChildren == 0) {
-					$(t).appendTo($(clicked[0]));
-					$(t).removeClass("inTileArea");
-					$(clicked[0]).removeClass("clicked");
-					// TODO: check if the game has been won
-					var gameWon = window.board.workspace.winCheck();
-					if(gameWon) {
-						TransitionScreen(score);
+		// In firefox, e.which gets set instead of e.keypress
+		var num = e.keyCode;
+		if (num == 0) {
+			num = e.which;
+		}
+		// One of the keys a - z was pressed.
+		if (num >= 97 && num <= 122) {
+			var clicked = $(".clicked");
+			if (clicked.length == 1) {
+				var t = getTileFromChar(String.fromCharCode(num));
+				if (t) {
+					//Check if any children exist on the clicked box
+					var numChildren = clicked.children().length;
+					if(numChildren == 0) {
+						$(t).appendTo($(clicked[0]));
+						$(t).removeClass("inTileArea");
+						$(clicked[0]).removeClass("clicked");
+						// TODO: check if the game has been won
+						var gameWon = window.board.workspace.winCheck();
+						if(gameWon) {
+							TransitionScreen(score);
+						}
+						// If there is a next empty tile in this answer area, make it "clicked"
+						var next = getNextEmpty($(clicked[0]).attr("id"));
+						if (next) {
+						$(next).addClass("clicked")
+						}
 					}
-				    // If there is a next empty tile in this answer area, make it "clicked"
-				    var next = getNextEmpty($(clicked[0]).attr("id"));
-				    if (next) {
-					$(next).addClass("clicked")
-				    }
 				}
 			}
-	    }
-	}
-	if(num == 13) {
-	    alert(self.getSolutions());
-	}
+		}
+		if(num == 13) {
+			alert(self.getSolutions());
+		}
     });
 
     //Helper for solutions
