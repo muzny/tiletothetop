@@ -254,7 +254,7 @@ var Workspace = function(words) {
 	    var emptyTile = $("<div>");
 	    emptyTile.addClass("emptyTileLoc");
 	    emptyTile.attr({
-		"id" : "emptyTile" + index + "_" + i,
+		"id" : "emptyTile_" + index + "_" + i,
 		"ondrop" : "dropTileInEmptyTile(event)",
 		"ondragover" : "dragTileOverEmptyTile(event)",
 		"ondragleave" : "leaveEmptyTile(event)"
@@ -311,6 +311,11 @@ var Workspace = function(words) {
 					if(gameWon) {
 						TransitionScreen(score);
 					}
+				    // If there is a next empty tile in this answer area, make it "clicked"
+				    var next = getNextEmpty($(clicked[0]).attr("id"));
+				    if (next) {
+					$(next).addClass("clicked")
+				    }
 				}
 			}
 	    }
@@ -338,6 +343,25 @@ function getTileFromChar(tchar) {
     }
     return false;
 }
+
+// Gets the next empty box in an answer area
+function getNextEmpty(prevId) {
+    // Get the first number
+    var answerNum = parseInt(prevId.split("_")[1]);
+    var boxNum = parseInt(prevId.split("_")[2]);
+    var i = boxNum;
+    while (true) {
+	var id = "#emptyTile_" + answerNum + "_" + i;
+	var empty = $(id);
+	if (empty.length == 1 && empty.children().length == 0) {
+	    return $(empty[0]);
+	} else if (empty.length == 0) {
+	    return false;
+	}
+	i += 1
+    }
+}
+
 
 var OptionsArea = function() {
 	var optionsArea = $("<div>").attr("id", "options-area");
