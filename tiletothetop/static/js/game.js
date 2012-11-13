@@ -243,11 +243,26 @@ var Workspace = function(words) {
 		$(this).toggleClass("clicked", toggleSelf);
     };
 
+    var answerClick = function(e) {
+	// If none of the children of this answer are clicked, then go
+	// through with it
+	var children = $(this).children();
+	for (var i = 0; i < children.length; i++) {
+	    if ($(children[i]).hasClass("clicked")) {
+		return false;
+	    }	
+	}
+	// Get the first empty one
+	var next = getNextEmpty($(children[0]).attr("id"));
+	$(next).triggerHandler("click")
+    }
+    
     var right = $("<div>").addClass("right-col");
     $("#definitions-answers-area").append(right);
     $.each(words, function(index) {
 	var ans = $("<div>");
 	ans.addClass("answer");
+	ans.bind('click', answerClick)
 	right.append(ans);
 	var word = words[index];
 	for(var i = 0; i < word.length; i++) {
@@ -287,7 +302,7 @@ var Workspace = function(words) {
 	return gameWon;
     };
     
-    //Cheat to get solutions
+    // Typing controls for the empty boxes
     $(document).bind('keypress', function(e) {
 	// In firefox, e.which gets set instead of e.keypress
 	var num = e.keyCode;
