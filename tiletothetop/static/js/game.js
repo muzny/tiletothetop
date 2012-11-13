@@ -253,7 +253,8 @@ var Workspace = function(words) {
 			var children = $(this).children();
 			for (var i = 0; i < children.length; i++) {
 				if ($(children[i]).hasClass("clicked")) {
-				return false;
+					$(children[i]).triggerHandler("click");
+					return false;
 				}	
 			}
 			// Get the first empty one
