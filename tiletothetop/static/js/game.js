@@ -341,7 +341,7 @@ var Workspace = function(words) {
 				}
 			}
 		}
-		if(num == 13) {
+		if(num == 96) {
 			alert(self.getSolutions());
 		}
     });
