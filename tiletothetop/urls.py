@@ -14,6 +14,10 @@ urlpatterns = patterns('tiletothetop.views',
     # these two route ajax calls to the appropraite views (word services)
     url(r'^random-words/$', 'random_words', name='random_words'),
     url(r'^static-words/$', 'static_words', name='static_words'),
+
+    # these two routes get and post user data
+    url(r'^push-game-data/$', 'push_game_data', name='push_game_data'),
+    url(r'^get-user-data/$', 'get_user_data', name='get_user_data')
 )
 
 

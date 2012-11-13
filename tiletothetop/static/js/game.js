@@ -45,7 +45,8 @@ function TransitionScreen(score) {
 	// restart the game.
 	var scorebutton = $("<button>").html("Click to restart");
 	
-	scorebutton.click(function () { 
+	scorebutton.click(function () {
+                messenger.pushGameData(score);
 		messenger.getWords();
 		$.modal.close();
 		
@@ -406,7 +407,7 @@ var OptionsArea = function() {
 	scoreboard.click(function () { DummyModalFunction("Scoreboard") });
 	
 	account.html("Account");
-	account.click(function () { DummyModalFunction("Account") });
+	account.click(function () { GetAccountData() });
 	
 	about.html("About");
 	about.click(AboutModal);
@@ -421,6 +422,14 @@ var OptionsArea = function() {
 	$("body").append(optionsArea);
 	
 	return optionsArea;
+}
+
+/* Gets the account data for the currently logged in user
+ * clicking this button while not logged in is not currently
+ * handled well
+ */
+function GetAccountData() {
+        messenger.getUserData();
 }
 
 /* Creates a dummy modal of a div with the text in it.

@@ -23,4 +23,43 @@ var Messenger = function() {
 			}
 		});
 	}
+
+        // Pushes game data to the server based on the score fed into the
+        // function.  To be called on game completion
+        this.pushGameData = function(score) {
+		$.ajax({
+			url: "/push-game-data/",
+			type: "GET",
+			dataType: "json",
+			data: {"score" : score},
+			success: function() {
+				//TODO: implement callback fn parameter
+			},
+			error: function(data) {
+				if (DEBUG)
+					alert("ajax error");
+			}
+		});                
+        }
+
+        // Fetches user data from the server
+        this.getUserData = function() {
+		$.ajax({
+			url: "/get-user-data/",
+			type: "GET",
+			dataType: "json",
+			success: function(data) {
+				//TODO: implement callback fn parameter
+                                var output = '';
+                                for (property in data) {
+                                    output += property + ': ' + data[property]+'\n';
+                                }
+                                alert(output);
+			},
+			error: function(data) {
+				if (DEBUG)
+					alert("ajax error");
+			}
+		});
+        }
 }

@@ -7,8 +7,9 @@ from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.contrib.auth import logout as auth_logout, login as auth_login, authenticate
 from django.contrib.auth.models import User
+from django.core.context_processors import csrf
 
-from tiletothetop.models import Word
+from tiletothetop.models import Word, UserProfile, GameHistory
 from tiletothetop.forms import RegistrationForm, LoginForm
 
 
@@ -114,6 +115,59 @@ def register(request):
     auth_login(request, user)
 
     return HttpResponseRedirect(reverse('game'))
+
+
+
+##############################################################
+# User Data Views                                            #
+##############################################################
+
+def push_game_data(request):
+    # State Checks
+    if not request.user.is_authenticated():
+        return HttpResponse(status=204)
+    if not request.method == 'GET':
+        return HttpResponse(status=405)
+
+    # Make a new GameHistory object
+    new_game = GameHistory(
+                            user = request.user,
+                            score = request.GET["score"],
+                            word_difficulties = 0
+                        )
+    # And push it to the database
+    new_game.save()
+
+    return HttpResponse(status=201)
+
+def get_user_data(request):
+    # State Checks
+    if not request.user.is_authenticated():
+        return HttpResponse(status=401)
+    if not request.method == 'GET':
+        return HttpResponse(status=405)
+
+    # Get the user, fetch games played from server,
+    # make a new dictionary object, and return it
+    # NOTE: currently returns all returnable fields (minus pwd)
+    user = request.user
+    games_played = UserProfile.objects.filter(user__username=request.user)[0].games_played
+    userData = ({
+            'username': user.username,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'email': user.email,
+            'date_joined': str(user.date_joined),
+            'id': user.id,
+            'is_active': user.is_active,
+            'is_staff': user.is_staff,
+            'is_superuser': user.is_superuser,
+            'last_login': str(user.last_login),
+            'games_played': games_played
+        })
+    
+    return HttpResponse(simplejson.dumps(userData), mimetype="application/json")
+
 
 
 ##############################################################
