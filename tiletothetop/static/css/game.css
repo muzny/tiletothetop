@@ -219,3 +219,8 @@ a, a:link, a:visited {
 	background-color: blue;
 }
 
+/* Banner region */
+#logo img
+{
+    display: block;
+}
