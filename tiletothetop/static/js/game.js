@@ -6,7 +6,6 @@
 
 var board = null;
 var messenger = null;
-var options = null;
 var score = 0;
 var tileSize = 60;
 
@@ -25,12 +24,12 @@ var StartScreen = function() {
 	});
 	textBox.html("Click anywhere to start!");
 	screen.append(textBox);
-	
+
 	screen.click(function () {
 		$.modal.close();
 		//TransitionScreen(score);
 	});
-	
+
 	screen.modal({closeHTML : "", overlayClose : true});
 }
 
@@ -40,23 +39,20 @@ var StartScreen = function() {
 function TransitionScreen(score) {
 	// Create a new div with the score inside it.
 	var scorediv = $("<div>").html("<h1>SCORE: " + score + "</h1>");
-	
+
 	// Add a link to the score div that allows the user to
 	// restart the game.
 	var scorebutton = $("<button>").html("Click to restart");
-	
+
 	scorebutton.click(function () {
                 messenger.pushGameData(score);
 		messenger.getWords();
 		$.modal.close();
-		
+
 		// Clean up the board.
 		$("#game-area").html("");
-		if (options != null) {
-			options.remove();
-		}
 	});
-	
+
 	scorediv.append(scorebutton);
 	scorediv.modal();
 }
@@ -77,7 +73,6 @@ var Board = function(data) {
 		letters = letters.concat(words[i].split(""));
     }
     this.tileArea = new TileArea(letters);
-    options = new OptionsArea();
 };
 
 var TileArea = function(letters) {
@@ -87,7 +82,7 @@ var TileArea = function(letters) {
 		"ondragover" : "dragTileOverTileArea(event)",
 		"ondragleave" : "leaveTileArea(event)"
 	});*/
-	
+
     $("#game-area").append(tilesArea);
     // Can't go get these until we've added it to the page.
     var areaWidth = tilesArea.width();
@@ -117,7 +112,8 @@ var TileArea = function(letters) {
 		var tile = $("<div>");
 		tile.addClass("tile");
 		tile.addClass("inTileArea");
-		tile.text(letters[index]);
+		//tile.text(letters[index]);
+        tile.html("<p>"+letters[index]+"</p>");
 		//Setting the tile's id and making it draggable
 		tile.attr("id", "tile" + index);
 		tile.attr("draggable", "true");
@@ -148,7 +144,7 @@ function dragTileOverTileArea(ev) {
 
 //This should cancel the special effects added in dragTileOverTileArea()
 function leaveTileArea(ev) {
-	
+
 }
 
 //Drops the tile into the TileArea
@@ -179,7 +175,7 @@ function dragTileOverEmptyTile(ev) {
 
 //This should cancel the special effects added in dragTileOverEmptyTile()
 function leaveEmptyTile(ev) {
-	
+
 }
 
 //Drops the tile into the EmptyTile
@@ -256,14 +252,14 @@ var Workspace = function(words) {
 				if ($(children[i]).hasClass("clicked")) {
 					$(children[i]).triggerHandler("click");
 					return false;
-				}	
+				}
 			}
 			// Get the first empty one
 			var next = getNextEmpty($(children[0]).attr("id"));
 			$(next).triggerHandler("click")
 		}
     }
-    
+
     var right = $("<div>").addClass("right-col");
     $("#definitions-answers-area").append(right);
     $.each(words, function(index) {
@@ -289,7 +285,7 @@ var Workspace = function(words) {
 			emptyTile.offset({top: off.top + heightOff, left: off.left + 10 + widthOff});
 		}
     });
-    
+
     //Checks to see if the solution has been found
     this.winCheck = function() {
 	var children = right.children();
@@ -308,7 +304,7 @@ var Workspace = function(words) {
 	var holder = gameWon;
 	return gameWon;
     };
-    
+
     // Typing controls for the empty boxes
     $(document).bind('keypress', function(e) {
 		// In firefox, e.which gets set instead of e.keypress
@@ -384,46 +380,6 @@ function getNextEmpty(prevId) {
     }
 }
 
-
-var OptionsArea = function() {
-	var optionsArea = $("<div>").attr("id", "options-area");
-	
-	// Create the buttons for the different options
-	var levelSelect = $("<button>").attr("class", "options-button");
-	var customWords = $("<button>").attr("class", "options-button");
-	var scoreboard = $("<button>").attr("class", "options-button");
-	var account = $("<button>").attr("class", "options-button");
-	var about = $("<button>").attr("class", "options-button");
-	
-	// Add text to each of the buttons, and set them to display
-	// their options when clicked.
-	levelSelect.html("Level Select");
-	levelSelect.click(function () { DummyModalFunction("Level Select") });
-	
-	customWords.html("Custom Words");
-	customWords.click(function () { DummyModalFunction("Custom Words") });
-	
-	scoreboard.html("Scoreboard");
-	scoreboard.click(function () { DummyModalFunction("Scoreboard") });
-	
-	account.html("Account");
-	account.click(function () { GetAccountData() });
-	
-	about.html("About");
-	about.click(AboutModal);
-	
-	// Throw the buttons in the options area, and throw
-	// the options area in the body.
-	optionsArea.append(levelSelect);
-	optionsArea.append(customWords);
-	optionsArea.append(scoreboard);
-	optionsArea.append(account);
-	optionsArea.append(about);
-	$("body").append(optionsArea);
-	
-	return optionsArea;
-}
-
 /* Gets the account data for the currently logged in user
  * clicking this button while not logged in is not currently
  * handled well
@@ -432,29 +388,3 @@ function GetAccountData() {
         messenger.getUserData();
 }
 
-/* Creates a dummy modal of a div with the text in it.
- * Used for placeholding purposes. You can click
- * anywhere outside of the modal to close it.
- */
-function DummyModalFunction(text) {
-	var div = $("<div>").html(text);
-	div.modal({closeHTML : "", overlayClose : true});
-}
-
-/* Pop up a modal with our "About" information.
- * 
- */
-function AboutModal()
-{	
-	var aboutDiv = $("<div>");
-	var names = new Array("Laura Dong", "Rowan Hale", "Adam Kalman", "Justin McManus", "Grace Muzny", "Steve Seedall", "Cullen Su");
-	
-	
-	for (var i = 0; i < names.length; ++i)
-	{
-		var nameDiv = $("<p>").html(names[i]);
-		aboutDiv.append(nameDiv);
-	}
-	 
-	aboutDiv.modal({closeHTML : "", overlayClose : true});
-}

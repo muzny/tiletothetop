@@ -1,0 +1,45 @@
+    <!-- Modals -->
+    <div id="login-modal" class="modal">
+        <form action="{% url login %}" method="post">
+            {% csrf_token %}
+            {% if login_form.non_field_errors or login_errors %}
+            <ul class="errorlist">
+                {% for error in login_form.non_field_errors %}
+                <li>{{ error|escape }}</li>
+                {% endfor %}
+
+                {% for error in login_errors %}
+                <li>{{ error|escape }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+            {% for field in login_form %}
+            {{ field.label_tag }}{{ field }}<span class="field-error">{{ field.errors.0 }}</span>
+            {% endfor %}
+            <input type="submit" value="Login" />
+        </form>
+    </div>
+
+    <div id="register-modal" class="modal">
+        <form action="{% url register %}" method="post">
+            {% csrf_token %}
+            {% if registration_form.non_field_errors or registration_errors %}
+            <ul class="errorlist">
+                {% for error in registration_form.non_field_errors %}
+                <li>{{ error|escape }}</li>
+                {% endfor %}
+
+                {% for error in registration_errors %}
+                <li>{{ error|escape }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+            {% for field in registration_form %}
+            {{ field.label_tag }} {{ field }}<span class="field-error">{{ field.errors.0 }}</span>
+            {% endfor %}
+            <input type="submit" value="Sign Up" />
+        </form>
+    </div>
+

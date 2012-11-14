@@ -6,73 +6,71 @@
 {% endblock %}
 
 {% block content %}
-    <div id="navbar">
-        {% if user.is_authenticated %}
-        Hello, {{ user.username }}</a> |
-        <a id="logout-button" href="{% url logout %}">Logout</a>
-        {% else %}
-        <a id="register-button" href="#">Sign Up</a> |
-        <a id="login-button" href="#">Login</a> | or you can
-        <a href="{% url socialauth_begin 'facebook' %}">Sign Up / Login with Facebook</a>
-        {% endif %}
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="brand" href="#">TileToTheTop</a>
+                {% if user.is_authenticated %}
+                <ul class="nav">
+                    <li><a href="#">Hello, {{ user.username }}</a>
+                </ul>
+                <ul class="nav pull-right">
+                    <li><a id="logout-button" href="{% url logout %}">Logout</a></li>
+                </ul>
+                {% else %}
+                <ul class="nav">
+                    <li><a id="register-button" href="#">Register</a></li>
+                    <li><a id="login-button" href="#">Login</a></li>
+                    <li><a href="{% url socialauth_begin 'facebook' %}">Login with Facebook</a></li>
+                </ul>
+                {% endif %}
+            </div>
+        </div>
     </div>
 
-    <div id="logo">
-        <img src={%static "t4logo_v0.2_70.png" %} />  
-    </div>
+    <div class="container" style="margin-top: 60px">
+        <div id="logo">
+            <img src={%static "t4logo_v0.2_70.png" %} />  
+        </div>
 
-    <div id=game-area></div>
-
-    <!-- Modals -->
-    <div id="login-modal" class="modal">
-        <form action="{% url login %}" method="post">
-            {% csrf_token %}
-            {% if login_form.non_field_errors or login_errors %}
-            <ul class="errorlist">
-                {% for error in login_form.non_field_errors %}
-                <li>{{ error|escape }}</li>
-                {% endfor %}
-
-                {% for error in login_errors %}
-                <li>{{ error|escape }}</li>
-                {% endfor %}
+        <div class="tabbable"> <!-- Only required for left/right tabs -->
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#game-area" data-toggle="tab">Play</a></li>
+                <li><a href="#settings" data-toggle="tab">Settings</a></li>
+                <li><a href="#account" data-toggle="tab">Account</a></li>
+                <li><a href="#leaderboard" data-toggle="tab">Leaderboard</a></li>
+                <li><a href="#about" data-toggle="tab">About</a></li>
             </ul>
-            {% endif %}
-
-            {% for field in login_form %}
-            {{ field.label_tag }}{{ field }}<span class="field-error">{{ field.errors.0 }}</span>
-            {% endfor %}
-            <input type="submit" value="Login" />
-        </form>
+            <div class="tab-content">
+                <div class="tab-pane active" id="game-area">
+                </div>
+                <div class="tab-pane" id="settings">
+                    <p>Game settings</p>
+                </div>
+                <div class="tab-pane" id="account">
+                    <p>Account home</p>
+                </div>
+                <div class="tab-pane" id="leaderboard">
+                    <p>The Leaderboard</p>
+                </div>
+                <div class="tab-pane" id="about">
+                    <h2>About Us</h2>
+                    <p>Laura Dong<br />Rowan Hale<br />Adam Kalman<br />
+                       Justin McManus<br />Grace Muzny<br />Steve Seedall<br />
+                       Cullen Su
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div id="register-modal" class="modal">
-        <form action="{% url register %}" method="post">
-            {% csrf_token %}
-            {% if registration_form.non_field_errors or registration_errors %}
-            <ul class="errorlist">
-                {% for error in registration_form.non_field_errors %}
-                <li>{{ error|escape }}</li>
-                {% endfor %}
-
-                {% for error in registration_errors %}
-                <li>{{ error|escape }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-
-            {% for field in registration_form %}
-            {{ field.label_tag }} {{ field }}<span class="field-error">{{ field.errors.0 }}</span>
-            {% endfor %}
-            <input type="submit" value="Sign Up" />
-        </form>
-    </div>
+    {% include "modals.html" %}
 {% endblock %}
-
 {% block js %}
+        <script src="{% static "js/bootstrap.min.js"></script>
         <script src="{% static "js/game.js" %}"></script>
-		<script src="{% static "js/messenger.js" %}"></script>
+        <script src="{% static "js/messenger.js" %}"></script>
         <script src="{% static "js/jquery.simplemodal-1.4.3.js" %}"></script>
         <script src="{% static "js/modals.js" %}"></script>
-		<script src="{% static "js/utilities.js" %}"></script>
+        <script src="{% static "js/utilities.js" %}"></script>
 {% endblock %}

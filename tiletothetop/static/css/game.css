@@ -8,23 +8,21 @@ p {
     font-weight: bold;
 }
 
-div {
-    border: 4px solid black;
-}
-
 .definition, .answer {
     height: 75px;
     width: 100%;
+    margin: .25em .5em .25em;
+    padding: 5px;
 }
 
 .definition {
-    background-color: red;
+    background-color: #AD1D28;
     float: left;
     clear: left;
 }
 
 .answer {
-    background-color: green;
+    background-color: #48CA3B;
     float: right;
     clear: right;
 }
@@ -32,19 +30,23 @@ div {
 .tile {
     height: 50px;
     width: 50px;
-    background-color: orange;
+    background-color: #DF6E1E;
     border-radius: 10px;
     text-align: center;
 }
 
+.tile p {
+    padding-top: .7em;
+}
 
 .tile-box {
     display: table-cell;
-    border: 1px dotted red;
+    border: 1px dotted #AD1D28;
     padding: 4px 6px;
     width: 2%;
     margin-bottom: 0;
 }
+
 
 .tile-row {
     display: table;
@@ -58,40 +60,37 @@ div {
 .emptyTileLoc {
 	height: 55px;
 	width: 55px;
-	background-color: grey;
+	background-color: #26666C;
 	border-radius: 10px;
 	float: left;
 }
 
 .clicked {
-    border: solid yellow 4px;
-}
-
-.inTileArea {
-    background-color: "red";
+    border: 2px solid yellow;
 }
 
 #game-area {
     background-color: cyan;
     overflow: hidden;
     padding: 5px;
-    margin: 5px;
-    min-width: 1000px;
+    width: 900px;
+    margin: 1em auto 1em;
 }
 
 #definitions-answers-area {
+    padding: .25em 0 .25em;
     background-color: yellow;
     overflow: hidden;
 }
 
 .left-col {
     float: left;
-    width: 48%;
+    width: 30%;
 }
 
 .right-col {
     float: right;
-    width: 48%;
+    width: 66%;
 }
 
 #tiles-area {
@@ -179,6 +178,9 @@ a, a:link, a:visited {
     margin-left: 275px;
 }
 
+/* end Login/Register modals */
+
+
 /* CSS Rules to disallow highlighting of any elements.
  * The ::-moz-selection is firefox specific.
  * */
@@ -224,3 +226,11 @@ a, a:link, a:visited {
 {
     display: block;
 }
+
+/* Bootstrap -related UI stuff */
+
+.tab-content {
+    background-color: #26666C;
+}
+
+/* end bootstrap-related UI stuff */
