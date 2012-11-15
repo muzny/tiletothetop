@@ -186,8 +186,8 @@ function dropTileInEmptyTile(ev) {
 		var tile = document.getElementById(data);
 		//Set location
 		//Seems like the "absolute" layout will be relative to the parent's position if the parent's layout is also "absolute"
-		tile.style.top = "0";
-		tile.style.left = "0";
+		//tile.style.top = "0";
+		//tile.style.left = "0";
 		ev.currentTarget.appendChild(tile);
 
 		// Tile is no longer in the tile area
@@ -291,7 +291,7 @@ var Workspace = function(words) {
 	    var answerTiles = $(children[index]).children();
 	    for(var i = 0; i < answerTiles.length; i++) {
 			var answerTile = $(answerTiles[i]);
-			var letter = $(answerTile.children()[0]).html();
+			var letter = $(answerTile.children()[0]).text();
 			var correctLetter = solutions[index][i];
 			if(letter != correctLetter) {
 				gameWon = false;
