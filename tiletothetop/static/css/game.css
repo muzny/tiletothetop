@@ -202,5 +202,26 @@ button.close {
     font-weight: bold;
 }
 
+.tab-pane {
+    background-color: #108D97;
+    overflow: hidden;
+    width: 900px;
+    margin: 1em auto 1em;
+}
+
+.tab-pane h3 {
+    background-color: #AD1D28;
+    margin-top: 0px;
+    padding-left: .5em;
+}
+
+#account-data div.labels {
+    text-align: right;
+}
+
+#about-data p {
+    text-align: center;
+}
+
 /* end bootstrap-related UI stuff */
 

@@ -48,17 +48,22 @@
                     <p>Game settings</p>
                 </div>
                 <div class="tab-pane" id="account">
-                    <p>Account home</p>
+                    {% include "account.html" %}
                 </div>
                 <div class="tab-pane" id="leaderboard">
                     <p>The Leaderboard</p>
                 </div>
                 <div class="tab-pane" id="about">
-                    <h2>About Us</h2>
-                    <p>Laura Dong<br />Rowan Hale<br />Adam Kalman<br />
-                       Justin McManus<br />Grace Muzny<br />Steve Seedall<br />
-                       Cullen Su
-                    </p>
+                    <div id="about-data">
+                        <h3>The Development Team</h3>
+                        <p>Laura Dong</p>
+                        <p>Rowan Hale</p>
+                        <p>Adam Kalman</p>
+                        <p>Justin McManus</p>
+                        <p>Grace Muzny</p>
+                        <p>Steve Seedall</p>
+                        <p>Cullen Su</p>
+                    </div>
                 </div>
             </div>
         </div>

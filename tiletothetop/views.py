@@ -165,9 +165,8 @@ def get_user_data(request):
             'last_login': str(user.last_login),
             'games_played': games_played
         })
-    
-    return HttpResponse(simplejson.dumps(userData), mimetype="application/json")
 
+    return HttpResponse(simplejson.dumps(userData), mimetype="application/json")
 
 
 ##############################################################
