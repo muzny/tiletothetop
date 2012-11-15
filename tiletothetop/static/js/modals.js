@@ -1,21 +1,12 @@
 $(function () {
-    $("#login-button").click(function () {
-        $("#login-modal").modal();
-    });
-    $("#register-button").click(function () {
-        $("#register-modal").modal();
-    });
-
-    var register_errors = $("#register-modal").find(".field-error");
-    var login_errors = $("#login-modal").find(".field-error");
-    if ($("#register-modal").find(".errorlist").length > 0
-        || $.grep(register_errors, function(e) { return $(e).html() != ""}).length > 0) {
-        $("#register-modal").modal();
-    }
-    else if ($("#login-modal").find(".errorlist").length > 0
-             || $.grep(login_errors, function(e) { return $(e).html() != ""}).length > 0)  {
-        $("#login-modal").modal();
-    }
+	// ==================================  MODALS ============================================================ //
+	// If one of the modals has errors, it's because we just sent the user back here to fix them.  Show the modal.
+	if (($("#register-modal").find(".help-inline").length > 0) || ($("#register-modal").find(".alert").length > 0)) {
+    	$("#register-modal").modal("show");
+	}
+	else if (($("#login-modal").find(".help-inline").length > 0) || ($("#login-modal").find(".alert").length > 0)) {
+		$("#login-modal").modal("show");
+	}
 
     // this is just a quick fix to an old bug in facebook authentication where it appends
     // #_=_ to the redirect url

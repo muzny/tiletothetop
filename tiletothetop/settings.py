@@ -129,11 +129,18 @@ INSTALLED_APPS = (
     'gunicorn',
     'south',
     'social_auth',
+    'crispy_forms',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
+
+# let django-crispy-forms know we're using bootstrap
+CRISPY_TEMPLATE_PACK = 'bootstrap'
+
+# don't log silently while we're in debug mode
+CRISPY_FAIL_SILENTLY = not DEBUG
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

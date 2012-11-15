@@ -16,22 +16,10 @@ $(window).load(function() {
 });
 
 var StartScreen = function() {
-	var screen = $("<div>").attr("id", "start-screen");
-	var textBox = $("<p>").attr({
-		"width" : "100%",
-		"height": "100%",
-		"align" : "center"
-	});
-	textBox.html("Click anywhere to start!");
-	screen.append(textBox);
-
-	screen.click(function () {
-		$.modal.close();
-		//TransitionScreen(score);
-	});
-
-	screen.modal({closeHTML : "", overlayClose : true});
-}
+    var startscreen = $('#start-screen');
+    startscreen.click(function() { startscreen.modal('hide'); });
+	$('#start-screen').modal('show');
+};
 
 /* Creates a modal popup that displays the given score and
  * allows the user to restart the game.
@@ -45,16 +33,16 @@ function TransitionScreen(score) {
 	var scorebutton = $("<button>").html("Click to restart");
 
 	scorebutton.click(function () {
-                messenger.pushGameData(score);
+        messenger.pushGameData(score);
 		messenger.getWords();
-		$.modal.close();
+		scorediv.modal('hide');
 
 		// Clean up the board.
 		$("#game-area").html("");
 	});
 
 	scorediv.append(scorebutton);
-	scorediv.modal();
+	scorediv.modal('show');
 }
 
 var Board = function(data) {

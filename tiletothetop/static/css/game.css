@@ -102,42 +102,13 @@ p {
 }
 
 #start-screen {
-	background-color: red;
-	min-width: 50%;
-	min-height: 50%;
-	align: center;
-	border: double 5px black;
+	background-color: #AD1D28;
 }
 
-.simplemodal-container {
-	border: 0px;
-}
-
-.simplemodal-wrap {
-	border: 0px;
-}
-
-.simplemodal-data {
-	padding: 1em;
-	background-color: grey;
-	align: center;
-}
-
-#simplemodal-overlay {
-	background-color:#000;
-}
-
-
-#simplemodal-container a.modalCloseImg {
-	background:url(/static/x.png) no-repeat; /* adjust url as required */
-	width:25px;
-	height:29px;
-	display:inline;
-	z-index:3200;
-	position:absolute;
-	top:-15px;
-	right:-18px;
-	cursor:pointer;
+#start-screen p {
+    text-align: center;
+    display: block;
+    margin: 3em auto 3em;
 }
 
 a, a:link, a:visited {
@@ -145,29 +116,7 @@ a, a:link, a:visited {
 	text-decoration: none;
 }
 
-
-/* Login/Register Modals */
-.modal {
-    display: none;
-    width: 600px;
-    float: left;
-}
-
-.modal label {
-    float: left;
-    clear: left;
-    width: 250px;
-    text-align: right;
-    margin-right: .5em;
-}
-
-.modal input[type="submit"] {
-    clear: both;
-}
-
-.modal input {
-    float: left;
-}
+/* Login/Register modals */
 
 .errorlist, .field-error {
     color: red;
@@ -233,4 +182,25 @@ a, a:link, a:visited {
     background-color: #26666C;
 }
 
+.control-group.error .help-inline, .control-group.error .help-block {
+    color: #B94E48;
+    font-size: 70%;
+    display: block;
+    clear: both;
+}
+
+.control-group.error > label {
+    color: black;
+}
+
+#login-form, #registration-form {
+    margin-bottom: 0px;
+}
+
+button.close {
+    font-size: 200%;
+    font-weight: bold;
+}
+
 /* end bootstrap-related UI stuff */
+

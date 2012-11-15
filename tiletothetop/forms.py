@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
+from crispy_forms.helper import FormHelper
 
 class RegistrationForm(forms.Form):
     # all fields are required, but some are checked manually below, to avoid
@@ -8,6 +9,14 @@ class RegistrationForm(forms.Form):
     email = forms.EmailField(max_length=30, label="Email", required=True)
     password1 = forms.CharField(widget=forms.PasswordInput(render_value=False), label="Password")
     password2 = forms.CharField(widget=forms.PasswordInput(render_value=False), label="Confirm Password")
+
+    # used by django-crispy-forms - gives us lots of control over how forms are rendered
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.help_text_inline = True
+        self.helper.error_text_inline = True
+        super(RegistrationForm, self).__init__(*args, **kwargs)
 
     def clean_username(self):
         username = self.cleaned_data.get('username', None)
@@ -46,6 +55,14 @@ class RegistrationForm(forms.Form):
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=30, label="Username", required=True)
     password = forms.CharField(widget=forms.PasswordInput(render_value=False), label="Password", required=True)
+
+    # used by django-crispy-forms - gives us lots of control over how forms are rendered
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.help_text_inline = True
+        self.helper.error_text_inline = True
+        super(LoginForm, self).__init__(*args, **kwargs)
 
     def clean_username(self):
         username = self.cleaned_data.get('username', None)
