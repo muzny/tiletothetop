@@ -3,9 +3,9 @@
 // the server using ajax requests.
 
 var Messenger = function() {
-	
+
 	var DEBUG = true;
-	
+
 	// Gets random words from the server and creates a new board with these
 	// words when they are recieved successfully.
 	this.getWords = function() {
@@ -22,7 +22,7 @@ var Messenger = function() {
 					alert("ajax error");
 			}
 		});
-	}
+	};
 
         // Pushes game data to the server based on the score fed into the
         // function.  To be called on game completion
@@ -36,11 +36,10 @@ var Messenger = function() {
 				//TODO: implement callback fn parameter
 			},
 			error: function(data) {
-				if (DEBUG)
 					alert("ajax error");
 			}
-		});                
-        }
+		});
+        };
 
         // Fetches user data from the server
         this.getUserData = function() {
@@ -49,17 +48,13 @@ var Messenger = function() {
 			type: "GET",
 			dataType: "json",
 			success: function(data) {
-				//TODO: implement callback fn parameter
-                                var output = '';
-                                for (property in data) {
-                                    output += property + ': ' + data[property]+'\n';
-                                }
-                                alert(output);
+                insertAccountData(data);
 			},
 			error: function(data) {
-				if (DEBUG)
-					alert("ajax error");
+                // always errors if user is not logged in
+                // probably better to send back an empty
+                // JSON object from server
 			}
 		});
-        }
-}
+        };
+};

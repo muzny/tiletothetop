@@ -13,6 +13,7 @@ $(window).load(function() {
     StartScreen();
 	messenger = new Messenger();
     messenger.getWords();
+    GetAccountData();
 });
 
 var StartScreen = function() {
@@ -381,6 +382,41 @@ function getNextEmpty(prevId) {
  * handled well
  */
 function GetAccountData() {
-        messenger.getUserData();
+    messenger.getUserData();
+}
+
+function insertAccountData(data) {
+    if (!data.hasOwnProperty('username')) {
+        return; // not what we expected
+    }
+
+    $('#username').text(data.username);
+    var prettyDate = data.date_joined.split(' ')[0];
+    $('#date_joined').text(prettyDate);
+    prettyDate = data.last_login.split(' ')[0];
+    $('#last_login').text(prettyDate);
+    $('#games_played').text(data.games_played);
+
+    // some users don't have first, last names or emails
+    // associated with their accounts
+    if (!data.hasOwnProperty('first_name') || data.first_name === '') {
+        $('#first_name').remove();
+        $('#first_name_label').remove();
+    } else {
+        $('#first_name').text(data.first_name);
+    }
+
+    if (!data.hasOwnProperty('last_name') || data.last_name === '') {
+        $('#last_name').remove();
+        $('#last_name_label').remove();
+    } else {
+        $('#last_name').text(data.last_name);
+    }
+    if (!data.hasOwnProperty('email') || data.email === '') {
+        $('#email').remove();
+        $('#email_label').remove();
+    } else {
+        $('#email').text(data.email);
+    }
 }
 

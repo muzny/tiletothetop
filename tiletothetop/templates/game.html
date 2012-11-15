@@ -33,11 +33,13 @@
             <img src={%static "t4logo_v0.2_70.png" %} />  
         </div>
 
-        <div class="tabbable"> <!-- Only required for left/right tabs -->
+        <div class="tabbable">
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#game-area" data-toggle="tab">Play</a></li>
                 <li><a href="#settings" data-toggle="tab">Settings</a></li>
+                {% if user.is_authenticated %}
                 <li><a href="#account" data-toggle="tab">Account</a></li>
+                {% endif %}
                 <li><a href="#leaderboard" data-toggle="tab">Leaderboard</a></li>
                 <li><a href="#about" data-toggle="tab">About</a></li>
             </ul>
@@ -50,9 +52,11 @@
                 <div class="tab-pane" id="settings">
                     <p>Game settings</p>
                 </div>
+                {% if user.is_authenticated %}
                 <div class="tab-pane" id="account">
                     {% include "account.html" %}
                 </div>
+                {% endif %}
                 <div class="tab-pane" id="leaderboard">
                     <p>The Leaderboard</p>
                 </div>

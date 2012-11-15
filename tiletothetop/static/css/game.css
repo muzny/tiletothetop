@@ -119,22 +119,9 @@ p {
 }
 
 a, a:link, a:visited {
-	color: #0645AD;
+	color: white;
 	text-decoration: none;
 }
-
-/* Login/Register modals */
-
-.errorlist, .field-error {
-    color: red;
-}
-
-.field-error {
-    float: left;
-    margin-left: 275px;
-}
-
-/* end Login/Register modals */
 
 
 /* CSS Rules to disallow highlighting of any elements.
@@ -230,5 +217,13 @@ button.close {
     text-align: center;
 }
 
+.modal a,.modal a:link,.modal a:visited {
+	color: #108F99;
+	text-decoration: none;
+} 
+
+.modal a:hover {
+    color: #3CB9C6;
+}
 /* end bootstrap-related UI stuff */
 
