@@ -10,24 +10,64 @@ var score = 0;
 var tileSize = 60;
 
 $(window).load(function() {
-    StartScreen();
+    createStartScreen();
 	messenger = new Messenger();
     messenger.getWords();
     GetAccountData();
 });
 
-var StartScreen = function() {
+function createStartScreen() {
     var startscreen = $('#start-screen');
     startscreen.click(function() {
         // hide the start screen
         startscreen.css({'visibility':'hidden', 'z-index':'-1'});
-        StartGame();
+        showGameElements();
+        // startGame() is called once all elements are visible
     });
-};
+}
 
-function StartGame() {
-    // user closed start screen
-    // start timer, score tracking logic, etc
+// called during board creation
+function hideGameElements() {
+    var defs = $('#game-area').find('.definition');
+    var empty = $('#game-area').find('.emptyTileLoc');
+    var tiles = $('#game-area').find('.tile');
+
+    var elements = $.merge(defs, $.merge(empty, tiles));
+    $.each(elements, function() {
+        $(this).hide();
+    });
+}
+
+function showGameElements() {
+    var defs = $('#game-area').find('.definition');
+    var empty = $('#game-area').find('.emptyTileLoc');
+    var tiles = $('#game-area').find('.tile');
+
+    var elements = $.merge(defs, $.merge(empty, tiles));
+
+    // can't call each b/c we want to wait for each to show
+    function showRecursive(rest) {
+        if (rest.length === 0) {
+            startGame();
+            return;
+        }
+
+        var next = rest.splice(0,1);
+        var time = 50;
+        if ($(next).hasClass('definition'))
+            time = 400;
+        $(next).show(time, function() {
+            showRecursive(rest);
+        });
+    }
+
+    showRecursive(elements.toArray());
+}
+
+function startGame() {
+    // user has closed start screen
+    // all game elements are now visible
+    // need to start timer, score tracking logic, etc
 }
 
 /* Creates a modal popup that displays the given score and
@@ -45,6 +85,7 @@ function TransitionScreen(score) {
         messenger.pushGameData(score);
 		messenger.getWords();
 		scorediv.modal('hide');
+        showGameElements();
 
 		// Clean up the board.
 		$("#game-area").html("");
@@ -70,6 +111,7 @@ var Board = function(data) {
 		letters = letters.concat(words[i].split(""));
     }
     this.tileArea = new TileArea(letters);
+    hideGameElements();
 };
 
 var TileArea = function(letters) {
