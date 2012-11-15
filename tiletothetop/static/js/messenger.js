@@ -19,7 +19,7 @@ var Messenger = function() {
 			},
 			error: function(data) {
 				if (DEBUG)
-					alert("ajax error");
+					alert("getWords ajax error");
 			}
 		});
 	};
@@ -36,7 +36,7 @@ var Messenger = function() {
 				//TODO: implement callback fn parameter
 			},
 			error: function(data) {
-					alert("ajax error");
+					alert("pushGameData ajax error");
 			}
 		});
         };
