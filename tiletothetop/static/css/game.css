@@ -70,6 +70,7 @@ p {
 }
 
 #game-area {
+    position: relative; // for absolutely position child (start-screen)
     background-color: cyan;
     overflow: hidden;
     padding: 5px;
@@ -102,7 +103,13 @@ p {
 }
 
 #start-screen {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
 	background-color: #AD1D28;
+    z-index: 100;
 }
 
 #start-screen p {

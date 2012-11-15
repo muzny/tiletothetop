@@ -10,16 +10,24 @@ var score = 0;
 var tileSize = 60;
 
 $(window).load(function() {
-    new StartScreen();
+    StartScreen();
 	messenger = new Messenger();
     messenger.getWords();
 });
 
 var StartScreen = function() {
     var startscreen = $('#start-screen');
-    startscreen.click(function() { startscreen.modal('hide'); });
-	$('#start-screen').modal('show');
+    startscreen.click(function() {
+        // hide the start screen
+        startscreen.css({'visibility':'hidden', 'z-index':'-1'});
+        StartGame();
+    });
 };
+
+function StartGame() {
+    // user closed start screen
+    // start timer, score tracking logic, etc
+}
 
 /* Creates a modal popup that displays the given score and
  * allows the user to restart the game.
