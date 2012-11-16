@@ -12,9 +12,16 @@ var tileSize = 60;
 $(window).load(function() {
     createStartScreen();
 	messenger = new Messenger();
-    messenger.getWords();
+    messenger.getWords(initializeBoard);
     GetAccountData();
 });
+
+function initializeBoard(data) {
+    if (board != null) {
+	board.workspace.cleanUp();
+    }
+    board = new Board(data);
+}
 
 function createStartScreen() {
     var startscreen = $('#start-screen');
@@ -86,12 +93,13 @@ function TransitionScreen(score) {
     $('#definitions-answers-area').remove();
     $('#tiles-area').remove();
 
+
     // show the transition screen, and load words in the background
     transitionScreen.css({'display':'visible', 'z-index':'100'});
     // if we call this immediately, it likely won't get the updated user data
     setTimeout(messenger.getUserData, 2000);
-	messenger.getWords(); // the getWords success callback inserts, but hides definitions and tiles
-
+	messenger.getWords(initializeBoard); // the getWords success callback inserts, but hides definitions and tiles
+    
 	transitionScreen.click(function () {
         transitionScreen.css({'display':'hidden', 'z-index':'-1'});
         showGameElements(); // animated display of definitions / tiles
@@ -349,7 +357,7 @@ var Workspace = function(words) {
     };
 
     // Typing controls for the empty boxes
-    $(document).bind('keypress', function(e) {
+    $(document).on('keypress', function(e) {
 		// In firefox, e.which gets set instead of e.keypress
 		var num = e.keyCode;
 		if (num == 0) {
@@ -390,6 +398,13 @@ var Workspace = function(words) {
     this.getSolutions = function() {
 	return solutions;
     };
+};
+
+// This method must be called if you are getting rid of an old workspace.
+// It turns off all of the old listeners so that crazy things
+// like multiple keypress events firing don't happen.
+Workspace.prototype.cleanUp = function() {
+    $(document).off('keypress');
 };
 
 // Given a character, will return the first tile from the tile area
