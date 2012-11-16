@@ -138,6 +138,10 @@ def push_game_data(request):
     # And push it to the database
     new_game.save()
 
+    profile = request.user.get_profile()
+    profile.games_played += 1
+    profile.save()
+
     return HttpResponse(status=201)
 
 def get_user_data(request):

@@ -107,7 +107,7 @@ p {
     overflow: hidden;
 }
 
-#start-screen {
+#start-screen, #transition-screen {
     position: absolute;
     left: 0px;
     top: 0px;
@@ -117,11 +117,19 @@ p {
     z-index: 100;
 }
 
+#transition-screen h1,
+#transition-screen p,
 #start-screen p {
     text-align: center;
     display: block;
     margin: 3em auto 3em;
 }
+
+#transition-screen {
+    z-index: -1;
+    display: hidden;
+}
+
 
 a, a:link, a:visited {
 	color: white;
@@ -229,6 +237,14 @@ button.close {
 
 .modal a:hover {
     color: #3CB9C6;
+}
+
+.brand img {
+    height: 40px;
+    width: 200px;
+    margin-top: -10px;
+    margin-bottom: -10px;
+    margin-left: .5em;
 }
 /* end bootstrap-related UI stuff */
 
