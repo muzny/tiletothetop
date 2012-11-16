@@ -168,10 +168,22 @@ var TileArea = function(letters) {
 		//Adding check for IE9 or above
 		if($.browser.msie && parseInt($.browser.version, 10) >= 9)
 		{
-			document.getElementById(tile.attr("id")).addEventListener("dragStart", dragTile, false);
+			var container = document.getElementById(tile.attr("id"));
+			if (container.dragDrop) {
+				$(container).bind('mousemove', handleDragMouseMove);
+			}
+			//document.getElementById(tile.attr("id")).addEventListener("dragStart", dragTile, false);
 		}
     });
 };
+
+//Function for IE9
+function handleDragMouseMove(e) {
+    var target = e.target;
+    if (window.event.button === 1) {
+        target.dragDrop();
+    }
+}
 
 //Called every time the tile is dragged
 function dragTile(ev) {
