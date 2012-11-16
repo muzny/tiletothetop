@@ -8,15 +8,15 @@ var Messenger = function() {
 
 	// Gets random words from the server and creates a new board with these
 	// words when they are recieved successfully.
-	this.getWords = function() {
+	this.getWords = function(successFn) {
 		$.ajax({
 			url: "/random-words/",
 			type: "GET",
 			dataType: "json",
 			data: {"word_count" : 4},
 			success: function(data) {
-				board = new Board(data);
-			},
+			    successFn(data); // better for game.js to 
+			},                   // initialize the board
 			error: function(data) {
 				if (DEBUG)
 					alert("getWords ajax error");
