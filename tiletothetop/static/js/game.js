@@ -172,7 +172,10 @@ var TileArea = function(letters) {
 		var row = parseInt(index / numInRow);
 		var col = index % numInRow;
 		var boxId = "#tileBox" + row + "_" + col;
-		$(boxId).append(tile)
+		$(boxId).append(tile);
+		var boxHeight = $(boxId).height();
+		var boxWidth = $(boxId).width();
+		tile.centerOnParent();
 		//Adding check for IE9 or above
 		if($.browser.msie && parseInt($.browser.version, 10) >= 9)
 		{
@@ -217,8 +220,9 @@ function dropTileInTileArea(ev) {
     if(numChildren == 0) {
 		ev.preventDefault();
 		var data=ev.dataTransfer.getData("Text");
-		var tile = document.getElementById(data)
+		var tile = document.getElementById(data);
 		ev.currentTarget.appendChild(tile);
+		$(tile).centerOnParent();
 		if (!$(tile).hasClass("inTileArea")) {
 		$(tile).addClass("inTileArea");
 		}
@@ -254,7 +258,7 @@ function dropTileInEmptyTile(ev) {
 		//tile.style.top = "0";
 		//tile.style.left = "0";
 		ev.currentTarget.appendChild(tile);
-
+		$(tile).centerOnParent();
 		// Tile is no longer in the tile area
 		$(tile).removeClass("inTileArea");
 		//Check to see if game has been won
@@ -281,9 +285,49 @@ TileArea.prototype.shuffle = function(myArray){
 // This is where the definitions of the word go.
 var DefinitionArea = function(definitions) {
     var left = $("<div>").addClass("left-col");
+	
+	var hintClicked = function(e) {
+		//get corresponding workspace element
+		var id = $(this).attr("id");
+		var idNum = parseInt(id.charAt(id.length - 1),10);
+		var workspaceElementId = "#answer_" + idNum;
+		var workspaceElement = $(workspaceElementId);
+		//count number of empty boxes in that word
+		var children = workspaceElement.children();
+		var count = 0;
+		for (var i = 0; i < children.length; i++) {
+			if ($(children[i]).text().length == 0) {
+				count++;
+			}
+		}
+		//pick random character to reveal
+		var randomIndex = parseInt(Math.random() * count, 10);
+		for(var i = 0; i < children.length; i++) {
+			if($(children[i]).text().length == 0) {
+				randomIndex--;
+			}
+			if(randomIndex == -1){
+				var letter = window.board.workspace.getSolutions()[idNum][i];
+				$(children[i]).text(letter.toUpperCase());
+			}
+		}
+	}
+	
     $.each(definitions, function(index) {
-	left.append("<div class='definition'>" +
-		definitions[index] + "</div>");
+		var def = $("<div>");
+		def.addClass("definition");
+		def.attr("id", "def_" + index);
+		
+		var hint = $("<div>");
+		hint.addClass("hint-box");
+		hint.attr("id", "hint_" + index);
+		hint.bind('click', hintClicked);
+		hint.append("Hint");
+		hint.disableSelection();
+		
+		def.append(hint);
+		def.append(definitions[index]);
+		left.append(def);
     });
     $("#definitions-answers-area").append(left);
 };
@@ -327,6 +371,7 @@ var Workspace = function(words) {
     $.each(words, function(index) {
 		var ans = $("<div>");
 		ans.addClass("answer");
+		ans.attr("id", "answer_" + index);
 		ans.bind('click', answerClick)
 		right.append(ans);
 		var word = words[index];
@@ -386,6 +431,7 @@ var Workspace = function(words) {
 					if(numChildren == 0) {
 						$(t).appendTo($(clicked[0]));
 						$(t).removeClass("inTileArea");
+						$(t).centerOnParent();
 						$(clicked[0]).removeClass("clicked");
 						// TODO: check if the game has been won
 						var gameWon = window.board.workspace.winCheck();
@@ -439,14 +485,14 @@ function getNextEmpty(prevId) {
     var boxNum = parseInt(prevId.split("_")[2]);
     var i = boxNum;
     while (true) {
-	var id = "#emptyTile_" + answerNum + "_" + i;
-	var empty = $(id);
-	if (empty.length == 1 && empty.children().length == 0) {
-	    return $(empty[0]);
-	} else if (empty.length == 0) {
-	    return false;
-	}
-	i += 1
+		var id = "#emptyTile_" + answerNum + "_" + i;
+		var empty = $(id);
+		if (empty.length == 1 && empty.children().length == 0) {
+			return $(empty[0]);
+		} else if (empty.length == 0) {
+			return false;
+		}
+		i += 1;
     }
 }
 
