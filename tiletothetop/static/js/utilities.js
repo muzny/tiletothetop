@@ -13,3 +13,19 @@ jQuery.fn.extend({
                 }); 
         } 
 }); 
+
+//Centers a jQuery Object onto it's parent, assumes the child is absolutly postioned
+jQuery.fn.extend({
+	centerOnParent : function() {
+		var parentOffset = this.parent().offset();
+		var parentBorderTemp = this.parent().css('border-left-width');
+		var parentBorder = parseInt(parentBorderTemp, 10);
+		if(isNaN(parentBorder)) {
+			parentBorder = 0;
+		}
+		var top = (this.parent().height() - this.height())/2;
+		var left = (this.parent().width() - this.width())/2;
+		var thisOffset = {top:top + parentOffset.top + parentBorder, left:left + parentOffset.left + parentBorder};
+		this.offset(thisOffset);
+	}
+});
