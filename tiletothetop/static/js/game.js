@@ -10,11 +10,71 @@ var score = 0;
 var tileSize = 60;
 
 $(window).load(function() {
-    createStartScreen();
-	messenger = new Messenger();
-    messenger.getWords(initializeBoard);
+    initializeMenuButtons();
+    
+    messenger = new Messenger();
     GetAccountData();
+    
+    //startGame();    // uncomment this to bypass main menu
 });
+
+// Start menu and game menu button event handlers, etc.
+function initializeMenuButtons() {
+    $('#start-button').click(startGame);
+    $('#return-button').click(returnToGame);
+    
+    $('#game-menu').tooltip({
+        selector: '[rel="tooltip"]'
+    });
+    $('#new-game').click(returnToStart);
+    $('#quit-game').click(quitGame);
+}
+
+function startGame() {
+    // user has started the game from main menu
+    // initialize game elements with user settings
+    // need to start timer, score tracking logic, etc
+
+    $("#start-menu").hide();
+
+    // TODO get form information to pass to getWords
+    // TODO should check for ajax errors before hiding menu
+    messenger.getWords(initializeBoard);
+    $('#game-menu').show();
+    showGameElements();
+    
+    // need to do this for submit buttons to prevent page refresh
+    return false;
+}
+
+// Return to game from start menu
+function returnToGame() {
+    $("#start-menu").hide();
+    
+    $('#game-menu').show();
+    $('#definitions-answers-area').show();
+    $('#tiles-area').show();
+    
+    return false;
+}
+
+// Return to start menu from game
+function returnToStart() {
+    $('#game-menu').hide();
+    $('#definitions-answers-area').hide();
+    $('#tiles-area').hide();
+    
+    $("#start-menu").show();
+    if (board != null) {
+        // allow user to return to current game
+        $('#start-game-inprogress').show();
+    }
+}
+
+// Show transition screen and reveal solution
+function quitGame() {
+    // TODO
+}
 
 function initializeBoard(data) {
     if (board != null) {
@@ -23,6 +83,7 @@ function initializeBoard(data) {
     board = new Board(data);
 }
 
+/*
 function createStartScreen() {
     var startscreen = $('#start-screen');
     startscreen.click(function() {
@@ -32,6 +93,7 @@ function createStartScreen() {
         // startGame() is called once all elements are visible
     });
 }
+*/
 
 // called during board creation
 function hideGameElements() {
@@ -55,7 +117,6 @@ function showGameElements() {
     // can't call each b/c we want to wait for each to show
     function showRecursive(rest) {
         if (rest.length === 0) {
-            startGame();
             return;
         }
 
@@ -69,12 +130,6 @@ function showGameElements() {
     }
 
     showRecursive(elements.toArray());
-}
-
-function startGame() {
-    // user has closed start screen
-    // all game elements are now visible
-    // need to start timer, score tracking logic, etc
 }
 
 /* Creates a modal popup that displays the given score and
@@ -122,7 +177,7 @@ var Board = function(data) {
 		letters = letters.concat(words[i].split(""));
     }
     this.tileArea = new TileArea(letters);
-    hideGameElements();
+    //hideGameElements();
 };
 
 var TileArea = function(letters) {
