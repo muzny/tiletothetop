@@ -8,6 +8,12 @@ p {
     font-weight: bold;
 }
 
+.instruction-text {
+	padding: 5px 10px;
+	font-family: Arial, Verdana, sans-serif;
+	font-size: 20px;
+}
+
 .brand {
     font-family: "Comic Sans", sans-serif;
 }
@@ -27,28 +33,28 @@ p {
 	font-size: 18px;
 }
 
+.hint-box{
+	background-color: #00BBEE;
+	float: right;
+	height: 20px;
+	width: 30px;
+	font-size: 16px;
+	cursor: hand;
+	cursor: pointer;
+}
+
 .answer {
     background-color: #48CA3B;
     float: right;
     clear: right;
 }
 
-.tile {
-    height: 50px;
-	line-height: 50px;
-    width: 50px;
-    background-color: #DF6E1E;
-    border-radius: 10px;
-    text-align: center;
-	margin: auto;
-}
-
 .tile-box {
     display: table-cell;
     border: 1px dotted #AD1D28;
-    padding: 11.5px 4px;
-    width: 2%;
+	width: 2%;
     margin-bottom: 0;
+	position: relative;
 }
 
 
@@ -60,14 +66,25 @@ p {
     border: none;
 }
 
+.tile, .emptyTileLoc {
+	height: 50px;
+	line-height: 50px;
+    width: 50px;
+	border-radius: 10px;
+    text-align: center;
+}
+
+.tile {
+    background-color: #DF6E1E;
+	margin: auto;
+	position: absolute;
+}
 
 .emptyTileLoc {
-	height: 50px;
-	width: 50px;
 	background-color: #26666C;
-	border-radius: 10px;
 	float: left;
 	border: 2px solid #26666C;
+	position: relative;
 }
 
 .clicked {
