@@ -9,7 +9,7 @@ from django.contrib.auth import logout as auth_logout, login as auth_login, auth
 from django.contrib.auth.models import User
 from django.core.context_processors import csrf
 
-from tiletothetop.models import Word, UserProfile, GameHistory
+from tiletothetop.models import Word, Tag, UserProfile, GameHistory
 from tiletothetop.forms import RegistrationForm, LoginForm
 
 
@@ -22,7 +22,10 @@ def game(request):
     lform_errors = get_and_delete(request.session, 'lform_errors', None)
     rform_errors = get_and_delete(request.session, 'rform_errors', None)
 
-    context = {'login_form' : lform, 'registration_form' : rform, 'login_errors' : lform_errors, 'registration_errors' : rform_errors}
+    tags = Tag.objects.all()
+
+    context = {'login_form' : lform, 'registration_form' : rform, 'login_errors' : lform_errors, 'registration_errors' : rform_errors,
+                'tags' : tags }
     return render_to_response('game.html', context, context_instance=RequestContext(request))
 
 

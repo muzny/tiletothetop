@@ -2,7 +2,7 @@
     <h2>Start Stacking!</h2>
     <h3>A red wheelbarrow glazed with rainwater...</h3>
 
-    <form class="form-horizontal">
+    <form id="game-settings" class="form-horizontal">
         <fieldset>
             <legend data-toggle="collapse" data-target="#game-options">
                 Game Options
@@ -10,21 +10,30 @@
             <div id="game-options" class="collapse in">
                 
                 <div class="control-group">
-                    <label class="control-label" for="difficulty">
+                    <label class="control-label" for="setting-difficulty">
                         Difficulty:
                     </label>
-                    <div id="difficulty" class="controls btn-group" data-toggle="buttons-radio">
-                        <button type="button" class="btn">Easy</button>
-                        <button type="button" class="btn">Medium</button>
-                        <button type="button" class="btn">Hard</button>
+                    <div id="setting-difficulty" class="controls btn-group" data-toggle="buttons-radio">
+                        <button type="button" class="btn" value="0">
+                            Easy
+                        </button>
+                        <button type="button" class="btn" value="50">
+                            Medium
+                        </button>
+                        <button type="button" class="btn" value="100">
+                            Hard
+                        </button>
+                        <button type="button" class="btn active" value="*">
+                            Any
+                        </button>
                     </div>
                 </div>
                 
                 <div class="control-group">
-                    <label class="control-label" for="level">
+                    <label class="control-label" for="setting-level">
                         Level:
                     </label>
-                    <select id="level" class="controls">
+                    <select id="setting-level" class="controls">
                         {% for i in "0123456789"|make_list %}
                         <option>{{ forloop.counter }}</option>
                         {% endfor %}
@@ -32,11 +41,11 @@
                 </div>
                 
                 <div class="control-group">
-                    <label class="control-label" for="tag">
+                    <label class="control-label" for="setting-tag">
                         Filter by Tag:
                     </label>
-                    <select id="tag" class="controls">
-                        <option>-None-</option>
+                    <select id="setting-tag" class="controls">
+                        <option value="">-None-</option>
                         {% for tag in tags %}
                         <option>{{ tag.name }}</option>
                         {% endfor %}
@@ -45,11 +54,11 @@
                 
                 {% if user.is_authenticated %}
                 <div class="control-group">
-                    <label class="control-label" for="list">
+                    <label class="control-label" for="setting-custom">
                         Use Custom List:
                     </label>
-                    <select id="list" class="controls">
-                        <option>-None-</option>
+                    <select id="setting-custom" class="controls">
+                        <option value="">-None-</option>
                         <!-- add others from db... -->
                     </select>
                 </div>
@@ -59,12 +68,12 @@
         </fieldset>
 
     <p>
-        <button class="btn btn-large btn-primary" id="start-button">
+        <button class="btn btn-large btn-primary" id="start-button" type="button">
             Start Game
         </button>
         <span id="start-game-inprogress">
             or
-            <button class="btn btn-large btn-primary" id="return-button">
+            <button class="btn btn-large btn-primary" id="return-button" type="button">
                 Return to Current Game
             </button>
             and continue tiling to the top!

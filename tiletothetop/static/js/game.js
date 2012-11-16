@@ -11,6 +11,21 @@ var numberHintsUsed = 0;
 var HINT_PENALTY = 100;
 var TILE_SIZE = 60;
 
+// difficulty constants - maybe not the right place for this
+var NUM_DIFFICULTIES = 3;
+var MAX_DIFFICULTY = 150; // [0,150)
+var INCR_DIFFICULTY = MAX_DIFFICULTY / NUM_DIFFICULTIES;
+var NUM_LEVELS = 10; // [0,10)
+var INCR_LEVEL = INCR_DIFFICULTY / NUM_LEVELS;
+
+// game settings
+var NUM_WORDS = 4;
+var MAX_WORDLEN = 10;
+var difficulty = 0;
+var level = 0;
+var tag_filter = "";
+var custom_list = "";
+
 $(window).load(function() {
     initializeMenuButtons();
     
@@ -37,16 +52,21 @@ function startGame() {
     // initialize game elements with user settings
     // need to start timer, score tracking logic, etc
 
-    $("#start-menu").hide();
-
-    // TODO get form information to pass to getWords
-    // TODO should check for ajax errors before hiding menu
-    messenger.getWords(initializeBoard);
-    $('#game-menu').show();
-    showGameElements();
+    // TODO server side validation and parameter usage
+    tag_filter = $('#setting-tag').val();
+    custom_list = $('#setting-custom').val();
+    // TODO make use of level advancement
+    level =  parseInt($('#setting-level').val()) - 1;
+    if (isNaN(level)) {
+        level = 0;
+    }
+    difficulty = parseInt($("#setting-difficulty > button.btn.active").val());
+    if (!isNaN(difficulty)) {
+        // calculate value to pass to getWords
+        difficulty += level * INCR_LEVEL;
+    }
     
-    // need to do this for submit buttons to prevent page refresh
-    return false;
+    messenger.getWords(initializeBoard, difficulty, tag_filter, custom_list);    
 }
 
 // Return to game from start menu
@@ -56,8 +76,6 @@ function returnToGame() {
     $('#game-menu').show();
     $('#definitions-answers-area').show();
     $('#tiles-area').show();
-    
-    return false;
 }
 
 // Return to start menu from game
@@ -80,22 +98,16 @@ function quitGame() {
 
 function initializeBoard(data) {
     if (board != null) {
-	board.workspace.cleanUp();
+        board.workspace.cleanUp();
+        $('#definitions-answers-area').remove();
+        $('#tiles-area').remove();
     }
     board = new Board(data);
+    
+    // hide start menu, show board
+    returnToGame();
+    showGameElements();
 }
-
-/*
-function createStartScreen() {
-    var startscreen = $('#start-screen');
-    startscreen.click(function() {
-        // hide the start screen
-        startscreen.css({'visibility':'hidden', 'z-index':'-1'});
-        showGameElements();
-        // startGame() is called once all elements are visible
-    });
-}
-*/
 
 // called during board creation
 function hideGameElements() {
@@ -155,7 +167,8 @@ function TransitionScreen(score) {
     transitionScreen.css({'display':'visible', 'z-index':'100'});
     // if we call this immediately, it likely won't get the updated user data
     setTimeout(messenger.getUserData, 2000);
-	messenger.getWords(initializeBoard); // the getWords success callback inserts, but hides definitions and tiles
+    // the getWords success callback inserts, but hides definitions and tiles
+    messenger.getWords(initializeBoard, difficulty, tag_filter, custom_list); 
     
 	transitionScreen.click(function () {
         transitionScreen.css({'display':'hidden', 'z-index':'-1'});
