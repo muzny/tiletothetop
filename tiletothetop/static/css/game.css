@@ -35,20 +35,18 @@ p {
 
 .tile {
     height: 50px;
+	line-height: 50px;
     width: 50px;
     background-color: #DF6E1E;
     border-radius: 10px;
     text-align: center;
-}
-
-.tile p {
-    padding-top: .7em;
+	margin: auto;
 }
 
 .tile-box {
     display: table-cell;
     border: 1px dotted #AD1D28;
-    padding: 4px 6px;
+    padding: 11.5px 4px;
     width: 2%;
     margin-bottom: 0;
 }
@@ -64,8 +62,8 @@ p {
 
 
 .emptyTileLoc {
-	height: 55px;
-	width: 55px;
+	height: 50px;
+	width: 50px;
 	background-color: #26666C;
 	border-radius: 10px;
 	float: left;

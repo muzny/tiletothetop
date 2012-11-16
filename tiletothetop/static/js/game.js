@@ -335,7 +335,7 @@ var Workspace = function(words) {
 			emptyTile.bind('click', emptyClick);
 			var off = ans.offset();
 			var widthOff = (i * (emptyTile.width() + 10));
-			var heightOff = 10;
+			var heightOff = (ans.height() - emptyTile.height())/2;
 			emptyTile.offset({top: off.top + heightOff, left: off.left + 10 + widthOff});
 		}
     });
