@@ -7,7 +7,9 @@
 var board = null;
 var messenger = null;
 var score = 0;
-var tileSize = 60;
+var numberHintsUsed = 0;
+var HINT_PENALTY = 100;
+var TILE_SIZE = 60;
 
 $(window).load(function() {
     initializeMenuButtons();
@@ -162,6 +164,8 @@ function TransitionScreen(score) {
 }
 
 var Board = function(data) {
+	//reset score
+	score = 0;
     var definitions = new Array();
     var words = new Array();
     $.each(data, function(index) {
@@ -192,7 +196,7 @@ var TileArea = function(letters) {
     // Can't go get these until we've added it to the page.
     var areaWidth = tilesArea.width();
     var off = tilesArea.offset();
-    var numInRow = parseInt(areaWidth / (tileSize + 10));
+    var numInRow = parseInt(areaWidth / (TILE_SIZE + 10));
     this.shuffle(letters);
     var numRows = Math.max(2, Math.ceil(letters.length / numInRow));
     var row;
@@ -356,14 +360,19 @@ var DefinitionArea = function(definitions) {
 			}
 		}
 		//pick random character to reveal
-		var randomIndex = parseInt(Math.random() * count, 10);
-		for(var i = 0; i < children.length; i++) {
-			if($(children[i]).text().length == 0) {
-				randomIndex--;
-			}
-			if(randomIndex == -1){
-				var letter = window.board.workspace.getSolutions()[idNum][i];
-				$(children[i]).text(letter.toUpperCase());
+		if(count != 0){
+			var randomIndex = parseInt(Math.random() * count, 10);
+			for(var i = 0; i < children.length; i++) {
+				if($(children[i]).text().length == 0) {
+					randomIndex--;
+				}
+				if(randomIndex == -1){
+					var letter = window.board.workspace.getSolutions()[idNum][i];
+					$(children[i]).text(letter.toUpperCase());
+					numberHintsUsed++;
+					score -= HINT_PENALTY;
+					break;
+				}
 			}
 		}
 	}
