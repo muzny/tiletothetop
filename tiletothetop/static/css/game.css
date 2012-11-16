@@ -19,6 +19,8 @@ p {
     background-color: #AD1D28;
     float: left;
     clear: left;
+	font-family: Arial, Verdana, sans-serif;
+	font-size: 18px;
 }
 
 .answer {
