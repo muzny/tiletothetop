@@ -155,7 +155,7 @@ var TileArea = function(letters) {
 		tile.addClass("tile");
 		tile.addClass("inTileArea");
 		//tile.text(letters[index]);
-        tile.html("<p>"+letters[index]+"</p>");
+        tile.html("<p>"+letters[index].toUpperCase()+"</p>");
 		//Setting the tile's id and making it draggable
 		tile.attr("id", "tile" + index);
 		tile.attr("draggable", "true");
@@ -349,7 +349,7 @@ var Workspace = function(words) {
             for(var i = 0; i < answerTiles.length; i++) {
                 var answerTile = $(answerTiles[i]);
                 // letters are now wrapped in a paragraph tag as well
-                var letter = $($(answerTile.children()[0]).html()).text();
+                var letter = $($(answerTile.children()[0]).html()).text().toLowerCase();
                 var correctLetter = solutions[index][i];
                 if(letter != correctLetter) {
                     gameWon = false;
@@ -371,7 +371,7 @@ var Workspace = function(words) {
 		if (num >= 97 && num <= 122) {
 			var clicked = $(".clicked");
 			if (clicked.length == 1) {
-				var t = getTileFromChar(String.fromCharCode(num));
+				var t = getTileFromChar((String.fromCharCode(num)).toUpperCase());
 				if (t) {
 					//Check if any children exist on the clicked box
 					var numChildren = clicked.children().length;
@@ -400,7 +400,7 @@ var Workspace = function(words) {
 
     //Helper for solutions
     this.getSolutions = function() {
-	return solutions;
+		return solutions;
     };
 };
 
