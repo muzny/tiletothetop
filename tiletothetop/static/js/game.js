@@ -66,7 +66,8 @@ function startGame() {
         difficulty += level * INCR_LEVEL;
     }
     
-    messenger.getWords(initializeBoard, difficulty, tag_filter, custom_list);    
+    messenger.getWords(initializeBoard);    
+    returnToGame(); // should be in initializeBoard()
 }
 
 // Return to game from start menu
@@ -87,6 +88,7 @@ function returnToStart() {
     $("#start-menu").show();
     if (board != null) {
         // allow user to return to current game
+        // board should never be empty after starting first game
         $('#start-game-inprogress').show();
     }
 }
@@ -105,8 +107,8 @@ function initializeBoard(data) {
     board = new Board(data);
     
     // hide start menu, show board
-    returnToGame();
-    showGameElements();
+    //returnToGame(); // Firefox doesn't like having this here for some reason
+    //showGameElements();
 }
 
 // called during board creation
@@ -168,7 +170,7 @@ function TransitionScreen(score) {
     // if we call this immediately, it likely won't get the updated user data
     setTimeout(messenger.getUserData, 2000);
     // the getWords success callback inserts, but hides definitions and tiles
-    messenger.getWords(initializeBoard, difficulty, tag_filter, custom_list); 
+    messenger.getWords(initializeBoard); 
     
 	transitionScreen.click(function () {
         transitionScreen.css({'display':'hidden', 'z-index':'-1'});

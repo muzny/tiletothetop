@@ -8,7 +8,7 @@ var Messenger = function() {
 
 	// Gets random words from the server and creates a new board with these
 	// words when they are recieved successfully.
-	this.getWords = function(successFn, difficulty, tag_filter, custom_list) {
+	this.getWords = function(successFn) {
         var parameters = {
             "word_count" : NUM_WORDS, "max_wordlen" : MAX_WORDLEN,
             "tag_filter" : tag_filter, "custom_list" : custom_list
@@ -16,7 +16,7 @@ var Messenger = function() {
         if (!isNaN(difficulty)) {
             parameters["difficulty"] = difficulty;
         }
-        
+
 		$.ajax({
 			url: "/random-words/",
 			type: "GET",
