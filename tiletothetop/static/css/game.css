@@ -8,6 +8,10 @@ p {
     font-weight: bold;
 }
 
+.brand {
+    font-family: "Comic Sans", sans-serif;
+}
+
 .definition, .answer {
     height: 75px;
     width: 100%;
@@ -63,6 +67,7 @@ p {
 	background-color: #26666C;
 	border-radius: 10px;
 	float: left;
+	border: 2px solid #26666C;
 }
 
 .clicked {
