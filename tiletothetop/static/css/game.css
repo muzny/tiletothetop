@@ -183,6 +183,19 @@ a, a:link, a:visited {
     display: block;
 }
 
+/* Menu stuff */
+#start-game-inprogress
+{
+    display: none;
+}
+
+#game-menu
+{
+    display: none;
+    margin: .5em;
+    text-align: center;
+}
+
 /* Bootstrap -related UI stuff */
 
 .tab-content {

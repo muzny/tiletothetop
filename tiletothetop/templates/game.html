@@ -32,7 +32,7 @@
 
     <div class="container" style="margin-top: 60px">
         <div id="logo">
-            <img src={%static "t4logo_v0.2_70.png" %} />  
+            <img src={% static "t4logo_v0.25_65.png" %} />  
         </div>
 
         <div class="tabbable">
@@ -45,11 +45,25 @@
                 <li><a href="#leaderboard" data-toggle="tab">Leaderboard</a></li>
                 <li><a href="#about" data-toggle="tab">About</a></li>
             </ul>
+            
             <div class="tab-content">
                 <div class="tab-pane active" id="game-area">
+                    {% include "main.html" %}
+                    <div id="game-menu">
+                        <button class="btn btn-primary" id="new-game"
+                                rel="tooltip" title="Return to start menu" data-placement="left">
+                            New Game
+                        </button>
+                        <button class="btn btn-primary" id="quit-game"
+                                rel="tooltip" title="End game and reveal solution" data-placement="right">
+                            Quit Game
+                        </button>
+                    </div>
+                    <!--
                     <div id="start-screen">
                         <p>Click here to start!</p>
                     </div>
+                    -->
                     <div id="transition-screen">
                         <h1>SCORE: 0</h1>
                         <p>Click here to start a new game</p>

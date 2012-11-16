@@ -1,0 +1,74 @@
+<div id="start-menu">
+    <h2>Start Stacking!</h2>
+    <h3>A red wheelbarrow glazed with rainwater...</h3>
+
+    <form class="form-horizontal">
+        <fieldset>
+            <legend data-toggle="collapse" data-target="#game-options">
+                Game Options
+            </legend>
+            <div id="game-options" class="collapse in">
+                
+                <div class="control-group">
+                    <label class="control-label" for="difficulty">
+                        Difficulty:
+                    </label>
+                    <div id="difficulty" class="controls btn-group" data-toggle="buttons-radio">
+                        <button type="button" class="btn">Easy</button>
+                        <button type="button" class="btn">Medium</button>
+                        <button type="button" class="btn">Hard</button>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="level">
+                        Level:
+                    </label>
+                    <select id="level" class="controls">
+                        {% for i in "0123456789"|make_list %}
+                        <option>{{ forloop.counter }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="tag">
+                        Filter by Tag:
+                    </label>
+                    <select id="tag" class="controls">
+                        <option>-None-</option>
+                        {% for tag in tags %}
+                        <option>{{ tag.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                {% if user.is_authenticated %}
+                <div class="control-group">
+                    <label class="control-label" for="list">
+                        Use Custom List:
+                    </label>
+                    <select id="list" class="controls">
+                        <option>-None-</option>
+                        <!-- add others from db... -->
+                    </select>
+                </div>
+                {% endif %}
+                
+            </div>
+        </fieldset>
+
+    <p>
+        <button class="btn btn-large btn-primary" id="start-button">
+            Start Game
+        </button>
+        <span id="start-game-inprogress">
+            or
+            <button class="btn btn-large btn-primary" id="return-button">
+                Return to Current Game
+            </button>
+            and continue tiling to the top!
+        </span>
+    </p>
+    </form>
+</div>
