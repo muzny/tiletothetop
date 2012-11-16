@@ -10,48 +10,92 @@ var score = 0;
 var tileSize = 60;
 
 $(window).load(function() {
-    StartScreen();
+    createStartScreen();
 	messenger = new Messenger();
     messenger.getWords();
     GetAccountData();
 });
 
-var StartScreen = function() {
+function createStartScreen() {
     var startscreen = $('#start-screen');
     startscreen.click(function() {
         // hide the start screen
         startscreen.css({'visibility':'hidden', 'z-index':'-1'});
-        StartGame();
+        showGameElements();
+        // startGame() is called once all elements are visible
     });
-};
+}
 
-function StartGame() {
-    // user closed start screen
-    // start timer, score tracking logic, etc
+// called during board creation
+function hideGameElements() {
+    var defs = $('#game-area').find('.definition');
+    var empty = $('#game-area').find('.emptyTileLoc');
+    var tiles = $('#game-area').find('.tile');
+
+    var elements = $.merge(defs, $.merge(empty, tiles));
+    $.each(elements, function() {
+        $(this).hide();
+    });
+}
+
+function showGameElements() {
+    var defs = $('#game-area').find('.definition');
+    var empty = $('#game-area').find('.emptyTileLoc');
+    var tiles = $('#game-area').find('.tile');
+
+    var elements = $.merge(defs, $.merge(empty, tiles));
+
+    // can't call each b/c we want to wait for each to show
+    function showRecursive(rest) {
+        if (rest.length === 0) {
+            startGame();
+            return;
+        }
+
+        var next = rest.splice(0,1);
+        var time = 50;
+        if ($(next).hasClass('definition'))
+            time = 400;
+        $(next).show(time, function() {
+            showRecursive(rest);
+        });
+    }
+
+    showRecursive(elements.toArray());
+}
+
+function startGame() {
+    // user has closed start screen
+    // all game elements are now visible
+    // need to start timer, score tracking logic, etc
 }
 
 /* Creates a modal popup that displays the given score and
  * allows the user to restart the game.
  */
 function TransitionScreen(score) {
-	// Create a new div with the score inside it.
-	var scorediv = $("<div>").html("<h1>SCORE: " + score + "</h1>");
+    // go ahead an push game data
+    messenger.pushGameData(score);
 
-	// Add a link to the score div that allows the user to
-	// restart the game.
-	var scorebutton = $("<button>").html("Click to restart");
+	// add the score to the transition screen
+    var transitionScreen = $('#transition-screen');
+    var scoreElement = $("#transition-screen h1")[0];
+	$(scoreElement).text("SCORE: " + score);
 
-	scorebutton.click(function () {
-        messenger.pushGameData(score);
-		messenger.getWords();
-		scorediv.modal('hide');
+		// Clean up the board
+    $('#definitions-answers-area').remove();
+    $('#tiles-area').remove();
 
-		// Clean up the board.
-		$("#game-area").html("");
+    // show the transition screen, and load words in the background
+    transitionScreen.css({'display':'visible', 'z-index':'100'});
+    // if we call this immediately, it likely won't get the updated user data
+    setTimeout(messenger.getUserData, 2000);
+	messenger.getWords(); // the getWords success callback inserts, but hides definitions and tiles
+
+	transitionScreen.click(function () {
+        transitionScreen.css({'display':'hidden', 'z-index':'-1'});
+        showGameElements(); // animated display of definitions / tiles
 	});
-
-	scorediv.append(scorebutton);
-	scorediv.modal('show');
 }
 
 var Board = function(data) {
@@ -70,6 +114,7 @@ var Board = function(data) {
 		letters = letters.concat(words[i].split(""));
     }
     this.tileArea = new TileArea(letters);
+    hideGameElements();
 };
 
 var TileArea = function(letters) {
@@ -285,21 +330,22 @@ var Workspace = function(words) {
 
     //Checks to see if the solution has been found
     this.winCheck = function() {
-	var children = right.children();
-	var gameWon = true;
-	for(index = 0; index < children.length; index++) {
-	    var answerTiles = $(children[index]).children();
-	    for(var i = 0; i < answerTiles.length; i++) {
-			var answerTile = $(answerTiles[i]);
-			var letter = $(answerTile.children()[0]).text();
-			var correctLetter = solutions[index][i];
-			if(letter != correctLetter) {
-				gameWon = false;
-			}
-	    }
-	}
-	var holder = gameWon;
-	return gameWon;
+        var children = right.children();
+        var gameWon = true;
+        for(index = 0; index < children.length; index++) {
+            var answerTiles = $(children[index]).children();
+            for(var i = 0; i < answerTiles.length; i++) {
+                var answerTile = $(answerTiles[i]);
+                // letters are now wrapped in a paragraph tag as well
+                var letter = $($(answerTile.children()[0]).html()).text();
+                var correctLetter = solutions[index][i];
+                if(letter != correctLetter) {
+                    gameWon = false;
+                }
+            }
+        }
+        var holder = gameWon;
+        return gameWon;
     };
 
     // Typing controls for the empty boxes
