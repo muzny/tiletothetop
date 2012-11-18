@@ -23,15 +23,13 @@ def game(request):
     lform_errors = get_and_delete(request.session, 'lform_errors', None)
     rform_errors = get_and_delete(request.session, 'rform_errors', None)
 
-    #tags = Tag.objects.order_by('name')
     # tags that have at least one word associated with them
-    #"""
     tags = Tag.objects.raw('''select * from tiletothetop_tag t 
                               where exists
                                 (select wt.id from tiletothetop_word w, tiletothetop_word_tags wt 
                                 where w.id= wt.word_id and t.id=wt.tag_id)
                               order by t.name''');
-    #"""
+
     context = {'login_form' : lform, 'registration_form' : rform, 'login_errors' : lform_errors, 'registration_errors' : rform_errors,
                 'tags' : tags }
     return render_to_response('game.html', context, context_instance=RequestContext(request))

@@ -43,29 +43,23 @@ function initializeMenuButtons() {
     $('#start-button').click(startGame);
     $('#return-button').click(returnToGame);
     
+    $('#new-game').click(returnToStart);
+    $('#quit-game').click(quitGame);
     $('#game-menu').tooltip({
         selector: '[rel="tooltip"]'
     });
-    $('#new-game').click(returnToStart);
-    $('#quit-game').click(quitGame);
 }
 
 // Return to game from start menu
 function returnToGame() {
-    $("#start-menu").hide();
-    
-    $('#game-menu').show();
-    $('#definitions-answers-area').show();
-    $('#tiles-area').show();
+    $('#start-menu').hide();
+    $('#game-area').show();
 }
 
 // Return to start menu from game
 function returnToStart() {
-    $('#game-menu').hide();
-    $('#definitions-answers-area').hide();
-    $('#tiles-area').hide();
-    
-    $("#start-menu").show();
+    $('#game-area').hide();
+    $('#start-menu').show();
     if (board != null) {
         // allow user to return to current game
         // board should never be empty after starting first game
@@ -96,6 +90,7 @@ function startGame() {
 
     messenger.getWords(initializeBoard);    
     returnToGame(); // should be in initializeBoard()
+    //showGameElements();
 }
 
 // Show transition screen and reveal solution
