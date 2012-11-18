@@ -37,7 +37,7 @@
 
         <div class="tabbable">
             <ul class="nav nav-tabs">
-                <li class="active"><a href="#game-area" data-toggle="tab">Play</a></li>
+                <li class="active"><a href="#play" data-toggle="tab">Play</a></li>
                 <li><a href="#settings" data-toggle="tab">Settings</a></li>
                 {% if user.is_authenticated %}
                 <li><a href="#account" data-toggle="tab">Account</a></li>
@@ -47,21 +47,25 @@
             </ul>
             
             <div class="tab-content">
-                <div class="tab-pane active" id="game-area">
-                    {% include "main.html" %}
-                    <div id="game-menu">
-                        <button class="btn btn-primary" id="new-game" type="button"
-                                rel="tooltip" title="Start a new game" data-placement="left">
-                            Return to Start Menu
-                        </button>
-                        <button class="btn btn-primary" id="quit-game" type="button"
-                                rel="tooltip" title="End game and reveal solution" data-placement="right">
-                            Quit Game
-                        </button>
-                    </div>
-                    <div id="transition-screen">
-                        <h1>SCORE: 0</h1>
-                        <p>Click here to start a new game</p>
+                <div class="tab-pane active carousel slide" id="play">
+                    <div class="carousel-inner">
+                        {% include "main.html" %}
+                        <div id="game-area" class="item">
+                            <div id="game-menu">
+                                <button class="btn btn-primary" id="new-game" type="button"
+                                        rel="tooltip" data-title="Start a new game" data-placement="left">
+                                    Return to Start Menu
+                                </button>
+                                <button class="btn btn-primary" id="quit-game" type="button"
+                                        rel="tooltip" data-title="End game and reveal solution" data-placement="right">
+                                    Quit Game
+                                </button>
+                            </div>
+                            <div id="transition-screen">
+                                <h1>SCORE: 0</h1>
+                                <p>Click here to start a new game</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="tab-pane" id="settings">

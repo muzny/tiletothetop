@@ -1,31 +1,33 @@
-<div id="start-menu">
+<div id="start-menu" class="item active">
     <h2>Start Stacking!</h2>
     <h3>A red wheelbarrow glazed with rainwater...</h3>
 
     <form id="game-settings" class="form-horizontal">
         <fieldset>
-            <legend data-toggle="collapse" data-target="#game-options">
-                Game Options
-            </legend>
-            <div id="game-options" class="collapse in">
-                
+            <legend>Game Options</legend>
+            
+            <div id="game-options">
                 <div class="control-group">
                     <label class="control-label" for="setting-difficulty">
                         Difficulty:
                     </label>
-                    <div id="setting-difficulty" class="controls btn-group" data-toggle="buttons-radio">
-                        <button type="button" class="btn" value="0">
+                    <div id="setting-difficulty" class="controls btn-group">
+                        <label class="radio inline">
+                            <input type="radio" name="setting-difficulty" value="0" />
                             Easy
-                        </button>
-                        <button type="button" class="btn" value="50">
+                        </label>
+                        <label class="radio inline">
+                            <input type="radio" name="setting-difficulty" value="50" />
                             Medium
-                        </button>
-                        <button type="button" class="btn" value="100">
+                        </label>
+                        <label class="radio inline">
+                            <input type="radio" name="setting-difficulty" value="100" />
                             Hard
-                        </button>
-                        <button type="button" class="btn active" value="*">
+                        </label>
+                        <label class="radio inline">
+                            <input type="radio" name="setting-difficulty" value="*" checked="checked" />
                             Any
-                        </button>
+                        </label>
                     </div>
                 </div>
                 
@@ -47,7 +49,7 @@
                     <select id="setting-tag" class="controls">
                         <option value="">-None-</option>
                         {% for tag in tags %}
-                        <option>{{ tag.name }}</option>
+                        <option value="{{ tag.id }}">{{ tag.name }}</option>
                         {% endfor %}
                     </select>
                 </div>

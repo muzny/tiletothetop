@@ -23,7 +23,7 @@ var NUM_WORDS = 4;
 var MAX_WORDLEN = 10;
 var difficulty = 0;
 var level = 0;
-var tag_filter = "";
+var tag_filter = 0;
 var custom_list = "";
 
 $(window).load(function() {
@@ -35,16 +35,43 @@ $(window).load(function() {
     //startGame();    // uncomment this to bypass main menu
 });
 
+
+/** Begin Menu / Navigation stuff */
+
 // Start menu and game menu button event handlers, etc.
 function initializeMenuButtons() {
+    $('#play.carousel').carousel({
+        interval: false
+    });
+    $('#play.carousel').bind('slid', function() {
+        showGameElements();
+    });
+    
     $('#start-button').click(startGame);
     $('#return-button').click(returnToGame);
     
+    $('#new-game').click(returnToStart);
+    $('#quit-game').click(quitGame);
     $('#game-menu').tooltip({
         selector: '[rel="tooltip"]'
     });
-    $('#new-game').click(returnToStart);
-    $('#quit-game').click(quitGame);
+}
+
+// Return to game from start menu
+function returnToGame() {
+    $('#play.carousel').carousel('next');
+    $('#start-menu').hide();
+}
+
+// Return to start menu from game
+function returnToStart() {
+    if (board != null) {
+        // allow user to return to current game
+        // board should never be empty after starting first game
+        $('#start-game-inprogress').show();
+    }
+    $('#start-menu').show();
+    $('#play.carousel').carousel('prev');
 }
 
 function startGame() {
@@ -52,51 +79,34 @@ function startGame() {
     // initialize game elements with user settings
     // need to start timer, score tracking logic, etc
 
-    // TODO server side validation and parameter usage
-    tag_filter = $('#setting-tag').val();
-    custom_list = $('#setting-custom').val();
     // TODO make use of level advancement
     level =  parseInt($('#setting-level').val()) - 1;
     if (isNaN(level)) {
         level = 0;
     }
-    difficulty = parseInt($("#setting-difficulty > button.btn.active").val());
+    difficulty = parseInt($('#setting-difficulty input[name="setting-difficulty"]:checked').val());
     if (!isNaN(difficulty)) {
         // calculate value to pass to getWords
         difficulty += level * INCR_LEVEL;
     }
-    
-    messenger.getWords(initializeBoard);    
-    returnToGame(); // should be in initializeBoard()
-}
-
-// Return to game from start menu
-function returnToGame() {
-    $("#start-menu").hide();
-    
-    $('#game-menu').show();
-    $('#definitions-answers-area').show();
-    $('#tiles-area').show();
-}
-
-// Return to start menu from game
-function returnToStart() {
-    $('#game-menu').hide();
-    $('#definitions-answers-area').hide();
-    $('#tiles-area').hide();
-    
-    $("#start-menu").show();
-    if (board != null) {
-        // allow user to return to current game
-        // board should never be empty after starting first game
-        $('#start-game-inprogress').show();
+    tag_filter = parseInt($('#setting-tag').val());
+    if (isNaN(tag_filter)) {
+        tag_filter = 0;
     }
+    custom_list = $('#setting-custom').val();
+
+    messenger.getWords(initializeBoard);
+
+    returnToGame();
 }
 
 // Show transition screen and reveal solution
 function quitGame() {
     // TODO
 }
+
+/** End Menu / Navigation stuff */
+
 
 function initializeBoard(data) {
     if (board != null) {
@@ -108,7 +118,6 @@ function initializeBoard(data) {
     
     // hide start menu, show board
     //returnToGame(); // Firefox doesn't like having this here for some reason
-    //showGameElements();
 }
 
 // called during board creation
@@ -196,7 +205,7 @@ var Board = function(data) {
 		letters = letters.concat(words[i].split(""));
     }
     this.tileArea = new TileArea(letters);
-    //hideGameElements();
+    hideGameElements();
 };
 
 var TileArea = function(letters) {

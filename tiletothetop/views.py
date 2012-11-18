@@ -8,6 +8,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth import logout as auth_logout, login as auth_login, authenticate
 from django.contrib.auth.models import User
 from django.core.context_processors import csrf
+from django.db.models import Max, Min
 
 from tiletothetop.models import Word, Tag, UserProfile, GameHistory
 from tiletothetop.forms import RegistrationForm, LoginForm
@@ -22,7 +23,12 @@ def game(request):
     lform_errors = get_and_delete(request.session, 'lform_errors', None)
     rform_errors = get_and_delete(request.session, 'rform_errors', None)
 
-    tags = Tag.objects.all()
+    # tags that have at least one word associated with them
+    tags = Tag.objects.raw('''select * from tiletothetop_tag t 
+                              where exists
+                                (select wt.id from tiletothetop_word w, tiletothetop_word_tags wt 
+                                where w.id= wt.word_id and t.id=wt.tag_id)
+                              order by t.name''');
 
     context = {'login_form' : lform, 'registration_form' : rform, 'login_errors' : lform_errors, 'registration_errors' : rform_errors,
                 'tags' : tags }
@@ -42,18 +48,48 @@ def random_words(request):
 
     MAXWORDS = 20
     num_words = int(request.GET["word_count"])
-    num_words = min(num_words, MAXWORDS)
+    num_words = max(min(num_words, MAXWORDS), 0)
+
+    # FIXME distinct will always return the same definition for a word
+    words = Word.objects.distinct("word")
+    # exception if num_words cannot be satisfied?
+
+    if "max_wordlen" in request.GET:
+        max_wordlen = int(request.GET["max_wordlen"])
+        # compatibility warning: where clause is psql-specific
+        words_maxlen = words.extra(where=["CHAR_LENGTH(word) <= %d" % max_wordlen])
+        # performance issue to have a bunch of db hits to ensure numwords length??
+        if (words_maxlen.count() >= num_words):
+            words = words_maxlen
+
+    # ensure that tag returns at least num_words, otherwise ignore
+    if "tag_filter" in request.GET:
+        tag_filter = int(request.GET["tag_filter"])
+        words_tag = words.filter(tags__in=[tag_filter]);
+        if (words_tag.count() >= num_words):
+            words = words_tag
 
     # if we recieved a difficulty, filter around that difficulty
-    # fails at the moment because the difficulty fields are empty in the database
     if "difficulty" in request.GET:
         difficulty = float(request.GET["difficulty"])
-        words = (Word.objects
-                .filter(difficulty__gt=difficulty-2)
-                .filter(difficulty__lt=difficulty+2))
-    else:
-        words = Word.objects.all()
-    words_size = len(words)
+        # clamp difficulty to the current range
+        min_diff = Word.objects.aggregate(Min("difficulty"))['difficulty__min']
+        max_diff = Word.objects.aggregate(Max("difficulty"))['difficulty__max']
+        difficulty = max(min(difficulty, max_diff), min_diff)
+        step = 2
+        count = 0
+        # expand difficulty range until we return at least num_words
+        range_diff = max_diff - min_diff
+        while (count < num_words and step < range_diff):
+            words_diff = (Word.objects
+                    .filter(difficulty__gte=difficulty-step)
+                    .filter(difficulty__lte=difficulty+step))
+            count = words_diff.count()
+            step *= 2
+        if (count >= num_words):
+            words = words_diff
+
+    words_size = words.count()
 
     # in the edge case where we have less than 20 words in the result set
     if words_size < num_words:
