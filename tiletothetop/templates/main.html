@@ -47,7 +47,7 @@
                     <select id="setting-tag" class="controls">
                         <option value="">-None-</option>
                         {% for tag in tags %}
-                        <option>{{ tag.name }}</option>
+                        <option value="{{ tag.id }}">{{ tag.name }}</option>
                         {% endfor %}
                     </select>
                 </div>
