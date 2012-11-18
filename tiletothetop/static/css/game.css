@@ -97,7 +97,8 @@ p {
     overflow: hidden;
     padding: 5px;
     width: 900px;
-    margin: 1em auto 1em;
+    margin: auto;
+    display: none;
 }
 
 #definitions-answers-area {
@@ -206,9 +207,24 @@ a, a:link, a:visited {
     display: none;
 }
 
+#start-menu fieldset {
+    margin: 1em;
+}
+
+#start-menu .controls {
+    margin-left: 90px;
+}
+
+#start-menu label {
+    font-size: 16px;
+}
+
+#start-menu .btn-primary {
+    margin-right: 12px;
+}
+
 #game-menu
 {
-    display: none;
     margin: .5em;
     text-align: center;
 }
@@ -242,7 +258,7 @@ button.close {
 .tab-pane {
     background-color: #108D97;
     overflow: hidden;
-    width: 900px;
+    width: 910px;
     margin: 1em auto 1em;
 }
 
