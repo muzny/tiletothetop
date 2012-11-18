@@ -98,7 +98,6 @@ p {
     padding: 5px;
     width: 900px;
     margin: auto;
-    display: none;
 }
 
 #definitions-answers-area {
@@ -215,12 +214,16 @@ a, a:link, a:visited {
     margin-left: 90px;
 }
 
-#start-menu label {
+#start-menu .control-label {
     font-size: 16px;
 }
 
 #start-menu .btn-primary {
     margin-right: 12px;
+}
+
+#start-menu .radio.inline {
+    margin-right: 1em;
 }
 
 #game-menu

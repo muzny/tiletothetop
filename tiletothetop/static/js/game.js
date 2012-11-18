@@ -40,6 +40,13 @@ $(window).load(function() {
 
 // Start menu and game menu button event handlers, etc.
 function initializeMenuButtons() {
+    $('#play.carousel').carousel({
+        interval: false
+    });
+    $('#play.carousel').bind('slid', function() {
+        showGameElements();
+    });
+    
     $('#start-button').click(startGame);
     $('#return-button').click(returnToGame);
     
@@ -52,19 +59,19 @@ function initializeMenuButtons() {
 
 // Return to game from start menu
 function returnToGame() {
+    $('#play.carousel').carousel('next');
     $('#start-menu').hide();
-    $('#game-area').show();
 }
 
 // Return to start menu from game
 function returnToStart() {
-    $('#game-area').hide();
-    $('#start-menu').show();
     if (board != null) {
         // allow user to return to current game
         // board should never be empty after starting first game
         $('#start-game-inprogress').show();
     }
+    $('#start-menu').show();
+    $('#play.carousel').carousel('prev');
 }
 
 function startGame() {
@@ -77,7 +84,7 @@ function startGame() {
     if (isNaN(level)) {
         level = 0;
     }
-    difficulty = parseInt($("#setting-difficulty > button.btn.active").val());
+    difficulty = parseInt($('#setting-difficulty input[name="setting-difficulty"]:checked').val());
     if (!isNaN(difficulty)) {
         // calculate value to pass to getWords
         difficulty += level * INCR_LEVEL;
@@ -88,9 +95,9 @@ function startGame() {
     }
     custom_list = $('#setting-custom').val();
 
-    messenger.getWords(initializeBoard);    
-    returnToGame(); // should be in initializeBoard()
-    //showGameElements();
+    messenger.getWords(initializeBoard);
+
+    returnToGame();
 }
 
 // Show transition screen and reveal solution
@@ -111,7 +118,6 @@ function initializeBoard(data) {
     
     // hide start menu, show board
     //returnToGame(); // Firefox doesn't like having this here for some reason
-    //showGameElements();
 }
 
 // called during board creation
@@ -199,7 +205,7 @@ var Board = function(data) {
 		letters = letters.concat(words[i].split(""));
     }
     this.tileArea = new TileArea(letters);
-    //hideGameElements();
+    hideGameElements();
 };
 
 var TileArea = function(letters) {
