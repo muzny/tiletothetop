@@ -23,7 +23,7 @@ var NUM_WORDS = 4;
 var MAX_WORDLEN = 10;
 var difficulty = 0;
 var level = 0;
-var tag_filter = "";
+var tag_filter = 0;
 var custom_list = "";
 
 $(window).load(function() {
@@ -35,6 +35,9 @@ $(window).load(function() {
     //startGame();    // uncomment this to bypass main menu
 });
 
+
+/** Begin Menu / Navigation stuff */
+
 // Start menu and game menu button event handlers, etc.
 function initializeMenuButtons() {
     $('#start-button').click(startGame);
@@ -45,29 +48,6 @@ function initializeMenuButtons() {
     });
     $('#new-game').click(returnToStart);
     $('#quit-game').click(quitGame);
-}
-
-function startGame() {
-    // user has started the game from main menu
-    // initialize game elements with user settings
-    // need to start timer, score tracking logic, etc
-
-    // TODO server side validation and parameter usage
-    tag_filter = $('#setting-tag').val();
-    custom_list = $('#setting-custom').val();
-    // TODO make use of level advancement
-    level =  parseInt($('#setting-level').val()) - 1;
-    if (isNaN(level)) {
-        level = 0;
-    }
-    difficulty = parseInt($("#setting-difficulty > button.btn.active").val());
-    if (!isNaN(difficulty)) {
-        // calculate value to pass to getWords
-        difficulty += level * INCR_LEVEL;
-    }
-    
-    messenger.getWords(initializeBoard);    
-    returnToGame(); // should be in initializeBoard()
 }
 
 // Return to game from start menu
@@ -93,10 +73,38 @@ function returnToStart() {
     }
 }
 
+function startGame() {
+    // user has started the game from main menu
+    // initialize game elements with user settings
+    // need to start timer, score tracking logic, etc
+
+    // TODO make use of level advancement
+    level =  parseInt($('#setting-level').val()) - 1;
+    if (isNaN(level)) {
+        level = 0;
+    }
+    difficulty = parseInt($("#setting-difficulty > button.btn.active").val());
+    if (!isNaN(difficulty)) {
+        // calculate value to pass to getWords
+        difficulty += level * INCR_LEVEL;
+    }
+    tag_filter = parseInt($('#setting-tag').val());
+    if (isNaN(tag_filter)) {
+        tag_filter = 0;
+    }
+    custom_list = $('#setting-custom').val();
+
+    messenger.getWords(initializeBoard);    
+    returnToGame(); // should be in initializeBoard()
+}
+
 // Show transition screen and reveal solution
 function quitGame() {
     // TODO
 }
+
+/** End Menu / Navigation stuff */
+
 
 function initializeBoard(data) {
     if (board != null) {

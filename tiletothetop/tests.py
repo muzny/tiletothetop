@@ -31,7 +31,7 @@ class RandomWordsTest(TestCase):
     
     def test_expected_num_words(self):
         """
-        Pre: test db has at least 20 distinct words
+        Pre: at least 20 distinct words exist
         """
         for n in range(22): # max words possible = 20
             words = self.__get_words(n);
@@ -52,14 +52,17 @@ class RandomWordsTest(TestCase):
     
     def test_difficulty_not_existant(self):
         """
-        Pre: negative difficulties are non-existant in db
+        Pre: at least 4 distinct words exist
         """
         words = self.__get_words(4, -1)
-        self.assertEqual(len(words), 0) # returning 0 words is valid
-        
-    def test_difficulty_exists(self):
-        """
-        Pre: at least 4 words with difficulty 75 +- 2 exist
-        """
-        words = self.__get_words(4, 75)
         self.assertEqual(len(words), 4)
+        words = self.__get_words(4, 9001)
+        self.assertEqual(len(words), 4)
+        
+    def test_difficulty_varying(self):
+        """
+        Pre: at least 4 distinct words exist
+        """
+        for i in range(0, 151, 5):
+            words = self.__get_words(4, i)
+            self.assertEqual(len(words), 4)
