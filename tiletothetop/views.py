@@ -81,7 +81,7 @@ def random_words(request):
         # expand difficulty range until we return at least num_words
         range_diff = max_diff - min_diff
         while (count < num_words and step < range_diff):
-            words_diff = (Word.objects
+            words_diff = (words
                     .filter(difficulty__gte=difficulty-step)
                     .filter(difficulty__lte=difficulty+step))
             count = words_diff.count()
