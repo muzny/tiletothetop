@@ -344,12 +344,42 @@ function dropTileInEmptyTile(ev) {
 		$(tile).centerOnParent();
 		// Tile is no longer in the tile area
 		$(tile).removeClass("inTileArea");
-		//Check to see if game has been won
-		var gameWon = window.board.workspace.winCheck();
-		if(gameWon) {
-			TransitionScreen(score);
-		}
+		
+		checkGameWon();
     }
+}
+
+// Check to see if game has been won. If it has, then it
+// calculates the score and shows the transition screen.
+function checkGameWon() {
+	if (window.board.workspace.winCheck()) {
+		// They won!!
+		
+		var solutions = window.board.workspace.getSolutions();
+	
+		// Calculate score for correct words
+		for (var i = 0; i < solutions.length; i++) {
+			score += scoreFunc(solutions[i]);
+		}
+		
+		// Show the transition screen
+		TransitionScreen(score);
+	}
+}
+
+// Returns the score value of the given word. Bases the score on
+// the length of the word and difficulty of the current level.
+function scoreFunc(word) {
+	// 100 points per letter
+	var baseScore = word.length * 100;
+	
+	// Add difficulty bonus
+	var bonus = 0;
+	if (!isNaN(difficulty)) {
+		bonus = difficulty * 10;
+	}
+	
+	return baseScore + bonus;
 }
 
 // Credit: http://sedition.com/perl/javascript-fy.html
@@ -521,11 +551,9 @@ var Workspace = function(words) {
 						$(t).removeClass("inTileArea");
 						$(t).centerOnParent();
 						$(clicked[0]).removeClass("clicked");
-						// TODO: check if the game has been won
-						var gameWon = window.board.workspace.winCheck();
-						if(gameWon) {
-							TransitionScreen(score);
-						}
+
+						checkGameWon();
+						
 						// If there is a next empty tile in this answer area, make it "clicked"
 						var next = getNextEmpty($(clicked[0]).attr("id"));
 						if (next) {
