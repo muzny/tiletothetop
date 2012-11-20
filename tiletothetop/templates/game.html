@@ -38,7 +38,6 @@
         <div class="tabbable">
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#play" data-toggle="tab">Play</a></li>
-                <li><a href="#settings" data-toggle="tab">Settings</a></li>
                 {% if user.is_authenticated %}
                 <li><a href="#account" data-toggle="tab">Account</a></li>
                 {% endif %}
@@ -67,9 +66,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="tab-pane" id="settings">
-                    <p>Game settings</p>
                 </div>
                 {% if user.is_authenticated %}
                 <div class="tab-pane" id="account">
