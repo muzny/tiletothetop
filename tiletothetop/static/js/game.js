@@ -301,11 +301,11 @@ function leaveTileArea(ev) {
 
 //Drops the tile into the TileArea
 function dropTileInTileArea(ev) {
+	ev.preventDefault();
 	var id = ev.currentTarget.id;
     var numChildren = $("#" + id).children().length;
     //Check if there are any children
     if(numChildren == 0) {
-		ev.preventDefault();
 		var data=ev.dataTransfer.getData("Text");
 		var tile = document.getElementById(data);
 		ev.currentTarget.appendChild(tile);
@@ -333,11 +333,11 @@ function leaveEmptyTile(ev) {
 
 //Drops the tile into the EmptyTile
 function dropTileInEmptyTile(ev) {
+	ev.preventDefault();
     var id = ev.currentTarget.id;
     var numChildren = $("#" + id).children().length;
     //Check if any children exist
     if(numChildren == 0) {
-		ev.preventDefault();
 		var data=ev.dataTransfer.getData("Text");
 		var tile = document.getElementById(data);
 		//Set location
