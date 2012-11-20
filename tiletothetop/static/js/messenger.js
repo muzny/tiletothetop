@@ -32,6 +32,26 @@ var Messenger = function() {
 		});
 	};
 
+        // Gets static words based on a string of IDs
+        this.getStaticWords = function(successFn, wordIDs) {
+            var parameters = {
+                "id" : wordIDs
+            };
+            $.ajax({
+                url: "/static-words/",
+                type: "GET",
+                dataType: "json",
+                data: parameters,
+                success: function(data) {
+                    successFn(data)
+                },
+                error: function(data) {
+                    if (DEBUG)
+                        alert("static words error");
+                }
+            });
+        };
+
         // Pushes game data to the server based on the score fed into the
         // function.  To be called on game completion
         this.pushGameData = function(score) {

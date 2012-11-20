@@ -34,6 +34,9 @@ $(window).load(function() {
     
     messenger = new Messenger();
     GetAccountData();
+
+    //if we're fed static ids, automagically create game from them
+    createStaticGameIfApplicable()
     
     //startGame();    // uncomment this to bypass main menu
 });
@@ -76,6 +79,25 @@ function returnToStart() {
     }
     $('#start-menu').show();
     $('#play.carousel').carousel('prev');
+}
+
+function createStaticGameIfApplicable() {
+    var getUrlVars = function() {
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for(var i = 0; i < hashes.length; i++)
+        {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
+        }
+        return vars;
+    }
+    var params = getUrlVars();
+    if (params.id) {
+        var words = messenger.getStaticWords(initializeBoard, params.id);
+        returnToGame();
+    }
 }
 
 function startGame() {
