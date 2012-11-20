@@ -37,9 +37,10 @@ var Messenger = function() {
         this.pushGameData = function(score) {
 		$.ajax({
 			url: "/push-game-data/",
-			type: "GET",
+			type: "POST",
 			dataType: "json",
 			data: {"score" : score},
+			headers: {"X-CSRFToken" : $.cookie('csrftoken')},
 			success: function() {
 				//TODO: implement callback fn parameter
 			},
@@ -56,7 +57,7 @@ var Messenger = function() {
 			type: "GET",
 			dataType: "json",
 			success: function(data) {
-                insertAccountData(data);
+                            insertAccountData(data);
 			},
 			error: function(data) {
                 // always errors if user is not logged in

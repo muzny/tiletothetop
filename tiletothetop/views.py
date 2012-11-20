@@ -165,13 +165,14 @@ def push_game_data(request):
     # State Checks
     if not request.user.is_authenticated():
         return HttpResponse(status=204)
-    if not request.method == 'GET':
+    if not request.method == 'POST':
         return HttpResponse(status=405)
 
     # Make a new GameHistory object
+    print(request.POST['score']);
     new_game = GameHistory(
                             user = request.user,
-                            score = request.GET["score"],
+                            score = 0,
                             word_difficulties = 0
                         )
     # And push it to the database
