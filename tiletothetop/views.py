@@ -187,10 +187,9 @@ def push_game_data(request):
         return HttpResponse(status=405)
 
     # Make a new GameHistory object
-    print(request.POST['score']);
     new_game = GameHistory(
                             user = request.user,
-                            score = 0,
+                            score = request.POST['score'],
                             word_difficulties = 0
                         )
     # And push it to the database
