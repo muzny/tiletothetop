@@ -36,6 +36,11 @@ $(window).load(function() {
     GetAccountData();
 
     //if we're fed static ids, automagically create game from them
+    //argument done as id parameter, which is hyphen separated ids.
+    // example:
+    // http://our.game.url/?id=id1-id2-id3-id4
+    // dev example:
+    // http://127.0.0.1:8000/?id=47-106-8-900
     createStaticGameIfApplicable()
     
     //startGame();    // uncomment this to bypass main menu
