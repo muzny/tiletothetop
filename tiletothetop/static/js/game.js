@@ -27,6 +27,9 @@ var tag_filter = 0;
 var custom_list = "";
 
 $(window).load(function() {
+    // because IE tries to cache all the things
+    $.ajaxSetup({cache:false});
+    
     initializeMenuButtons();
     
     messenger = new Messenger();
