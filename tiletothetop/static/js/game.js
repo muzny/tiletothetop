@@ -27,6 +27,9 @@ var tag_filter = 0;
 var custom_list = "";
 
 $(window).load(function() {
+    // because IE tries to cache all the things
+    $.ajaxSetup({cache:false});
+    
     initializeMenuButtons();
     
     messenger = new Messenger();
@@ -43,10 +46,11 @@ function initializeMenuButtons() {
     $('#play.carousel').carousel({
         interval: false
     });
+    /*
     $('#play.carousel').bind('slid', function() {
         showGameElements();
     });
-    
+    */
     $('#start-button').click(startGame);
     $('#return-button').click(returnToGame);
     
@@ -205,7 +209,7 @@ var Board = function(data) {
 		letters = letters.concat(words[i].split(""));
     }
     this.tileArea = new TileArea(letters);
-    hideGameElements();
+    //hideGameElements();
 };
 
 var TileArea = function(letters) {
