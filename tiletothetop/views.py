@@ -42,6 +42,24 @@ def game(request):
 def static_words(request):
     pass
 
+def static_words(request):
+    if not request.is_ajax() or request.method != "GET":
+        return HttpResponse(status=400)
+
+    data = []
+    idString = request.GET["id"]
+    ids = idString.split('-');
+    for curID in ids:
+        word = Word.objects.filter(id=curID)[0];
+        if not word:
+            return HttpResponse(status=400)
+
+        data.append({'word': word.word,
+                     'definition': word.definition,
+                     'speech': word.part_of_speech})
+
+    return HttpResponse(simplejson.dumps(data), mimetype="application/json")
+
 def random_words(request):
     if not request.is_ajax() or request.method != "GET":
         return HttpResponse(status=400)
