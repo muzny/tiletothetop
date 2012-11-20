@@ -43,10 +43,11 @@ function initializeMenuButtons() {
     $('#play.carousel').carousel({
         interval: false
     });
+    /*
     $('#play.carousel').bind('slid', function() {
         showGameElements();
     });
-    
+    */
     $('#start-button').click(startGame);
     $('#return-button').click(returnToGame);
     
@@ -205,7 +206,7 @@ var Board = function(data) {
 		letters = letters.concat(words[i].split(""));
     }
     this.tileArea = new TileArea(letters);
-    hideGameElements();
+    //hideGameElements();
 };
 
 var TileArea = function(letters) {
