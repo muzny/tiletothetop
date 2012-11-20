@@ -42,6 +42,24 @@ def game(request):
 def static_words(request):
     pass
 
+def static_words(request):
+    if not request.is_ajax() or request.method != "GET":
+        return HttpResponse(status=400)
+
+    data = []
+    idString = request.GET["id"]
+    ids = idString.split('-');
+    for curID in ids:
+        word = Word.objects.filter(id=curID)[0];
+        if not word:
+            return HttpResponse(status=400)
+
+        data.append({'word': word.word,
+                     'definition': word.definition,
+                     'speech': word.part_of_speech})
+
+    return HttpResponse(simplejson.dumps(data), mimetype="application/json")
+
 def random_words(request):
     if not request.is_ajax() or request.method != "GET":
         return HttpResponse(status=400)
@@ -165,13 +183,14 @@ def push_game_data(request):
     # State Checks
     if not request.user.is_authenticated():
         return HttpResponse(status=204)
-    if not request.method == 'GET':
+    if not request.method == 'POST':
         return HttpResponse(status=405)
 
     # Make a new GameHistory object
+    print(request.POST['score']);
     new_game = GameHistory(
                             user = request.user,
-                            score = request.GET["score"],
+                            score = 0,
                             word_difficulties = 0
                         )
     # And push it to the database

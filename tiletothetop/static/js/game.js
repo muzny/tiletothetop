@@ -34,6 +34,14 @@ $(window).load(function() {
     
     messenger = new Messenger();
     GetAccountData();
+
+    //if we're fed static ids, automagically create game from them
+    //argument done as id parameter, which is hyphen separated ids.
+    // example:
+    // http://our.game.url/?id=id1-id2-id3-id4
+    // dev example:
+    // http://127.0.0.1:8000/?id=47-106-8-900
+    createStaticGameIfApplicable()
     
     //startGame();    // uncomment this to bypass main menu
 });
@@ -76,6 +84,25 @@ function returnToStart() {
     }
     $('#start-menu').show();
     $('#play.carousel').carousel('prev');
+}
+
+function createStaticGameIfApplicable() {
+    var getUrlVars = function() {
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for(var i = 0; i < hashes.length; i++)
+        {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
+        }
+        return vars;
+    }
+    var params = getUrlVars();
+    if (params.id) {
+        var words = messenger.getStaticWords(initializeBoard, params.id);
+        returnToGame();
+    }
 }
 
 function startGame() {
