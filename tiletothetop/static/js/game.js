@@ -11,6 +11,9 @@ var numberHintsUsed = 0;
 var HINT_PENALTY = 100;
 var TILE_SIZE = 60;
 
+// So that we can tell if a modal is open, and pause the game when it is
+var MODAL_IDS = ["#login-modal", "#register-modal"];
+
 // difficulty constants - maybe not the right place for this
 var NUM_DIFFICULTIES = 3;
 var MAX_DIFFICULTY = 150; // [0,150)
@@ -404,6 +407,11 @@ function checkGameWon() {
 // Return true if the game is "paused". The game is "paused" if
 // the play screen is not active.
 function isPaused() {
+    for (var i = 0; i < MODAL_IDS.length; i++) {
+	if ($(MODAL_IDS[i]).hasClass("in")) {
+	    return true;
+	}
+    }
     return !$("#play").hasClass("active");
 }
 
