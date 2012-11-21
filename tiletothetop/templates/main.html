@@ -13,19 +13,19 @@
                     </label>
                     <div id="setting-difficulty" class="controls btn-group">
                         <label class="radio inline">
-                            <input type="radio" name="setting-difficulty" value="0" />
+                            <input type="radio" name="setting-difficulty" value="0">
                             Easy
                         </label>
                         <label class="radio inline">
-                            <input type="radio" name="setting-difficulty" value="50" />
+                            <input type="radio" name="setting-difficulty" value="50">
                             Medium
                         </label>
                         <label class="radio inline">
-                            <input type="radio" name="setting-difficulty" value="100" />
+                            <input type="radio" name="setting-difficulty" value="100">
                             Hard
                         </label>
                         <label class="radio inline">
-                            <input type="radio" name="setting-difficulty" value="*" checked="checked" />
+                            <input type="radio" name="setting-difficulty" value="*" checked="checked">
                             Any
                         </label>
                     </div>
@@ -68,7 +68,7 @@
                 
             </div>
         </fieldset>
-
+    </form>
     <p>
         <button class="btn btn-large btn-primary" id="start-button" type="button">
             Start New Game
@@ -81,5 +81,22 @@
             and continue tiling to the top!
         </span>
     </p>
-    </form>
+    
+</div>
+
+<div id="game-area" class="item">
+    <div id="game-menu">
+        <button class="btn btn-primary" id="new-game" type="button"
+                rel="tooltip" data-title="Start a new game" data-placement="left">
+            Return to Start Menu
+        </button>
+        <button class="btn btn-primary" id="quit-game" type="button"
+                rel="tooltip" data-title="End game and reveal solution" data-placement="right">
+            Quit Game
+        </button>
+    </div>
+    <div id="transition-screen">
+        <h1>SCORE: 0</h1>
+        <p>Click here to start a new game</p>
+    </div>
 </div>

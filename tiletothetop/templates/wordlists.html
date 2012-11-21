@@ -1,0 +1,134 @@
+<div id="custom-words">
+    
+    <h3>Custom Word Lists</h3>
+    
+    {% if user.is_authenticated %}
+    <form class="form-inline">
+        <h4>Create a new list or edit an existing list:</h4>
+        <div id="custom-new" class="input-append">
+            <input id="list-name" type="text" placeholder="List Name">
+            <button id="create-list" type="button" class="btn btn-primary">
+                Create List
+            </button>
+        </div>
+
+        <div id="custom-edit" class="input-append">
+            <select id="edit-list">
+                <option>Populate with existing lists...</option>
+                <option>ListName1</option>
+                <option>ListName2</option>
+                <option>ListName3</option>
+            </select>
+            <button id="edit-list" type="button" class="btn btn-primary">
+                Edit List
+            </button>            
+        </div>
+    </form>
+    
+    <!-- if edit, populate with name and existing words of the selected list -->
+    <!-- if create, can only populate list name -->
+    <div id="custom-builder">
+        <h4>Build your list here:</h4>
+        <p>List name: <span id="list-name">[none]</span></p>
+        
+        <!-- search words in db? -->
+        <!--
+        <div id="search-words">
+            <form class="form-search">
+                <div class="input-append">
+                    <input type="text" class="search-query">
+                    <button type="button" class="btn">Search</button>
+                </div>
+            </form>
+            <p>table/grid of results with add option here</p>
+        </div>
+        -->
+        
+        <div id="create-words">
+            <p>Create a word</p>
+            <label class="control-label">Essential stuff</label>
+            <div class="controls controls-row">
+                <input id="word-name" class="span3" type="text" placeholder="Word">
+                <input id="word-part" class="span2" type="text" placeholder="Part of Speech">
+                <textarea id="word-defn" class="span5" placeholder="Definition"></textarea>
+            </div>
+            <label class="control-label">Extra stuff</label>
+            <div class="controls controls-row">
+                <input id="word-difficulty" class="span2" type="text" placeholder="Difficulty">
+                <input id="word-tags" class="span3" type="text" placeholder="Tags">
+            </div>
+            <button type="button" class="btn">Add word</button>
+        </div>
+
+        <!-- TODO should support editing existing words -->
+        <div id="current-words">
+            <p>Current words</p>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Word</th>
+                        <th>Part of Speech</th>
+                        <th>Definition</th>
+                        <!-- do we want these fields for custom words??? -->
+                        <th>Difficulty</th>
+                        <th>Tags</th>
+                        <th>Remove</th>
+                        <th>Edit</th>
+                    </tr>
+                </thead>
+                
+                <tbody id="list-entries">
+                    <tr id="custom-word-0">
+                        <td>petrichor</td>
+                        <td></td>
+                        <td>the name for the smell of rain on dry ground, is from oils given off by vegetation, absorbed onto neighboring surfaces, and released into the air after a first rain</td>
+                        <td></td>
+                        <td></td>
+                        <td><button type="button" class="btn btn-small remove-word">X</button></td>
+                        <td><button type="button" class="btn btn-small edit-word">E</button></td>
+                    </tr>
+                    <tr id="custom-word-1">
+                        <td>harglebargh</td>
+                        <td>whatever I want</td>
+                        <td>expression for expressing the most expressive of expressions, one which expresses an expression about an expressive expression just going to make this really long oh man it's not going to fit into the database what will we do</td>
+                        <td>42</td>
+                        <td>fish, crackers</td>
+                        <td><button type="button" class="btn btn-small remove-word">X</button></td>
+                        <td><button type="button" class="btn btn-small edit-word">E</button></td>
+                    </tr>
+                    <tr id="custom-word-2">
+                        <td>pickle</td>
+                        <td></td>
+                        <td>A small cucumber preserved in vinegar, brine, or a similar solution.</td>
+                        <td>42</td>
+                        <td>crackers</td>
+                        <td><button type="button" class="btn btn-small remove-word">X</button></td>
+                        <td><button type="button" class="btn btn-small edit-word">E</button></td>
+                    </tr>
+                    <tr id="custom-word-3">
+                        <td>pickle</td>
+                        <td>n</td>
+                        <td>If he had gone to a public high school he could have avoided this ____.</td>
+                        <td></td>
+                        <td>fill in the blank</td>
+                        <td><button type="button" class="btn btn-small remove-word">X</button></td>
+                        <td><button type="button" class="btn btn-small edit-word">E</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <p>
+            <button id="save-list" type="button" class="btn btn-primary">
+                Save List
+            </button>
+            <button id="delete-list" type="button" class="btn">
+                Delete List
+            </button>
+        </p>
+    </div>
+    
+    {% else %}
+    <p>Login or register to create your own word lists!</p>
+    {% endif %}
+</div>

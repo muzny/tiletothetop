@@ -399,6 +399,12 @@ function checkGameWon() {
 	}
 }
 
+// Return true if the game is "paused". The game is "paused" if
+// the play screen is not active.
+function isPaused() {
+    return !$("#play").hasClass("active");
+}
+
 // Returns the score value of the given word. Bases the score on
 // the length of the word and difficulty of the current level.
 function scoreFunc(word) {
@@ -565,6 +571,9 @@ var Workspace = function(words) {
 
     // Typing controls for the empty boxes
     $(document).on('keypress', function(e) {
+	// If not in the "play" tab, the game should be paused
+	// and keypresses should not trigger anything.
+	if (!isPaused()) {
 		// In firefox, e.which gets set instead of e.keypress
 		var num = e.keyCode;
 		if (num == 0) {
@@ -600,6 +609,7 @@ var Workspace = function(words) {
 		if(num == 96) {
 			alert(self.getSolutions());
 		}
+	}
     });
 
     // Handle arrow keys being pressed. Note that arrow keys
