@@ -28,7 +28,7 @@ class Word(models.Model):
 class GameHistory(models.Model):
     user  = models.ForeignKey(User)
     score = models.IntegerField(default=0)
-    
+
     # list of difficulty values of words solved in the game
     # (will probably replace with something more usable later
     # same as a string, just does extra validation on comma separation)
@@ -42,6 +42,7 @@ class GameHistory(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User)  # provides our authentication info
     games_played = models.IntegerField(default=0)
+    total_score = models.IntegerField(default=0)
 
     def __unicode__(self):
         return self.user.__unicode__()

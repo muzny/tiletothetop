@@ -11,6 +11,9 @@ var numberHintsUsed = 0;
 var HINT_PENALTY = 100;
 var TILE_SIZE = 60;
 
+// So that we can tell if a modal is open, and pause the game when it is
+var MODAL_IDS = ["#login-modal", "#register-modal"];
+
 // difficulty constants - maybe not the right place for this
 var NUM_DIFFICULTIES = 3;
 var MAX_DIFFICULTY = 150; // [0,150)
@@ -27,12 +30,13 @@ var inMenu = false;
 $(window).load(function() {
     // because IE tries to cache all the things
     $.ajaxSetup({cache:false});
-    
+
     initializeMenuButtons();
     initializeWordListButtons();
-    
     messenger = new Messenger();
-    GetAccountData();
+    getAccountData();
+    getUserRank();
+    getLeaderboard(10);
 
     //if we're fed static ids, automagically create game from them
     //argument done as id parameter, which is hyphen separated ids.
@@ -41,7 +45,7 @@ $(window).load(function() {
     // dev example:
     // http://127.0.0.1:8000/?id=47-106-8-900
     createStaticGameIfApplicable()
-    
+
     //startGame();    // uncomment this to bypass main menu
 });
 
@@ -65,7 +69,7 @@ function initializeMenuButtons() {
     $('#setting-difficulty').change(updateDifficultySlider);
     $('#start-button').click(startGame);
     $('#return-button').click(returnToGame);
-    
+
     $('#new-game').click(returnToStart);
     $('#quit-game').click(quitGame);
     $('#game-menu').tooltip({
@@ -160,7 +164,7 @@ function initializeBoard(data) {
         $('#tiles-area').remove();
     }
     board = new Board(data);
-    
+
     // hide start menu, show board
     //returnToGame(); // Firefox doesn't like having this here for some reason
 }
@@ -224,8 +228,8 @@ function TransitionScreen(score) {
     // if we call this immediately, it likely won't get the updated user data
     setTimeout(messenger.getUserData, 2000);
     // the getWords success callback inserts, but hides definitions and tiles
-    messenger.getWords(initializeBoard); 
-    
+    messenger.getWords(initializeBoard);
+
 	transitionScreen.click(function () {
         transitionScreen.css({'display':'hidden', 'z-index':'-1'});
         showGameElements(); // animated display of definitions / tiles
@@ -389,7 +393,7 @@ function dropTileInEmptyTile(ev) {
 		$(tile).centerOnParent();
 		// Tile is no longer in the tile area
 		$(tile).removeClass("inTileArea");
-		
+
 		checkGameWon();
     }
 }
@@ -399,14 +403,14 @@ function dropTileInEmptyTile(ev) {
 function checkGameWon() {
 	if (window.board.workspace.winCheck()) {
 		// They won!!
-		
+
 		var solutions = window.board.workspace.getSolutions();
-	
+
 		// Calculate score for correct words
 		for (var i = 0; i < solutions.length; i++) {
 			score += scoreFunc(solutions[i]);
 		}
-		
+
 		// Show the transition screen
 		TransitionScreen(score);
 	}
@@ -415,6 +419,11 @@ function checkGameWon() {
 // Return true if the game is "paused". The game is "paused" if
 // the play screen is not active.
 function isPaused() {
+    for (var i = 0; i < MODAL_IDS.length; i++) {
+	if ($(MODAL_IDS[i]).hasClass("in")) {
+	    return true;
+	}
+    }
     return !$("#play").hasClass("active");
 }
 
@@ -423,13 +432,13 @@ function isPaused() {
 function scoreFunc(word) {
 	// 100 points per letter
 	var baseScore = word.length * 100;
-	
+
 	// Add difficulty bonus
 	var bonus = 0;
 	if (!isNaN(difficulty)) {
 		bonus = difficulty * 10;
 	}
-	
+
 	return baseScore + bonus;
 }
 
@@ -449,7 +458,7 @@ TileArea.prototype.shuffle = function(myArray){
 // This is where the definitions of the word go.
 var DefinitionArea = function(definitions) {
     var left = $("<div>").addClass("left-col");
-	
+
 	var hintClicked = function(e) {
 		//get corresponding workspace element
 		var id = $(this).attr("id");
@@ -481,19 +490,19 @@ var DefinitionArea = function(definitions) {
 			}
 		}
 	}
-	
+
     $.each(definitions, function(index) {
 		var def = $("<div>");
 		def.addClass("definition");
 		def.attr("id", "def_" + index);
-		
+
 		var hint = $("<div>");
 		hint.addClass("hint-box");
 		hint.attr("id", "hint_" + index);
 		hint.bind('click', hintClicked);
 		hint.append("Hint");
 		hint.disableSelection();
-		
+
 		def.append(hint);
 		def.append(definitions[index]);
 		left.append(def);
@@ -604,9 +613,9 @@ var Workspace = function(words) {
 						$(t).appendTo($(clicked[0]));
 						$(t).removeClass("inTileArea");
 						$(t).centerOnParent();
-						
+
 						checkGameWon();
-						
+
 						// If there is a next empty tile in this answer area, make it "clicked"
 						var next = getNextEmpty($(clicked[0]).attr("id"));
 						if (next) {
@@ -617,7 +626,7 @@ var Workspace = function(words) {
 				}
 			}
 		}
-		
+
 		// If ` is pressed, show the solutions
 		if(num == 96) {
 			alert(self.getSolutions());
@@ -633,7 +642,7 @@ var Workspace = function(words) {
 	    if (num == 0) {
 		    num = e.which;
 	    }
-	    
+
 	   // User pressed backspace
 	    if (num == 8 && !inMenu) {
 		e.preventDefault();
@@ -644,11 +653,11 @@ var Workspace = function(words) {
 		}
 		return false;
 	    }
-	    
+
 	    // The user pressed the left or right arrow keys.
 	    if ((num == 37 || num == 39) && !inMenu) {
 		    var clicked = $(".clicked");
-		    
+
 		    // If a box is "clicked", move which box is "clicked"
 		    // based on the arrow key.
 		    if (clicked.length == 1) {
@@ -659,29 +668,29 @@ var Workspace = function(words) {
 			} else { // Right Arrow
 			    nextBox = getBoxAtOffset($(clicked[0]).attr("id"), 1);
 			}
-			
+
 			if (nextBox) {
 			    $(clicked[0]).removeClass("clicked");
 			    $(nextBox).addClass("clicked");
 			}
 		    }
 	    }
-	    
+
 	    // The user pressed the up or down arrow keys, or the tab key.
 	    if ((num == 38 || num == 40 || num == 9) && !inMenu) {
 		if (num == 9) e.preventDefault(); // Stop tab from selecting elements on the screen.
-		
+
 		var clicked = $(".clicked");
-		    
+
 		// If a box is "clicked", move which box is "clicked"
 		// based on the arrow key.
 		if (clicked.length == 1) {
 		    var prevId = $(clicked).attr("id");
 		    var answerNum = parseInt(prevId.split("_")[1]);
 		    var boxNum = parseInt(prevId.split("_")[2]);
-		    
+
 		    var nextAnswerArea;
-		    
+
 		    // User pressed up arrow
 		    if (num == 38) {
 			nextAnswerArea = $("#emptyTile_" + (answerNum - 1) + "_0");
@@ -690,18 +699,18 @@ var Workspace = function(words) {
 		    } else {
 			nextAnswerArea = $("#emptyTile_" + ((answerNum + 1) % NUM_WORDS) + "_0");
 		    }
-		    
+
 		    // If there was a previous answer area to move to, find
 		    // the first empty box in it and highlight that box.
 		    if (nextAnswerArea) {
 			var emptyNext = getNextEmpty($(nextAnswerArea).attr("id"));
-			
+
 			// If there was no empty box in this row, just
 			// get the last box in the row.
 			if (!emptyNext) {
 			    emptyNext = getLastInRow($(nextAnswerArea).attr("id"));
 			}
-			
+
 			//prevAnswerArea = emptyPrev ? emptyPrev : prevAnswerArea;
 			$(clicked[0]).removeClass("clicked");
 			$(emptyNext).addClass("clicked");
@@ -709,7 +718,7 @@ var Workspace = function(words) {
 		}
 	    }
     });
-    
+
     //Helper for solutions
     this.getSolutions = function() {
 		return solutions;
@@ -767,13 +776,13 @@ function getBoxAtOffset(prevId, n) {
     var boxNum = parseInt(prevId.split("_")[2]);
     var i = boxNum;
     var prevValidBox = null;
-    
+
     // Search for the box that we're looking for by going forwards or
     // backwards (depending on the sign of n), 1 box at a time.
     while (true) {
 	var id = "#emptyTile_" + answerNum + "_" + i;
 	var empty = $(id);
-	
+
 	if (empty.length == 0) { // Have we gone off the list?
 		return prevValidBox == null ? false : prevValidBox;
 	} else if (i == boxNum + n) { // Have we hit the box we're looking for?
@@ -795,18 +804,18 @@ function getLastInRow(prevId) {
     var i = boxNum;
     var prevValidBox = $("#" + prevId);
     var currentBox = $("#" + prevId);
-    
+
     while (true) {
 	i += 1;
 	currentBox = $("#emptyTile_" + answerNum + "_" + i);
-	
+
 	if (currentBox.length == 0) {
 	    break;
 	}
-	    
+
 	prevValidBox = currentBox[0];
     }
-    
+
     return prevValidBox;
 }
 
@@ -817,30 +826,30 @@ function deleteBoxAt(prevId) {
     var currentBox = $("#" + prevId);
     var numChildren = currentBox.children().length;
     var decrementHighlighted = false; // Do we move the highlighted box after deleting the current box?
-    
+
     // If the current box is empty, look at the box behind it.
     if (numChildren == 0) {
 	currentBox = getBoxAtOffset(prevId, -1);
 	decrementHighlighted = true;
 	numChildren = currentBox.children().length;
     }
-    
+
     // If the current box has a child, remove it and throw it back
     // in the tile area.
     if(numChildren == 1) {
 	var t = currentBox.children()[0];
-	
+
 	//$(t).appendTo($("#tile-area"));
 	addToTileArea(t);
-	
-	currentBox.empty();
+
+	//currentBox.empty();
     }
-    
+
     if (decrementHighlighted) {
 	var clicked = $(".clicked")[0];
-	
+
 	var prevBox = getBoxAtOffset($(clicked).attr("id"), -1);
-	
+
 	if (prevBox) {
 	    $(clicked).removeClass("clicked");
 	    $(prevBox).addClass("clicked");
@@ -851,17 +860,17 @@ function deleteBoxAt(prevId) {
 // Adds the tile t to the tile area.
 function addToTileArea(t) {
     var tileArea = $(".tile-box");
-    
+
     for (var i = 0; i < tileArea.children().length; ++i) {
 	var tileBox = $(tileArea.get(i));
-	
+
 	if (tileBox.children().length == 0) {
 	    tileBox.append(t);
 	    break;
 	}
     }
-    
-    
+
+
     $(t).addClass("inTileArea");
     $(t).centerOnParent();
 }
@@ -870,7 +879,7 @@ function addToTileArea(t) {
  * clicking this button while not logged in is not currently
  * handled well
  */
-function GetAccountData() {
+function getAccountData() {
     messenger.getUserData();
 }
 
@@ -909,3 +918,10 @@ function insertAccountData(data) {
     }
 }
 
+function getLeaderboard(count) {
+    messenger.getLeaderboard(count);
+}
+
+function getUserRank() {
+    messenger.getUserRank();
+}

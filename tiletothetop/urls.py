@@ -17,7 +17,10 @@ urlpatterns = patterns('tiletothetop.views',
 
     # these two routes get and post user data
     url(r'^push-game-data/$', 'push_game_data', name='push_game_data'),
-    url(r'^get-user-data/$', 'get_user_data', name='get_user_data')
+    url(r'^get-user-data/$', 'get_user_data', name='get_user_data'),
+
+    url(r'^get-leaderboard/$', 'get_leaderboard', name='get_leaderboard'),
+    url(r'^get-user-rank/$', 'get_user_rank', name='get_user_rank'),
 )
 
 
