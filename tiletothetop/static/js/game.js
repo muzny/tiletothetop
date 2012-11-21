@@ -821,7 +821,7 @@ function deleteBoxAt(prevId) {
 	//$(t).appendTo($("#tile-area"));
 	addToTileArea(t);
 	
-	currentBox.empty();
+	//currentBox.empty();
     }
     
     if (decrementHighlighted) {
