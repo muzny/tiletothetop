@@ -31,6 +31,7 @@ $(window).load(function() {
     $.ajaxSetup({cache:false});
     
     initializeMenuButtons();
+    initializeWordListButtons();
     
     messenger = new Messenger();
     GetAccountData();
