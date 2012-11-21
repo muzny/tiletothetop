@@ -13,7 +13,7 @@ var Messenger = function() {
             "word_count" : NUM_WORDS, "max_wordlen" : MAX_WORDLEN,
             "tag_filter" : tag_filter, "custom_list" : custom_list
         };
-        if (!isNaN(difficulty)) {
+        if (!isNaN(difficulty) || difficulty == null) {
             parameters["difficulty"] = difficulty;
         }
 

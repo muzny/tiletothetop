@@ -210,8 +210,12 @@ a, a:link, a:visited {
     margin: 1em;
 }
 
+#start-menu .accordion-heading {
+    background-color: #26666C;
+}
+
 #start-menu .controls {
-    margin-left: 90px;
+    margin-left: 160px;
 }
 
 #start-menu .control-label {
@@ -222,10 +226,11 @@ a, a:link, a:visited {
     margin-right: 12px;
 }
 
+/*
 #start-menu .radio.inline {
     margin-right: 1em;
 }
-
+*/
 #game-menu
 {
     margin: .5em;
@@ -297,3 +302,44 @@ button.close {
 }
 /* end bootstrap-related UI stuff */
 
+
+/* jQuery Tools's rangeinput stuff */
+
+/* slider root element */
+.slider {
+    background:#fff;
+    height:9px;
+    position:relative;
+    cursor:pointer;
+    width:220px;
+    margin-left:160px;
+    margin-top:10px;
+}
+
+/* progress bar (enabled with progress: true) */
+.progress {
+    height:9px;
+    background-color:#DEBB27;
+    opacity:0.8;
+}
+
+/* drag handle */
+.handle {
+    background:#fff;
+    height:28px;
+    width:14px;
+    top:-12px;
+    position:absolute;
+    display:block;
+    margin-top:1px;
+    cursor:move;
+}
+
+/* the input field */
+.range {
+    display:none;
+}
+
+#start-menu #setting-difficulty {
+    display: none;
+}

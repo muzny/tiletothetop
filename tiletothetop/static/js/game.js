@@ -15,14 +15,11 @@ var TILE_SIZE = 60;
 var NUM_DIFFICULTIES = 3;
 var MAX_DIFFICULTY = 150; // [0,150)
 var INCR_DIFFICULTY = MAX_DIFFICULTY / NUM_DIFFICULTIES;
-var NUM_LEVELS = 10; // [0,10)
-var INCR_LEVEL = INCR_DIFFICULTY / NUM_LEVELS;
 
 // game settings
 var NUM_WORDS = 4;
 var MAX_WORDLEN = 10;
 var difficulty = 0;
-var level = 0;
 var tag_filter = 0;
 var custom_list = "";
 var inMenu = false;
@@ -61,6 +58,11 @@ function initializeMenuButtons() {
         showGameElements();
     });
     */
+    $('#setting-difficulty').rangeinput({
+        progress: true,
+        speed: 0
+    });
+    $('#setting-difficulty').change(updateDifficultySlider);
     $('#start-button').click(startGame);
     $('#return-button').click(returnToGame);
     
@@ -107,29 +109,39 @@ function createStaticGameIfApplicable() {
     }
 }
 
+// Update slider appearance according to difficulty category
+function updateDifficultySlider(e, value) {
+    var progressBar = $('#dict-game .progress')[0];
+    var text, color;
+    if (value < 50) {
+        text = 'Easy';
+        color = '#48CA3B';
+    } else if (value >= 50 && value < 100) {
+        text = 'Medium';
+        color = '#DEBB27';
+    } else {
+        text = 'Hard';
+        color = '#AD1D28';
+    }
+    $('#difficulty-text').text(text);
+    progressBar.style.backgroundColor = color;
+}
+
 function startGame() {
     // user has started the game from main menu
     // initialize game elements with user settings
     // need to start timer, score tracking logic, etc
 
-    // TODO make use of level advancement
-    level =  parseInt($('#setting-level').val()) - 1;
-    if (isNaN(level)) {
-        level = 0;
-    }
-    difficulty = parseInt($('#setting-difficulty input[name="setting-difficulty"]:checked').val());
-    if (!isNaN(difficulty)) {
-        // calculate value to pass to getWords
-        difficulty += level * INCR_LEVEL;
-    }
+    difficulty = parseInt($('#setting-difficulty').val());
+
     tag_filter = parseInt($('#setting-tag').val());
     if (isNaN(tag_filter)) {
         tag_filter = 0;
     }
-    custom_list = $('#setting-custom').val();
+    
+    //custom_list = $('#setting-custom').val();
 
     messenger.getWords(initializeBoard);
-
     returnToGame();
 }
 
