@@ -29,11 +29,13 @@ var custom_list = "";
 $(window).load(function() {
     // because IE tries to cache all the things
     $.ajaxSetup({cache:false});
-    
+
     initializeMenuButtons();
-    
+
     messenger = new Messenger();
-    GetAccountData();
+    getAccountData();
+    getUserRank();
+    getLeaderboard(10);
 
     //if we're fed static ids, automagically create game from them
     //argument done as id parameter, which is hyphen separated ids.
@@ -42,7 +44,7 @@ $(window).load(function() {
     // dev example:
     // http://127.0.0.1:8000/?id=47-106-8-900
     createStaticGameIfApplicable()
-    
+
     //startGame();    // uncomment this to bypass main menu
 });
 
@@ -61,7 +63,7 @@ function initializeMenuButtons() {
     */
     $('#start-button').click(startGame);
     $('#return-button').click(returnToGame);
-    
+
     $('#new-game').click(returnToStart);
     $('#quit-game').click(quitGame);
     $('#game-menu').tooltip({
@@ -146,7 +148,7 @@ function initializeBoard(data) {
         $('#tiles-area').remove();
     }
     board = new Board(data);
-    
+
     // hide start menu, show board
     //returnToGame(); // Firefox doesn't like having this here for some reason
 }
@@ -210,8 +212,8 @@ function TransitionScreen(score) {
     // if we call this immediately, it likely won't get the updated user data
     setTimeout(messenger.getUserData, 2000);
     // the getWords success callback inserts, but hides definitions and tiles
-    messenger.getWords(initializeBoard); 
-    
+    messenger.getWords(initializeBoard);
+
 	transitionScreen.click(function () {
         transitionScreen.css({'display':'hidden', 'z-index':'-1'});
         showGameElements(); // animated display of definitions / tiles
@@ -375,7 +377,7 @@ function dropTileInEmptyTile(ev) {
 		$(tile).centerOnParent();
 		// Tile is no longer in the tile area
 		$(tile).removeClass("inTileArea");
-		
+
 		checkGameWon();
     }
 }
@@ -385,14 +387,14 @@ function dropTileInEmptyTile(ev) {
 function checkGameWon() {
 	if (window.board.workspace.winCheck()) {
 		// They won!!
-		
+
 		var solutions = window.board.workspace.getSolutions();
-	
+
 		// Calculate score for correct words
 		for (var i = 0; i < solutions.length; i++) {
 			score += scoreFunc(solutions[i]);
 		}
-		
+
 		// Show the transition screen
 		TransitionScreen(score);
 	}
@@ -403,13 +405,13 @@ function checkGameWon() {
 function scoreFunc(word) {
 	// 100 points per letter
 	var baseScore = word.length * 100;
-	
+
 	// Add difficulty bonus
 	var bonus = 0;
 	if (!isNaN(difficulty)) {
 		bonus = difficulty * 10;
 	}
-	
+
 	return baseScore + bonus;
 }
 
@@ -429,7 +431,7 @@ TileArea.prototype.shuffle = function(myArray){
 // This is where the definitions of the word go.
 var DefinitionArea = function(definitions) {
     var left = $("<div>").addClass("left-col");
-	
+
 	var hintClicked = function(e) {
 		//get corresponding workspace element
 		var id = $(this).attr("id");
@@ -461,19 +463,19 @@ var DefinitionArea = function(definitions) {
 			}
 		}
 	}
-	
+
     $.each(definitions, function(index) {
 		var def = $("<div>");
 		def.addClass("definition");
 		def.attr("id", "def_" + index);
-		
+
 		var hint = $("<div>");
 		hint.addClass("hint-box");
 		hint.attr("id", "hint_" + index);
 		hint.bind('click', hintClicked);
 		hint.append("Hint");
 		hint.disableSelection();
-		
+
 		def.append(hint);
 		def.append(definitions[index]);
 		left.append(def);
@@ -584,7 +586,7 @@ var Workspace = function(words) {
 						$(clicked[0]).removeClass("clicked");
 
 						checkGameWon();
-						
+
 						// If there is a next empty tile in this answer area, make it "clicked"
 						var next = getNextEmpty($(clicked[0]).attr("id"));
 						if (next) {
@@ -647,7 +649,7 @@ function getNextEmpty(prevId) {
  * clicking this button while not logged in is not currently
  * handled well
  */
-function GetAccountData() {
+function getAccountData() {
     messenger.getUserData();
 }
 
@@ -686,3 +688,10 @@ function insertAccountData(data) {
     }
 }
 
+function getLeaderboard(count) {
+    messenger.getLeaderboard(count);
+}
+
+function getUserRank() {
+    messenger.getUserRank();
+}

@@ -24,9 +24,9 @@ def game(request):
     rform_errors = get_and_delete(request.session, 'rform_errors', None)
 
     # tags that have at least one word associated with them
-    tags = Tag.objects.raw('''select * from tiletothetop_tag t 
+    tags = Tag.objects.raw('''select * from tiletothetop_tag t
                               where exists
-                                (select wt.id from tiletothetop_word w, tiletothetop_word_tags wt 
+                                (select wt.id from tiletothetop_word w, tiletothetop_word_tags wt
                                 where w.id= wt.word_id and t.id=wt.tag_id)
                               order by t.name''');
 
@@ -38,9 +38,6 @@ def game(request):
 ##############################################################
 # AJAX Services                                              #
 ##############################################################
-
-def static_words(request):
-    pass
 
 def static_words(request):
     if not request.is_ajax() or request.method != "GET":
@@ -129,6 +126,68 @@ def random_words(request):
 
     return HttpResponse(simplejson.dumps(data), mimetype="application/json")
 
+def get_leaderboard(request):
+    if not request.is_ajax() or request.method != 'GET':
+        return HttpResponse(status=400)
+
+    count = 10
+
+    if 'count' in request.GET:
+        count = request.GET['count']
+
+    leaders = UserProfile.objects.order_by('-total_score')[:count]
+
+    rank = 0
+    count = 1 # number of people at current rank
+    last = -1 # last unique score seen, used to determine ties
+    data = []
+    for leader_profile in leaders:
+        # handle ties
+        score = leader_profile.total_score
+        if score != last:
+            last = score
+            rank += count
+            count = 1
+        else:
+            count += 1
+
+        data.append({'user': leader_profile.user.username,
+                     'rank': rank,
+                     'score': score})
+
+    return HttpResponse(simplejson.dumps(data), mimetype='application/json')
+
+def get_user_rank(request):
+    if not request.is_ajax() or request.method != 'GET':
+        return HttpResponse(status=400)
+
+    if not request.user.is_authenticated():
+        return HttpResponse(status=204)
+
+    leaders = UserProfile.objects.order_by('-total_score')
+
+    print('rank1')
+    rank = 0
+    count = 1
+    last = -1
+    data = {}
+    for index, profile in enumerate(leaders):
+        # handle ties
+        score = profile.total_score
+        if score != last:
+            last = score
+            rank += count
+            count = 1
+        else:
+            count += 1
+
+        print('rank2')
+        if profile.user == request.user:
+            data['rank'] = rank
+            data['score'] = score
+
+    print('rank3')
+    return HttpResponse(simplejson.dumps(data), mimetype='application/json')
 
 
 ##############################################################
@@ -186,10 +245,11 @@ def push_game_data(request):
     if not request.method == 'POST':
         return HttpResponse(status=405)
 
+    new_score = int(request.POST['score'])
     # Make a new GameHistory object
     new_game = GameHistory(
                             user = request.user,
-                            score = request.POST['score'],
+                            score = new_score,
                             word_difficulties = 0
                         )
     # And push it to the database
@@ -197,6 +257,7 @@ def push_game_data(request):
 
     profile = request.user.get_profile()
     profile.games_played += 1
+    profile.total_score += new_score
     profile.save()
 
     return HttpResponse(status=201)
