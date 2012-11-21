@@ -57,70 +57,44 @@
                 <textarea id="word-defn" class="span5" placeholder="Definition"></textarea>
                 <button id="add-word" type="button" class="btn">Add word</button>
             </div>
-            <!--
-            <label class="control-label">Extra stuff</label>
-            <div class="controls controls-row">
-                <input id="word-difficulty" class="span2" type="text" placeholder="Difficulty">
-                <input id="word-tags" class="span3" type="text" placeholder="Tags">
-            </div>
-            <button id="add-word" type="button" class="btn">Add word</button>
-            -->
-            
         </div>
 
-        <!-- TODO should support editing existing words -->
         <div id="current-words">
-            <p>Current words</p>
+            <p>Current words. Click any cell to edit.</p>
             <table class="table table-striped">
                 <thead>
                     <tr>
                         <th>Word</th>
                         <th>Part of Speech</th>
                         <th>Definition</th>
-                        <!-- do we want these fields for custom words??? 
-                        <th>Difficulty</th>
-                        <th>Tags</th>-->
                         <th>Remove</th>
-                        <th>Edit</th>
                     </tr>
                 </thead>
                 
                 <tbody id="list-entries">
                     <tr id="custom-word-0">
-                        <td>petrichor</td>
-                        <td></td>
-                        <td>the name for the smell of rain on dry ground, is from oils given off by vegetation, absorbed onto neighboring surfaces, and released into the air after a first rain</td>
-                        <!--<td></td>
-                        <td></td>-->
+                        <td><div contenteditable>petrichor</div></td>
+                        <td><div contenteditable></div></td>
+                        <td><div contenteditable>the name for the smell of rain on dry ground, is from oils given off by vegetation, absorbed onto neighboring surfaces, and released into the air after a first rain</div></td>
                         <td><button type="button" class="btn btn-small remove-word">X</button></td>
-                        <td><button type="button" class="btn btn-small edit-word">E</button></td>
                     </tr>
                     <tr id="custom-word-1">
-                        <td>harglebargh</td>
-                        <td>whatever I want</td>
-                        <td>expression for expressing the most expressive of expressions, one which expresses an expression about an expressive expression just going to make this really long oh man it's not going to fit into the database what will we do</td>
-                        <!--<td>42</td>
-                        <td>fish, crackers</td>-->
+                        <td><div contenteditable>harglebargh</div></td>
+                        <td><div contenteditable>whatever I want</div></td>
+                        <td><div contenteditable>expression for expressing the most expressive of expressions, one which expresses an expression about an expressive expression just going to make this really long oh man it's not going to fit into the database what will we do</div></td>
                         <td><button type="button" class="btn btn-small remove-word">X</button></td>
-                        <td><button type="button" class="btn btn-small edit-word">E</button></td>
                     </tr>
                     <tr id="custom-word-2">
-                        <td>pickle</td>
-                        <td></td>
-                        <td>A small cucumber preserved in vinegar, brine, or a similar solution.</td>
-                        <!--<td>42</td>
-                        <td>crackers</td>-->
+                        <td><div contenteditable>pickle</div></td>
+                        <td><div contenteditable></div></td>
+                        <td><div contenteditable>A small cucumber preserved in vinegar, brine, or a similar solution.</div></td>
                         <td><button type="button" class="btn btn-small remove-word">X</button></td>
-                        <td><button type="button" class="btn btn-small edit-word">E</button></td>
                     </tr>
                     <tr id="custom-word-3">
-                        <td>pickle</td>
-                        <td>n</td>
-                        <td>If he had gone to a public high school he could have avoided this ____.</td>
-                        <!--<td></td>
-                        <td>fill in the blank</td>-->
+                        <td><div contenteditable>pickle</div></td>
+                        <td><div contenteditable>n</div></td>
+                        <td><div contenteditable>If he had gone to a public high school he could have avoided this ____.</div></td>
                         <td><button type="button" class="btn btn-small remove-word">X</button></td>
-                        <td><button type="button" class="btn btn-small edit-word">E</button></td>
                     </tr>
                 </tbody>
             </table>

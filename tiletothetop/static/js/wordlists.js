@@ -11,9 +11,9 @@ function initializeWordListButtons() {
     $('#edit-list').click(editList);
     
     $('#add-word').click(addWord);
+    // DEBUG
     // there shouldn't be any rows loaded at start
     $('.remove-word').click(removeWord);
-    $('.edit-word').click(editWord);
     
     $('#save-list').click(saveList);
     $('#delete-list').click(deleteList);
@@ -55,20 +55,16 @@ function addWord() {
     */
     //var nextId = $('#list-entries').children().size(); // maybe not important
     // TODO needs to be cleaner
-    // TODO validation
     var word = $('#word-name').val();
     var part = $('#word-part').val();
     var defn = $('#word-defn').val();
     var row = $('<tr>');
-    row.append($('<td>').text(word));
-    row.append($('<td>').text(part));
-    row.append($('<td>').text(defn));
+    row.append($('<td>').append($('<div contenteditable>').text(word)));
+    row.append($('<td>').append($('<div contenteditable>').text(part)));
+    row.append($('<td>').append($('<div contenteditable>').text(defn)));
     var removeButton = $('<td><button type="button" class="btn btn-small remove-word">X</button></td>');
     removeButton.click(removeWord);
     row.append(removeButton);
-    var editButton = $('<td><button type="button" class="btn btn-small edit-word">E</button></td>');
-    editButton.click(editWord);
-    row.append(editButton);
     $('#list-entries').append(row);
     
     // clear the form
@@ -84,13 +80,7 @@ function removeWord(e) {
     $(e.target).parent().parent().remove();
 }
 
-// Convert data in the target row to input fields.
-// When row is out of focus, convert back to plain text.
-function editWord() {
-    
-}
-
-// Parse words table to create JSON object, push to server
+// Parse words table, validate, push to server
 function saveList() {
     
 }
