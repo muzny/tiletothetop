@@ -166,7 +166,6 @@ def get_user_rank(request):
 
     leaders = UserProfile.objects.order_by('-total_score')
 
-    print('rank1')
     rank = 0
     count = 1
     last = -1
@@ -181,12 +180,10 @@ def get_user_rank(request):
         else:
             count += 1
 
-        print('rank2')
         if profile.user == request.user:
             data['rank'] = rank
             data['score'] = score
 
-    print('rank3')
     return HttpResponse(simplejson.dumps(data), mimetype='application/json')
 
 
