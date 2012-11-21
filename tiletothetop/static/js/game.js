@@ -25,13 +25,14 @@ var difficulty = 0;
 var level = 0;
 var tag_filter = 0;
 var custom_list = "";
+var inMenu = false;
 
 $(window).load(function() {
     // because IE tries to cache all the things
     $.ajaxSetup({cache:false});
 
     initializeMenuButtons();
-
+    initializeWordListButtons();
     messenger = new Messenger();
     getAccountData();
     getUserRank();
@@ -400,6 +401,12 @@ function checkGameWon() {
 	}
 }
 
+// Return true if the game is "paused". The game is "paused" if
+// the play screen is not active.
+function isPaused() {
+    return !$("#play").hasClass("active");
+}
+
 // Returns the score value of the given word. Bases the score on
 // the length of the word and difficulty of the current level.
 function scoreFunc(word) {
@@ -566,6 +573,9 @@ var Workspace = function(words) {
 
     // Typing controls for the empty boxes
     $(document).on('keypress', function(e) {
+	// If not in the "play" tab, the game should be paused
+	// and keypresses should not trigger anything.
+	if (!isPaused()) {
 		// In firefox, e.which gets set instead of e.keypress
 		var num = e.keyCode;
 		if (num == 0) {
@@ -583,22 +593,110 @@ var Workspace = function(words) {
 						$(t).appendTo($(clicked[0]));
 						$(t).removeClass("inTileArea");
 						$(t).centerOnParent();
-						$(clicked[0]).removeClass("clicked");
 
 						checkGameWon();
 
 						// If there is a next empty tile in this answer area, make it "clicked"
 						var next = getNextEmpty($(clicked[0]).attr("id"));
 						if (next) {
-						$(next).addClass("clicked")
+						    $(clicked[0]).removeClass("clicked");
+						    $(next).addClass("clicked")
 						}
 					}
 				}
 			}
 		}
+
+		// If ` is pressed, show the solutions
 		if(num == 96) {
 			alert(self.getSolutions());
 		}
+	}
+    });
+
+    // Handle arrow keys being pressed. Note that arrow keys
+    // are only triggered using 'keydown', not 'keypress'.
+    $(document).keydown(function(e) {
+	    // In firefox, e.which gets set instead of e.keypress
+	    var num = e.keyCode;
+	    if (num == 0) {
+		    num = e.which;
+	    }
+
+	   // User pressed backspace
+	    if (num == 8 && !inMenu) {
+		e.preventDefault();
+		//alert("backspace");
+		var clicked = $(".clicked");
+		if (clicked.length == 1) {
+		    deleteBoxAt($(clicked[0]).attr("id"));
+		}
+		return false;
+	    }
+
+	    // The user pressed the left or right arrow keys.
+	    if ((num == 37 || num == 39) && !inMenu) {
+		    var clicked = $(".clicked");
+
+		    // If a box is "clicked", move which box is "clicked"
+		    // based on the arrow key.
+		    if (clicked.length == 1) {
+			var nextBox;
+			// Left Arrow
+			if (num == 37) {
+			     nextBox = getBoxAtOffset($(clicked[0]).attr("id"), -1);
+			} else { // Right Arrow
+			    nextBox = getBoxAtOffset($(clicked[0]).attr("id"), 1);
+			}
+
+			if (nextBox) {
+			    $(clicked[0]).removeClass("clicked");
+			    $(nextBox).addClass("clicked");
+			}
+		    }
+	    }
+
+	    // The user pressed the up or down arrow keys, or the tab key.
+	    if ((num == 38 || num == 40 || num == 9) && !inMenu) {
+		if (num == 9) e.preventDefault(); // Stop tab from selecting elements on the screen.
+
+		var clicked = $(".clicked");
+
+		// If a box is "clicked", move which box is "clicked"
+		// based on the arrow key.
+		if (clicked.length == 1) {
+		    var prevId = $(clicked).attr("id");
+		    var answerNum = parseInt(prevId.split("_")[1]);
+		    var boxNum = parseInt(prevId.split("_")[2]);
+
+		    var nextAnswerArea;
+
+		    // User pressed up arrow
+		    if (num == 38) {
+			nextAnswerArea = $("#emptyTile_" + (answerNum - 1) + "_0");
+		    } else if (num == 40) { // User pressed down arrow
+			nextAnswerArea = $("#emptyTile_" + (answerNum + 1) + "_0");
+		    } else {
+			nextAnswerArea = $("#emptyTile_" + ((answerNum + 1) % NUM_WORDS) + "_0");
+		    }
+
+		    // If there was a previous answer area to move to, find
+		    // the first empty box in it and highlight that box.
+		    if (nextAnswerArea) {
+			var emptyNext = getNextEmpty($(nextAnswerArea).attr("id"));
+
+			// If there was no empty box in this row, just
+			// get the last box in the row.
+			if (!emptyNext) {
+			    emptyNext = getLastInRow($(nextAnswerArea).attr("id"));
+			}
+
+			//prevAnswerArea = emptyPrev ? emptyPrev : prevAnswerArea;
+			$(clicked[0]).removeClass("clicked");
+			$(emptyNext).addClass("clicked");
+		    }
+		}
+	    }
     });
 
     //Helper for solutions
@@ -643,6 +741,118 @@ function getNextEmpty(prevId) {
 		}
 		i += 1;
     }
+}
+
+// Gets the tile box that has the offset 'n' from the given ID.
+// E.G. Passing -1 will get the previous box, and passing 2 will
+// get the box 2 past the previous box.
+//
+// Returns false if no box exists at that location.
+function getBoxAtOffset(prevId, n) {
+    // N == 0 corresponds to box with id prevId.
+    if (n == 0) return $("#" + prevId);
+
+    var answerNum = parseInt(prevId.split("_")[1]);
+    var boxNum = parseInt(prevId.split("_")[2]);
+    var i = boxNum;
+    var prevValidBox = null;
+
+    // Search for the box that we're looking for by going forwards or
+    // backwards (depending on the sign of n), 1 box at a time.
+    while (true) {
+	var id = "#emptyTile_" + answerNum + "_" + i;
+	var empty = $(id);
+
+	if (empty.length == 0) { // Have we gone off the list?
+		return prevValidBox == null ? false : prevValidBox;
+	} else if (i == boxNum + n) { // Have we hit the box we're looking for?
+		return $(empty[0]);
+	} else if (empty.length == 1) {// We found another valid box, so save this as our previous valid.
+		prevValidBox = empty[0];
+	}
+
+	// Increment/decrement i depending on the sign of n.
+	if (n < 0) i -= 1;
+	else if (n > 0) i += 1;
+    }
+}
+
+// Returns the last box in the same row as the box with the given id.
+function getLastInRow(prevId) {
+    var answerNum = parseInt(prevId.split("_")[1]);
+    var boxNum = parseInt(prevId.split("_")[2]);
+    var i = boxNum;
+    var prevValidBox = $("#" + prevId);
+    var currentBox = $("#" + prevId);
+
+    while (true) {
+	i += 1;
+	currentBox = $("#emptyTile_" + answerNum + "_" + i);
+
+	if (currentBox.length == 0) {
+	    break;
+	}
+
+	prevValidBox = currentBox[0];
+    }
+
+    return prevValidBox;
+}
+
+// Removes a box at the given location. If there is no box there,
+// removed the previous box. If there is no box there, this function
+// has no effect.
+function deleteBoxAt(prevId) {
+    var currentBox = $("#" + prevId);
+    var numChildren = currentBox.children().length;
+    var decrementHighlighted = false; // Do we move the highlighted box after deleting the current box?
+
+    // If the current box is empty, look at the box behind it.
+    if (numChildren == 0) {
+	currentBox = getBoxAtOffset(prevId, -1);
+	decrementHighlighted = true;
+	numChildren = currentBox.children().length;
+    }
+
+    // If the current box has a child, remove it and throw it back
+    // in the tile area.
+    if(numChildren == 1) {
+	var t = currentBox.children()[0];
+
+	//$(t).appendTo($("#tile-area"));
+	addToTileArea(t);
+
+	//currentBox.empty();
+    }
+
+    if (decrementHighlighted) {
+	var clicked = $(".clicked")[0];
+
+	var prevBox = getBoxAtOffset($(clicked).attr("id"), -1);
+
+	if (prevBox) {
+	    $(clicked).removeClass("clicked");
+	    $(prevBox).addClass("clicked");
+	}
+    }
+}
+
+// Adds the tile t to the tile area.
+function addToTileArea(t) {
+    var tileArea = $(".tile-box");
+
+    for (var i = 0; i < tileArea.children().length; ++i) {
+	var tileBox = $(tileArea.get(i));
+
+	if (tileBox.children().length == 0) {
+	    tileBox.append(t);
+	    break;
+	}
+    }
+
+
+    $(t).addClass("inTileArea");
+    $(t).centerOnParent();
 }
 
 /* Gets the account data for the currently logged in user
