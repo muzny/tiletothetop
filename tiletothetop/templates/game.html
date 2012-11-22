@@ -7,33 +7,33 @@
 
 {% block content %}
     <div class="navbar navbar-fixed-top">
+        <div id="logo">
+            <img src={% static "t4logo_v0.25_65.png" %} />  
+        </div>
         <div class="navbar-inner">
             <div class="container">
                 {% if user.is_authenticated %}
-                <ul class="nav">
-                    <li><a href="#">Hello, {{ user.username }}</a></li>
-                </ul>
                 <ul class="nav pull-right">
                     <li><a id="logout-button" href="{% url logout %}">Logout</a></li>
                 </ul>
-                {% else %}
-                <ul class="nav">
-                    <li><a href="#">Welcome, guest</a></li>
+                <ul class="nav pull-right">
+                    <li><a href="#">Hello, {{ user.username }}</a></li>
                 </ul>
+                {% else %}
                 <ul class="nav pull-right">
                     <li><a id="register-button" data-toggle="modal" href="#register-modal">Register</a></li>
                     <li><a id="login-button" data-toggle="modal" href="#login-modal">Login</a></li>
                     <li><a href="{% url socialauth_begin 'facebook' %}">Login with Facebook</a></li>
+                </ul>
+                <ul class="nav pull-right">
+                    <li><a href="#">Welcome, guest</a></li>
                 </ul>
                 {% endif %}
             </div>
         </div>
     </div>
 
-    <div class="container" style="margin-top: 60px">
-        <div id="logo">
-            <img src={% static "t4logo_v0.25_65.png" %} />  
-        </div>
+    <div class="container" style="margin-top: 80px">
 
         <div class="tabbable">
             <ul class="nav nav-tabs">
