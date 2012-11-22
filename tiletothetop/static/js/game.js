@@ -227,11 +227,13 @@ function TransitionScreen(score) {
     transitionScreen.css({'display':'visible', 'z-index':'100'});
     // if we call this immediately, it likely won't get the updated user data
     setTimeout(messenger.getUserData, 2000);
-    // the getWords success callback inserts, but hides definitions and tiles
-    messenger.getWords(initializeBoard);
+    // manually set height of transition screen's parent
+    $('#game-area').css({'height':'616px'});
 
 	transitionScreen.click(function () {
         transitionScreen.css({'display':'hidden', 'z-index':'-1'});
+	$('#game-area').css({'height':'auto'}); // make height of parent auto again
+	messenger.getWords(initializeBoard);
         showGameElements(); // animated display of definitions / tiles
 	});
 }
