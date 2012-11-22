@@ -233,7 +233,8 @@ a, a:link, a:visited {
 */
 #game-menu
 {
-    margin: .5em;
+    margin-top: .25em;
+    margin-bottom: .5em;
     text-align: center;
 }
 
@@ -344,6 +345,9 @@ button.close {
     display: none;
 }
 
+/* game height styles */
+/* TODO: please move me to proper locaion */
+
 .navbar-inner .container {
     width: 100% !important;
     padding-top: 5px;
@@ -357,4 +361,13 @@ button.close {
 #logo {
     float: left;
     margin-left: 10px;
+}
+
+.nav-tabs {
+    margin-bottom: 10px;
+}
+
+#play {
+    margin: 10px;
+    padding: 0px 5px;
 }
