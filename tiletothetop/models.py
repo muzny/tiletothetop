@@ -8,12 +8,12 @@ Standard game dictionary
 
 class BasicWord(models.Model):
     word = models.CharField(max_length=50)
-    definition = models.CharField(max_length=200)
     part_of_speech = models.CharField(max_length=10)
-    
+    definition = models.CharField(max_length=200)
+
     def __unicode__(self):
         return "%s -- (%s) %s" % (self.word, self.part_of_speech, self.definition)
-    
+
     class Meta:
         abstract = True
 
@@ -38,9 +38,10 @@ Custom word lists
 
 class CustomList(models.Model):
     user = models.ForeignKey(User)
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, verbose_name="List Name")
     tags = models.ManyToManyField(Tag)
-    is_public = models.BooleanField(default=False)
+    is_public = models.BooleanField(default=False, 
+                help_text="Whether this list can be viewed by anyone.")
 
     def __unicode__(self):
         return "User: %d; List: %s [%s] (%s)" % (self.user.id, self.name, 

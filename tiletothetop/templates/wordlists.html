@@ -3,8 +3,9 @@
     <h3>Custom Word Lists</h3>
     
     {% if user.is_authenticated %}
-    <form class="form-inline">
-        <h4>Create a new list or edit an existing list:</h4>
+    {% load crispy_forms_tags %}
+    <div>
+        <p>Create a new list or edit an existing list:</p>
         <!--
         <div id="custom-new" class="input-append">
             <input id="new-list-name" type="text" placeholder="List Name">
@@ -15,7 +16,6 @@
         -->
         <div id="custom-edit" class="input-append">
             <select id="existing-list-name">
-                <option>Populate with existing lists, or edit a new list...</option>
                 <option>&lt;New List&gt;</option>
                 <option>ListName1</option>
                 <option>ListName2</option>
@@ -25,32 +25,73 @@
                 Edit List
             </button>            
         </div>
-    </form>
+    </div>
+    
+    <!-- django forms stuff -->
+    <div>
+        <p>Build your list here:</p>
+        <form action="{% url save_customlist %}" method="post">
+            {% csrf_token %}
+            {% crispy customlist_form %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Word</th>
+                        <th>Part of Speech</th>
+                        <th>Definition</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <!--
+                {% crispy customwords_formset %}
+                -->
+                {{ customwords_formset.management_form }}
+                <tbody id="list-entries">
+                    {% for form in customwords_formset %}
+                    <tr>
+                        {% for field in form %}
+                        <td>{{ field }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            <button id="save-list" type="submit" class="btn btn-primary">
+                Save List
+            </button>
+            <button id="delete-list" type="button" class="btn">
+                Delete List
+            </button>
+        </form>
+    </div>
+    
+    <!-- search words in db? -->
+    <!--
+    <div id="search-words">
+        <form class="form-search">
+            <div class="input-append">
+                <input type="text" class="search-query">
+                <button type="button" class="btn">Search</button>
+            </div>
+        </form>
+        <p>table/grid of results with add option here</p>
+    </div>
+    -->
     
     <!-- if edit, populate with name and existing words of the selected list -->
     <!-- if create, can only populate list name -->
+    <!--
     <div id="custom-builder">
         <h4>Build your list here:</h4>
         <div>
             <p>List Name</p>
             <input id="list-name" type="text" placeholder="List Name">
         </div>
-        <!-- search words in db? -->
-        <!--
-        <div id="search-words">
-            <form class="form-search">
-                <div class="input-append">
-                    <input type="text" class="search-query">
-                    <button type="button" class="btn">Search</button>
-                </div>
-            </form>
-            <p>table/grid of results with add option here</p>
-        </div>
-        -->
+
         
         <div id="create-word">
             <p>Create a word</p>
-            <!--<label class="control-label">Essential stuff</label>-->
             <div class="controls controls-row">
                 <input id="word-name" class="span3" type="text" placeholder="Word">
                 <input id="word-part" class="span2" type="text" placeholder="Part of Speech">
@@ -109,7 +150,7 @@
             </button>
         </p>
     </div>
-    
+    -->
     {% else %}
     <p>Login or register to create your own word lists!</p>
     {% endif %}

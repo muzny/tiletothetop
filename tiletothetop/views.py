@@ -8,10 +8,11 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth import logout as auth_logout, login as auth_login, authenticate
 from django.contrib.auth.models import User
 from django.core.context_processors import csrf
+from django.forms.models import inlineformset_factory
 from django.db.models import Max, Min
 
-from tiletothetop.models import Word, Tag, UserProfile, GameHistory
-from tiletothetop.forms import RegistrationForm, LoginForm
+from tiletothetop.models import Word, Tag, CustomList, CustomWord, UserProfile, GameHistory
+from tiletothetop.forms import RegistrationForm, LoginForm, CustomListForm
 
 
 def game(request):
@@ -23,6 +24,11 @@ def game(request):
     lform_errors = get_and_delete(request.session, 'lform_errors', None)
     rform_errors = get_and_delete(request.session, 'rform_errors', None)
 
+    cl = CustomList()
+    clform = CustomListForm(instance=cl)
+    CustomWordsInlineFormSet = inlineformset_factory(CustomList, CustomWord)
+    cwformset = CustomWordsInlineFormSet(instance=cl)
+
     # tags that have at least one word associated with them
     tags = Tag.objects.raw('''select * from tiletothetop_tag t
                               where exists
@@ -31,7 +37,7 @@ def game(request):
                               order by t.name''');
 
     context = {'login_form' : lform, 'registration_form' : rform, 'login_errors' : lform_errors, 'registration_errors' : rform_errors,
-                'tags' : tags }
+                'customlist_form' : clform, 'customwords_formset' : cwformset, 'tags' : tags }
     return render_to_response('game.html', context, context_instance=RequestContext(request))
 
 
@@ -126,6 +132,10 @@ def random_words(request):
 
     return HttpResponse(simplejson.dumps(data), mimetype="application/json")
 
+# get form to edit requested list
+def edit_customlist(request):
+    pass
+
 def get_leaderboard(request):
     if not request.is_ajax() or request.method != 'GET':
         return HttpResponse(status=400)
@@ -188,6 +198,31 @@ def get_user_rank(request):
 
 
 ##############################################################
+# User Custom Words Views                                    #
+##############################################################
+
+# ajax vs. redirect??
+def save_customlist(request):
+    clform = CustomListForm(request.POST)
+    if clform.is_valid():
+        cl = clform.save(commit=False)
+        cl.user = request.user
+        CustomWordsInlineFormSet = inlineformset_factory(CustomList, CustomWord)
+        cwformset = CustomWordsInlineFormSet(request.POST)
+        if cwformset.is_valid():
+            cl.save()
+            cws = cwformset.save(commit=False)
+            for cw in cws:
+                cw.custom_list = cl
+                cw.save()
+            return HttpResponseRedirect(reverse('game'))
+    return HttpResponseRedirect(reverse('game')) # TODO error handling
+
+def delete_customlist(request):
+    pass
+
+
+##############################################################
 # User Account Views                                         #
 ##############################################################
 
@@ -228,7 +263,6 @@ def register(request):
     auth_login(request, user)
 
     return HttpResponseRedirect(reverse('game'))
-
 
 
 ##############################################################
