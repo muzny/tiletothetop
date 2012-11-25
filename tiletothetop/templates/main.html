@@ -61,7 +61,9 @@
                                 </label>
                                 <select id="setting-custom" class="controls">
                                     <option value="">-None-</option>
-                                    <!-- add others from db... -->
+                                    {% for list in custom_lists %}
+                                    <option value="{{ list.id }}">{{ list.name }}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                         </div>

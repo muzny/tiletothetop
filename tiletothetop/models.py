@@ -8,7 +8,7 @@ Standard game dictionary
 
 class BasicWord(models.Model):
     word = models.CharField(max_length=50)
-    part_of_speech = models.CharField(max_length=10)
+    part_of_speech = models.CharField(max_length=10,blank=True)
     definition = models.CharField(max_length=200)
 
     def __unicode__(self):
@@ -44,7 +44,7 @@ class CustomList(models.Model):
                 help_text="Whether this list can be viewed by anyone.")
 
     def __unicode__(self):
-        return "User: %d; List: %s [%s] (%s)" % (self.user.id, self.name, 
+        return "User: %d; List %d: %s [%s] (%s)" % (self.user.id, self.id, self.name, 
                ", ".join([tag.name for tag in self.tags.all()]), self.is_public)
 
 class CustomWord(BasicWord):

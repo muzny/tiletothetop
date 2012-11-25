@@ -6,20 +6,12 @@
     {% load crispy_forms_tags %}
     <div>
         <p>Create a new list or edit an existing list:</p>
-        <!--
-        <div id="custom-new" class="input-append">
-            <input id="new-list-name" type="text" placeholder="List Name">
-            <button id="create-list" type="button" class="btn btn-primary">
-                Create List
-            </button>
-        </div>
-        -->
         <div id="custom-edit" class="input-append">
             <select id="existing-list-name">
-                <option>&lt;New List&gt;</option>
-                <option>ListName1</option>
-                <option>ListName2</option>
-                <option>ListName3</option>
+                <option value="-1">&lt;New List&gt;</option>
+                {% for list in custom_lists %}
+                <option value="{{ list.id }}">{{ list.name }}</option>
+                {% endfor %}
             </select>
             <button id="edit-list" type="button" class="btn btn-primary">
                 Edit List
@@ -27,130 +19,53 @@
         </div>
     </div>
     
-    <!-- django forms stuff -->
     <div>
         <p>Build your list here:</p>
-        <form action="{% url save_customlist %}" method="post">
-            {% csrf_token %}
-            {% crispy customlist_form %}
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Word</th>
-                        <th>Part of Speech</th>
-                        <th>Definition</th>
-                        <th>Delete</th>
-                    </tr>
-                </thead>
-                <!--
-                {% crispy customwords_formset %}
-                -->
-                {{ customwords_formset.management_form }}
-                <tbody id="list-entries">
-                    {% for form in customwords_formset %}
-                    <tr>
-                        {% for field in form %}
-                        <td>{{ field }}</td>
-                        {% endfor %}
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <form id="custom-form" method="post">
             
-            <button id="save-list" type="submit" class="btn btn-primary">
-                Save List
-            </button>
-            <button id="delete-list" type="button" class="btn">
-                Delete List
-            </button>
-        </form>
-    </div>
-    
-    <!-- search words in db? -->
-    <!--
-    <div id="search-words">
-        <form class="form-search">
-            <div class="input-append">
-                <input type="text" class="search-query">
-                <button type="button" class="btn">Search</button>
-            </div>
-        </form>
-        <p>table/grid of results with add option here</p>
-    </div>
-    -->
-    
-    <!-- if edit, populate with name and existing words of the selected list -->
-    <!-- if create, can only populate list name -->
-    <!--
-    <div id="custom-builder">
-        <h4>Build your list here:</h4>
-        <div>
-            <p>List Name</p>
-            <input id="list-name" type="text" placeholder="List Name">
-        </div>
+            <div id="custom-form-content">
+                {% block custom_form_content %}
+                {% csrf_token %}
 
-        
-        <div id="create-word">
-            <p>Create a word</p>
-            <div class="controls controls-row">
-                <input id="word-name" class="span3" type="text" placeholder="Word">
-                <input id="word-part" class="span2" type="text" placeholder="Part of Speech">
-                <textarea id="word-defn" class="span5" placeholder="Definition"></textarea>
-                <button id="add-word" type="button" class="btn">Add word</button>
+                <div id="customlist-form">
+                    <!-- TODO better indicator of whether this is create vs. update -->
+                    {% crispy customlist_form %}
+                </div>
+                <table id="customwords-formset" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Word</th>
+                            <th>Part of Speech</th>
+                            <th>Definition</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <!--
+                    {% crispy customwords_formset %}
+                    -->
+                    {{ customwords_formset.management_form }}
+                    <tbody id="list-entries">
+                        {% for form in customwords_formset %}
+                        <tr>
+                            {% for field in form %}
+                            <td>{{ field }}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% endblock %}
             </div>
-        </div>
-
-        <div id="current-words">
-            <p>Current words. Click any cell to edit.</p>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Word</th>
-                        <th>Part of Speech</th>
-                        <th>Definition</th>
-                        <th>Remove</th>
-                    </tr>
-                </thead>
-                
-                <tbody id="list-entries">
-                    <tr id="custom-word-0">
-                        <td><div contenteditable>petrichor</div></td>
-                        <td><div contenteditable></div></td>
-                        <td><div contenteditable>the name for the smell of rain on dry ground, is from oils given off by vegetation, absorbed onto neighboring surfaces, and released into the air after a first rain</div></td>
-                        <td><button type="button" class="btn btn-small remove-word">X</button></td>
-                    </tr>
-                    <tr id="custom-word-1">
-                        <td><div contenteditable>harglebargh</div></td>
-                        <td><div contenteditable>whatever I want</div></td>
-                        <td><div contenteditable>expression for expressing the most expressive of expressions, one which expresses an expression about an expressive expression just going to make this really long oh man it's not going to fit into the database what will we do</div></td>
-                        <td><button type="button" class="btn btn-small remove-word">X</button></td>
-                    </tr>
-                    <tr id="custom-word-2">
-                        <td><div contenteditable>pickle</div></td>
-                        <td><div contenteditable></div></td>
-                        <td><div contenteditable>A small cucumber preserved in vinegar, brine, or a similar solution.</div></td>
-                        <td><button type="button" class="btn btn-small remove-word">X</button></td>
-                    </tr>
-                    <tr id="custom-word-3">
-                        <td><div contenteditable>pickle</div></td>
-                        <td><div contenteditable>n</div></td>
-                        <td><div contenteditable>If he had gone to a public high school he could have avoided this ____.</div></td>
-                        <td><button type="button" class="btn btn-small remove-word">X</button></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        
-        <p>
+            
             <button id="save-list" type="button" class="btn btn-primary">
                 Save List
             </button>
             <button id="delete-list" type="button" class="btn">
                 Delete List
             </button>
-        </p>
+        </form>
     </div>
-    -->
+
     {% else %}
     <p>Login or register to create your own word lists!</p>
     {% endif %}

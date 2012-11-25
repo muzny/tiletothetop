@@ -194,12 +194,6 @@ a, a:link, a:visited {
 	background-color: blue;
 }
 
-/* Banner region */
-#logo img
-{
-    display: block;
-}
-
 /* Menu stuff */
 #start-game-inprogress
 {
@@ -226,11 +220,6 @@ a, a:link, a:visited {
     margin-right: 12px;
 }
 
-/*
-#start-menu .radio.inline {
-    margin-right: 1em;
-}
-*/
 #game-menu
 {
     margin-top: .25em;

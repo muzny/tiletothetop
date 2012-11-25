@@ -54,6 +54,26 @@ var Messenger = function() {
         });
     };
 
+    // Get forms for the requested custom list id
+    this.getCustomListForms = function(successFn, customListID) {
+        var parameters = {
+            "custom_list_id" : customListID
+        };
+        $.ajax({
+            url: "/edit-customlist/",
+            type: "GET",
+            dataType: "html",
+            data: parameters,
+            success: function(data) {
+                successFn(data);
+            },
+            error: function(data) {
+                if (DEBUG)
+                    alert("getCustomListForms ajax error");
+            }
+        });
+    };
+
     // Pushes game data to the server based on the score fed into the
     // function.  To be called on game completion
     this.pushGameData = function(score) {
@@ -129,9 +149,9 @@ var Messenger = function() {
             dataType: "json",
             success: function(data) {
                 //insertUserRank(data);
-                if (data !== null)
+                if (data !== null) {
                     alert("rank: " + data.rank + "\nhigh score: " + data.score);
-                else
+                } else
                     alert("no rank, user not authenticated");
             },
             error: function(data) {
@@ -140,4 +160,5 @@ var Messenger = function() {
             }
         });
     };
+
 };
