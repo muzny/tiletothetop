@@ -54,6 +54,26 @@ var Messenger = function() {
         });
     };
 
+    // Get forms for the requested custom list id
+    this.getCustomListForms = function(successFn, customListID) {
+        var parameters = {
+            "custom_list_id" : customListID
+        };
+        $.ajax({
+            url: "/edit-customlist/",
+            type: "GET",
+            dataType: "html",
+            data: parameters,
+            success: function(data) {
+                successFn(data);
+            },
+            error: function(data) {
+                if (DEBUG)
+                    alert("getCustomListForms ajax error");
+            }
+        });
+    };
+
     // Pushes game data to the server based on the score fed into the
     // function.  To be called on game completion
     this.pushGameData = function(score) {
