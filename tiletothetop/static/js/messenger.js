@@ -53,6 +53,26 @@ var Messenger = function() {
             }
         });
     };
+    
+    // Gets random words from a list of custom words
+    this.getCustomWords = function(successFn, customListID) {
+        var parameters = {
+            'id' : customListID
+        };
+        $.ajax({
+            url: "/custom-words/",
+            type: "GET",
+            dataType: "json",
+            data: parameters,
+            success: function(data) {
+                successFn(data);
+            },
+            error: function(data) {
+                if (DEBUG)
+                    alert("custom words error");
+            }
+        })
+    }
 
     // Get forms for the requested custom list id
     this.getCustomListForms = function(successFn, customListID) {

@@ -164,6 +164,22 @@ def edit_customlist(request):
     #return HttpResponse(result)
     return render_to_response('wordlists.html', context, context_instance=RequestContext(request))
 
+def custom_words(request):
+    if not request.user.is_authenticated() or not request.is_ajax() or request.method != 'GET':
+        return HttpResponse(status=400)
+    
+    id =int(request.GET['id'])
+    list = CustomList.objects.get(id=id)
+    words = CustomWord.objects.filter(custom_list=list).order_by('?')[:4]
+    
+    data = []
+    for word in words:
+        data.append({'word': word.word,
+                     'definition': word.definition,
+                     'speech': word.part_of_speech})
+    
+    return HttpResponse(simplejson.dumps(data), mimetype="application/json")
+
 def get_leaderboard(request):
     if not request.is_ajax() or request.method != 'GET':
         return HttpResponse(status=400)

@@ -14,6 +14,7 @@ urlpatterns = patterns('tiletothetop.views',
     # these two route ajax calls to the appropriate views (word services)
     url(r'^random-words/$', 'random_words', name='random_words'),
     url(r'^static-words/$', 'static_words', name='static_words'),
+    url(r'^custom-words/$', 'custom_words', name='custom_words'),
 
     url(r'^edit-customlist/$', 'edit_customlist', name='edit_customlist'),
     url(r'^save-customlist/$', 'save_customlist', name='save_customlist'),

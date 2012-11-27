@@ -13,6 +13,11 @@ function initializeWordListButtons() {
 function editList() {
     var customListID = parseInt($('#existing-list-name').val());
     
+    if (customListID === -1) {
+        alert("Can't edit a new list.");
+        return;
+    }
+    
     // get forms from db
     messenger.getCustomListForms(displayForms, customListID);
 }

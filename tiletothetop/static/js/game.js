@@ -143,9 +143,12 @@ function startGame() {
         tag_filter = 0;
     }
     
-    //custom_list = $('#setting-custom').val();
-
-    messenger.getWords(initializeBoard);
+    custom_list = $('#setting-custom').val();
+    if (custom_list) {
+	messenger.getCustomWords(initializeBoard, custom_list);
+    } else {
+	messenger.getWords(initializeBoard);
+    }
     returnToGame();
 }
 
