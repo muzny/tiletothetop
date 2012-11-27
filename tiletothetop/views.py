@@ -31,7 +31,9 @@ def game(request):
     cwformset = CustomWordsInlineFormSet(instance=cl)
     
     # available lists to edit / use in game
-    lists = CustomList.objects.filter(user=request.user)
+    lists = []
+    if (request.user.is_authenticated()):
+        lists = CustomList.objects.filter(user=request.user)
     
     # tags that have at least one word associated with them
     tags = Tag.objects.raw('''select * from tiletothetop_tag t
