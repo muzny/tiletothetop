@@ -292,6 +292,33 @@ button.close {
 }
 /* end bootstrap-related UI stuff */
 
+.full-screen {
+    width: 100%;
+}
+
+.centered {
+    margin: auto;
+    display: block;
+}
+
+.rounded-rectangle {
+    border-radius: 10px;
+}
+
+.plaqued {
+    border-style: ridge;
+    border-width: 5px;
+    border-color: #982030;
+}
+
+.btn-disabled {
+    pointer-events: none
+    cursor: default;
+}
+
+.btn-disabled:active {
+    background-color: #971923;
+}
 
 /* jQuery Tools's rangeinput stuff */
 

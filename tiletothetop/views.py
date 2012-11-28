@@ -359,7 +359,7 @@ def push_game_data(request):
     profile.total_score += new_score
     profile.save()
 
-    return HttpResponse(status=201)
+    return HttpResponse(simplejson.dumps({'id': new_game.id}), status=201)
 
 def get_user_data(request):
     # State Checks

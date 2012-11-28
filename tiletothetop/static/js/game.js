@@ -75,6 +75,9 @@ function initializeMenuButtons() {
     $('#game-menu').tooltip({
         selector: '[rel="tooltip"]'
     });
+
+    
+    $('#share').click(generateShareUrl);
 }
 
 // Return to game from start menu
@@ -234,13 +237,21 @@ function TransitionScreen(score) {
     $('#game-area').css({'height':'611px'});
     $('#play').css({'padding':'0px'});
 
-	transitionScreen.click(function () {
+    $('#restart').click(function () {
         transitionScreen.css({'display':'hidden', 'z-index':'-1'});
 	$('#game-area').css({'height':'auto'}); // make height of parent auto again
 	$('#play').css({'padding':'0px 5px'});
 	messenger.getWords(initializeBoard);
         showGameElements(); // animated display of definitions / tiles
-	});
+	
+	var button = $('#share');
+	button.click(generateShareUrl);
+	button.removeAttr("disabled");
+	button.removeClass("btn-disabled");
+	button.html("<h2>Share</h2>");
+    });
+    
+
 }
 
 var Board = function(data) {
@@ -447,6 +458,16 @@ function scoreFunc(word) {
 	}
 
 	return baseScore + bonus;
+}
+
+function generateShareUrl() {
+    var url = window.location.origin + "/?id=" + window.__lastGame,
+	button = $('#share');
+    
+    button.attr("disabled", "disabled");
+    button.addClass("btn-disabled");
+    button.text(url);
+    
 }
 
 // Credit: http://sedition.com/perl/javascript-fy.html

@@ -103,8 +103,8 @@ var Messenger = function() {
             dataType: "json",
             data: {"score" : score},
             headers: {"X-CSRFToken" : $.cookie('csrftoken')},
-            success: function() {
-                //TODO: implement callback fn parameter
+            success: function(response) {
+                window.__lastGame = response.id;
             },
             error: function(data) {
                 if (DEBUG)
