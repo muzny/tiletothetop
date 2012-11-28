@@ -11,6 +11,8 @@ var score = 0;
 var numberHintsUsed = 0;
 var HINT_PENALTY = 100;
 var TILE_SIZE = 60;
+var TIMER_PENALTY = 10;
+var TIMER_CUTOFF = 60;
 
 // So that we can tell if a modal is open, and pause the game when it is
 var MODAL_IDS = ["#login-modal", "#register-modal"];
@@ -220,6 +222,8 @@ function TransitionScreen(score) {
     // go ahead an push game data
     messenger.pushGameData(score);
 
+    timer.pause();
+    
 	// add the score to the transition screen
     var transitionScreen = $('#transition-screen');
 	$('#score-final').text(score);
@@ -429,14 +433,17 @@ function checkGameWon() {
 		for (var i = 0; i < solutions.length; i++) {
 			base += scoreFunc(solutions[i]);
 		}
-
+	
+	var timeBonus = (TIMER_CUTOFF - (timer.getMin() * 60 + timer.getSec())) * TIMER_PENALTY;
+	
         // show score components in transition screen
         $('#score-base').text(base);
-        $('#score-bonus').text(0);  // TODO use something meaningful (time bonus?)
+        $('#score-bonus').text(timeBonus);  // TODO use something meaningful (time bonus?)
         // score currently contains accumulated penalties
         $('#score-penalty').text(score);
 
         score += base;
+	score += timeBonus;
 
 		// Show the transition screen
 		TransitionScreen(score);
@@ -981,12 +988,22 @@ function insertUserRank(data) {
 
 // Timer used when game is running. Can be paused and resumed.
 var Timer = function() {
-    var timerId, delay = 1000, start, sec, min;
+    var timerId, delay = 1000, start;
+    var sec = 0;
+    var min = 0;
 
     this.pause = function() {
         clearInterval(timerId);
     };
 
+    this.getSec = function() {
+	return sec;
+    };
+    
+    this.getMin = function() {
+	return min;
+    };
+    
     function timerIncrement(delay) {
 	sec += delay / 1000;
 	if (sec >= 60) {
@@ -1009,8 +1026,8 @@ var Timer = function() {
 		// Increment our internal timer numbers
 		timerIncrement(delay);
 		
-		$("#min").html(pad2(min));
-		$("#sec").html(pad2(sec));
+		$("#min").html("" + pad2(min));
+		$("#sec").html("" + pad2(sec));
 	    }
 	}, delay);
     };
