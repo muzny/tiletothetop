@@ -96,12 +96,16 @@ var Messenger = function() {
 
     // Pushes game data to the server based on the score fed into the
     // function.  To be called on game completion
-    this.pushGameData = function(score) {
+    this.pushGameData = function(score, definitions, words) {
         $.ajax({
             url: "/push-game-data/",
             type: "POST",
             dataType: "json",
-            data: {"score" : score},
+            data: {
+                "score" : score,
+                "definitions" : definitions,
+                "words" : words
+            },
             headers: {"X-CSRFToken" : $.cookie('csrftoken')},
             success: function(response) {
                 window.__lastGame = response.id;

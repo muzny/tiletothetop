@@ -26,6 +26,7 @@ var difficulty = 0;
 var tag_filter = 0;
 var custom_list = "";
 var inMenu = false;
+var setupEvents = false;
 
 $(window).load(function() {
     // because IE tries to cache all the things
@@ -217,12 +218,13 @@ function showGameElements() {
  */
 function TransitionScreen(score) {
     // go ahead an push game data
-    messenger.pushGameData(score);
+    var definitions = window.board.definitions.getDefinitions(),
+	words = window.board.workspace.getSolutions();
+    messenger.pushGameData(score, definitions, words);
 
 	// add the score to the transition screen
     var transitionScreen = $('#transition-screen');
-    var scoreElement = $("#transition-screen h1")[0];
-	$(scoreElement).text("SCORE: " + score);
+	$('#score-final').text(score);
 
 		// Clean up the board
     $('#definitions-answers-area').remove();
@@ -425,9 +427,18 @@ function checkGameWon() {
 		var solutions = window.board.workspace.getSolutions();
 
 		// Calculate score for correct words
+        var base = 0;
 		for (var i = 0; i < solutions.length; i++) {
-			score += scoreFunc(solutions[i]);
+			base += scoreFunc(solutions[i]);
 		}
+
+        // show score components in transition screen
+        $('#score-base').text(base);
+        $('#score-bonus').text(0);  // TODO use something meaningful (time bonus?)
+        // score currently contains accumulated penalties
+        $('#score-penalty').text(score);
+
+        score += base;
 
 		// Show the transition screen
 		TransitionScreen(score);
@@ -485,6 +496,9 @@ TileArea.prototype.shuffle = function(myArray){
 
 // This is where the definitions of the word go.
 var DefinitionArea = function(definitions) {
+    this.getDefinitions = function() {
+	return definitions;
+    }
     var left = $("<div>").addClass("left-col");
 
 	var hintClicked = function(e) {
@@ -664,89 +678,92 @@ var Workspace = function(words) {
 
     // Handle arrow keys being pressed. Note that arrow keys
     // are only triggered using 'keydown', not 'keypress'.
-    $(document).keydown(function(e) {
-	    // In firefox, e.which gets set instead of e.keypress
-	    var num = e.keyCode;
-	    if (num == 0) {
-		    num = e.which;
-	    }
-
-	   // User pressed backspace
-	    if (num == 8 && !inMenu) {
-		e.preventDefault();
-		//alert("backspace");
-		var clicked = $(".clicked");
-		if (clicked.length == 1) {
-		    deleteBoxAt($(clicked[0]).attr("id"));
+    if (!setupEvents) { // Check to see if we've already played a game first.
+	setupEvents = true;
+	$(document).keydown(function(e) {
+		// In firefox, e.which gets set instead of e.keypress
+		var num = e.keyCode;
+		if (num == 0) {
+			num = e.which;
 		}
-		return false;
-	    }
-
-	    // The user pressed the left or right arrow keys.
-	    if ((num == 37 || num == 39) && !inMenu) {
+		
+	       // User pressed backspace
+		if (num == 8 && !isPaused()) {
+		    e.preventDefault();
+		    //alert("backspace");
 		    var clicked = $(".clicked");
-
+		    if (clicked.length == 1) {
+			deleteBoxAt($(clicked[0]).attr("id"));
+		    }
+		    return false;
+		}
+		
+		// The user pressed the left or right arrow keys.
+		if ((num == 37 || num == 39) && !inMenu) {
+			var clicked = $(".clicked");
+			
+			// If a box is "clicked", move which box is "clicked"
+			// based on the arrow key.
+			if (clicked.length == 1) {
+			    var nextBox;
+			    // Left Arrow
+			    if (num == 37) {
+				 nextBox = getBoxAtOffset($(clicked[0]).attr("id"), -1);
+			    } else { // Right Arrow
+				nextBox = getBoxAtOffset($(clicked[0]).attr("id"), 1);
+			    }
+			    
+			    if (nextBox) {
+				$(clicked[0]).removeClass("clicked");
+				$(nextBox).addClass("clicked");
+			    }
+			}
+		}
+		
+		// The user pressed the up or down arrow keys, or the tab key.
+		if ((num == 38 || num == 40 || num == 9) && !isPaused()) {
+		    if (num == 9) e.preventDefault(); // Stop tab from selecting elements on the screen.
+		    
+		    var clicked = $(".clicked");
+			
 		    // If a box is "clicked", move which box is "clicked"
 		    // based on the arrow key.
 		    if (clicked.length == 1) {
-			var nextBox;
-			// Left Arrow
-			if (num == 37) {
-			     nextBox = getBoxAtOffset($(clicked[0]).attr("id"), -1);
-			} else { // Right Arrow
-			    nextBox = getBoxAtOffset($(clicked[0]).attr("id"), 1);
+			var prevId = $(clicked).attr("id");
+			var answerNum = parseInt(prevId.split("_")[1]);
+			var boxNum = parseInt(prevId.split("_")[2]);
+			
+			var nextAnswerArea;
+			
+			// User pressed up arrow
+			if (num == 38) {
+			    nextAnswerArea = $("#emptyTile_" + (answerNum - 1) + "_0");
+			} else if (num == 40) { // User pressed down arrow
+			    nextAnswerArea = $("#emptyTile_" + (answerNum + 1) + "_0");
+			} else {
+			    nextAnswerArea = $("#emptyTile_" + ((answerNum + 1) % NUM_WORDS) + "_0");
 			}
-
-			if (nextBox) {
+			
+			// If there was a previous answer area to move to, find
+			// the first empty box in it and highlight that box.
+			if (nextAnswerArea) {
+			    var emptyNext = getNextEmpty($(nextAnswerArea).attr("id"));
+			    
+			    // If there was no empty box in this row, just
+			    // get the last box in the row.
+			    if (!emptyNext) {
+				emptyNext = getLastInRow($(nextAnswerArea).attr("id"));
+			    }
+			    
+			    //prevAnswerArea = emptyPrev ? emptyPrev : prevAnswerArea;
 			    $(clicked[0]).removeClass("clicked");
-			    $(nextBox).addClass("clicked");
+			    $(emptyNext).addClass("clicked");
 			}
-		    }
-	    }
-
-	    // The user pressed the up or down arrow keys, or the tab key.
-	    if ((num == 38 || num == 40 || num == 9) && !inMenu) {
-		if (num == 9) e.preventDefault(); // Stop tab from selecting elements on the screen.
-
-		var clicked = $(".clicked");
-
-		// If a box is "clicked", move which box is "clicked"
-		// based on the arrow key.
-		if (clicked.length == 1) {
-		    var prevId = $(clicked).attr("id");
-		    var answerNum = parseInt(prevId.split("_")[1]);
-		    var boxNum = parseInt(prevId.split("_")[2]);
-
-		    var nextAnswerArea;
-
-		    // User pressed up arrow
-		    if (num == 38) {
-			nextAnswerArea = $("#emptyTile_" + (answerNum - 1) + "_0");
-		    } else if (num == 40) { // User pressed down arrow
-			nextAnswerArea = $("#emptyTile_" + (answerNum + 1) + "_0");
-		    } else {
-			nextAnswerArea = $("#emptyTile_" + ((answerNum + 1) % NUM_WORDS) + "_0");
-		    }
-
-		    // If there was a previous answer area to move to, find
-		    // the first empty box in it and highlight that box.
-		    if (nextAnswerArea) {
-			var emptyNext = getNextEmpty($(nextAnswerArea).attr("id"));
-
-			// If there was no empty box in this row, just
-			// get the last box in the row.
-			if (!emptyNext) {
-			    emptyNext = getLastInRow($(nextAnswerArea).attr("id"));
-			}
-
-			//prevAnswerArea = emptyPrev ? emptyPrev : prevAnswerArea;
-			$(clicked[0]).removeClass("clicked");
-			$(emptyNext).addClass("clicked");
 		    }
 		}
-	    }
-    });
-
+	});
+    }
+    
     //Helper for solutions
     this.getSolutions = function() {
 		return solutions;
