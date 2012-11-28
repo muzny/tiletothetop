@@ -373,3 +373,7 @@ button.close {
 #leaderboard_table td {
 	text-align: center;
 }
+
+#timer-display {
+    width: 130px;
+}

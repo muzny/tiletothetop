@@ -6,6 +6,7 @@
 
 var board = null;
 var messenger = null;
+var timer = null;
 var score = 0;
 var numberHintsUsed = 0;
 var HINT_PENALTY = 100;
@@ -25,7 +26,7 @@ var MAX_WORDLEN = 10;
 var difficulty = 0;
 var tag_filter = 0;
 var custom_list = "";
-var inMenu = false;
+var inStartMenu = false;
 var setupEvents = false;
 
 $(window).load(function() {
@@ -82,6 +83,7 @@ function initializeMenuButtons() {
 function returnToGame() {
     $('#play.carousel').carousel('next');
     $('#start-menu').hide();
+    inStartMenu = false;
 }
 
 // Return to start menu from game
@@ -93,6 +95,7 @@ function returnToStart() {
     }
     $('#start-menu').show();
     $('#play.carousel').carousel('prev');
+    inStartMenu = true;
 }
 
 function createStaticGameIfApplicable() {
@@ -261,6 +264,14 @@ var Board = function(data) {
 		letters = letters.concat(words[i].split(""));
     }
     this.tileArea = new TileArea(letters);
+    
+    // Turn off the old timer, if a previous game was just ended.
+    if (timer) {
+	timer.pause();
+    }
+    
+    // Start the new timer.
+    timer = new Timer(1000);
     //hideGameElements();
 };
 
@@ -966,4 +977,55 @@ function insertUserRank(data) {
 		alert("rank: " + data.rank + "\nhigh score: " + data.score);
 	else
 		alert("no rank, user not authenticated");
+}
+
+// Timer used when game is running. Can be paused and resumed.
+var Timer = function() {
+    var timerId, delay = 1000, start, sec, min;
+
+    this.pause = function() {
+        clearInterval(timerId);
+    };
+
+    function timerIncrement(delay) {
+	sec += delay / 1000;
+	if (sec >= 60) {
+	    var carry = sec / 60;
+	    min += carry;
+	    sec = sec % 60;
+	}
+    };
+
+    // Pads n to have 2 digits by using a leading zero if necessary, then returns it.
+    function pad2(n) {
+	return n < 10 ? "0" + n : "" + n;
+    };
+
+    this.resume = function() {
+	// Get the time to resume from.
+        this.setStartTime();
+        timerId = setInterval(function() {
+	    if (!(isPaused() || inStartMenu)) {
+		// Increment our internal timer numbers
+		timerIncrement(delay);
+		
+		$("#min").html(pad2(min));
+		$("#sec").html(pad2(sec));
+	    }
+	}, delay);
+    };
+    
+    this.setStartTime = function() {
+	var timeString = $("#timer-display").text().split(":");
+	
+	// Get the number of seconds and minutes that
+	// have gone by.
+	sec = parseInt(timeString[1]);
+	min = parseInt(timeString[0]);
+    };
+
+    // Set the initial time to 00:00 and start the timer.
+    $("#min").html("00");
+    $("#sec").html("00");
+    this.resume();
 }
