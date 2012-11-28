@@ -8,10 +8,11 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth import logout as auth_logout, login as auth_login, authenticate
 from django.contrib.auth.models import User
 from django.core.context_processors import csrf
+from django.forms.models import inlineformset_factory
 from django.db.models import Max, Min
 
-from tiletothetop.models import Word, Tag, UserProfile, GameHistory
-from tiletothetop.forms import RegistrationForm, LoginForm
+from tiletothetop.models import Word, Tag, CustomList, CustomWord, UserProfile, GameHistory
+from tiletothetop.forms import RegistrationForm, LoginForm, CustomListForm
 
 
 def game(request):
@@ -23,24 +24,32 @@ def game(request):
     lform_errors = get_and_delete(request.session, 'lform_errors', None)
     rform_errors = get_and_delete(request.session, 'rform_errors', None)
 
+    get_and_delete(request.session, 'custom_list_instance', None)
+    cl = CustomList()
+    clform = CustomListForm(instance=cl)
+    CustomWordsInlineFormSet = inlineformset_factory(CustomList, CustomWord)
+    cwformset = CustomWordsInlineFormSet(instance=cl)
+    
+    # available lists to edit / use in game
+    lists = []
+    if (request.user.is_authenticated()):
+        lists = CustomList.objects.filter(user=request.user)
+    
     # tags that have at least one word associated with them
-    tags = Tag.objects.raw('''select * from tiletothetop_tag t 
+    tags = Tag.objects.raw('''select * from tiletothetop_tag t
                               where exists
-                                (select wt.id from tiletothetop_word w, tiletothetop_word_tags wt 
+                                (select wt.id from tiletothetop_word w, tiletothetop_word_tags wt
                                 where w.id= wt.word_id and t.id=wt.tag_id)
                               order by t.name''');
 
     context = {'login_form' : lform, 'registration_form' : rform, 'login_errors' : lform_errors, 'registration_errors' : rform_errors,
-                'tags' : tags }
+                'customlist_form' : clform, 'customwords_formset' : cwformset, 'custom_lists' : lists, 'tags' : tags }
     return render_to_response('game.html', context, context_instance=RequestContext(request))
 
 
 ##############################################################
 # AJAX Services                                              #
 ##############################################################
-
-def static_words(request):
-    pass
 
 def static_words(request):
     if not request.is_ajax() or request.method != "GET":
@@ -129,6 +138,156 @@ def random_words(request):
 
     return HttpResponse(simplejson.dumps(data), mimetype="application/json")
 
+def edit_customlist(request):
+    if not request.user.is_authenticated() or not request.is_ajax() or request.method != 'GET':
+        return HttpResponse(status=400)
+
+    # get forms to edit requested list
+    list_id = int(request.GET['custom_list_id'])
+    try:
+        cl = CustomList.objects.get(id=list_id)
+        if cl.user != request.user:
+            return HttpResponse(status=400)
+        request.session['custom_list_instance'] = cl
+    except CustomList.DoesNotExist:
+        # return new form
+        cl = CustomList()
+        del request.session['custom_list_instance']
+
+    clform = CustomListForm(instance=cl)
+    CustomWordsInlineFormSet = inlineformset_factory(CustomList, CustomWord)
+    cwformset = CustomWordsInlineFormSet(instance=cl)
+
+    context = { 'customlist_form' : clform, 'customwords_formset' : cwformset }
+    # TODO don't want to render entire page
+    #result = render_block_to_string('wordlists.html', 'custom_wordlists_form', context)
+    #return HttpResponse(result)
+    return render_to_response('wordlists.html', context, context_instance=RequestContext(request))
+
+def custom_words(request):
+    if not request.user.is_authenticated() or not request.is_ajax() or request.method != 'GET':
+        return HttpResponse(status=400)
+    
+    id =int(request.GET['id'])
+    list = CustomList.objects.get(id=id)
+    words = CustomWord.objects.filter(custom_list=list).order_by('?')[:4]
+    
+    data = []
+    for word in words:
+        data.append({'word': word.word,
+                     'definition': word.definition,
+                     'speech': word.part_of_speech})
+    
+    return HttpResponse(simplejson.dumps(data), mimetype="application/json")
+
+def get_leaderboard(request):
+    if not request.is_ajax() or request.method != 'GET':
+        return HttpResponse(status=400)
+
+    count = 10
+
+    if 'count' in request.GET:
+        count = request.GET['count']
+
+    leaders = UserProfile.objects.order_by('-total_score')[:count]
+
+    rank = 0
+    count = 1 # number of people at current rank
+    last = -1 # last unique score seen, used to determine ties
+    data = []
+    for leader_profile in leaders:
+        # handle ties
+        score = leader_profile.total_score
+        if score != last:
+            last = score
+            rank += count
+            count = 1
+        else:
+            count += 1
+
+        data.append({'user': leader_profile.user.username,
+                     'rank': rank,
+                     'score': score})
+
+    return HttpResponse(simplejson.dumps(data), mimetype='application/json')
+
+def get_user_rank(request):
+    if not request.is_ajax() or request.method != 'GET':
+        return HttpResponse(status=400)
+
+    if not request.user.is_authenticated():
+        return HttpResponse(status=204)
+
+    leaders = UserProfile.objects.order_by('-total_score')
+
+    rank = 0
+    count = 1
+    last = -1
+    data = {}
+    for index, profile in enumerate(leaders):
+        # handle ties
+        score = profile.total_score
+        if score != last:
+            last = score
+            rank += count
+            count = 1
+        else:
+            count += 1
+
+        if profile.user == request.user:
+            data['rank'] = rank
+            data['score'] = score
+
+    return HttpResponse(simplejson.dumps(data), mimetype='application/json')
+
+
+##############################################################
+# User Custom Words Views                                    #
+##############################################################
+
+# ajax vs. redirect??
+def save_customlist(request):
+    if not request.user.is_authenticated() or request.method != 'POST':
+        return HttpResponse(status=400)
+
+    if 'custom_list_instance' in request.session:
+        cl = request.session['custom_list_instance']
+        if cl.user != request.user:
+            return HttpResponse(status=400)
+        clform = CustomListForm(request.POST, instance=cl)
+    else:
+        clform = CustomListForm(request.POST)
+
+    if clform.is_valid():
+        cl = clform.save(commit=False)
+        cl.user = request.user
+        CustomWordsInlineFormSet = inlineformset_factory(CustomList, CustomWord)
+        cwformset = CustomWordsInlineFormSet(request.POST, instance=cl)
+        if cwformset.is_valid():
+            cl.save()
+            cws = cwformset.save(commit=False)
+            for cw in cws:
+                cw.custom_list = cl
+                cw.save()
+            return HttpResponseRedirect(reverse('game'))
+        else:
+            return HttpResponse(content='cw formset not valid: %s\n list: %s' % (cwformset.errors, cl), status=400)
+    # TODO better error handling
+    return HttpResponse(content='cl form not valid: %s' % (clform.errors), status=400)
+
+def delete_customlist(request):
+    if not request.user.is_authenticated() or request.method != 'POST' or not 'custom_list_instance' in request.session:
+        return HttpResponse(status=400)
+
+    cl = request.session['custom_list_instance']
+    if cl.user != request.user:
+        return HttpResponse(status=400)
+    cws = CustomWord.objects.filter(custom_list=cl)
+
+    cws.delete()
+    cl.delete()
+
+    return HttpResponseRedirect(reverse('game'))
 
 
 ##############################################################
@@ -174,7 +333,6 @@ def register(request):
     return HttpResponseRedirect(reverse('game'))
 
 
-
 ##############################################################
 # User Data Views                                            #
 ##############################################################
@@ -186,10 +344,11 @@ def push_game_data(request):
     if not request.method == 'POST':
         return HttpResponse(status=405)
 
+    new_score = int(request.POST['score'])
     # Make a new GameHistory object
     new_game = GameHistory(
                             user = request.user,
-                            score = request.POST['score'],
+                            score = new_score,
                             word_difficulties = 0
                         )
     # And push it to the database
@@ -197,6 +356,7 @@ def push_game_data(request):
 
     profile = request.user.get_profile()
     profile.games_played += 1
+    profile.total_score += new_score
     profile.save()
 
     return HttpResponse(status=201)

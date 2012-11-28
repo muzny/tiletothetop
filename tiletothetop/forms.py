@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from crispy_forms.helper import FormHelper
+from tiletothetop.models import CustomList, CustomWord
 
 class RegistrationForm(forms.Form):
     # all fields are required, but some are checked manually below, to avoid
@@ -83,4 +84,13 @@ class LoginForm(forms.Form):
 
         return password
 
-
+class CustomListForm(forms.ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        super(CustomListForm, self).__init__(*args, **kwargs)
+    
+    class Meta:
+        model = CustomList
+        fields = { 'name' }#{ 'name', 'tags', 'is_public' }

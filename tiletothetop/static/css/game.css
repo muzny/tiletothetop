@@ -124,27 +124,22 @@ p {
     overflow: hidden;
 }
 
-#start-screen, #transition-screen {
+#transition-screen {
     position: absolute;
     left: 0px;
     top: 0px;
+    z-index: -1;
     width: 100%;
     height: 100%;
-	background-color: #AD1D28;
-    z-index: 100;
+    background-color: #AD1D28;
+    display: hidden;
 }
 
 #transition-screen h1,
-#transition-screen p,
-#start-screen p {
+#transition-screen p {
     text-align: center;
     display: block;
     margin: 3em auto 3em;
-}
-
-#transition-screen {
-    z-index: -1;
-    display: hidden;
 }
 
 
@@ -194,12 +189,6 @@ a, a:link, a:visited {
 	background-color: blue;
 }
 
-/* Banner region */
-#logo img
-{
-    display: block;
-}
-
 /* Menu stuff */
 #start-game-inprogress
 {
@@ -210,8 +199,12 @@ a, a:link, a:visited {
     margin: 1em;
 }
 
+#start-menu .accordion-heading {
+    background-color: #26666C;
+}
+
 #start-menu .controls {
-    margin-left: 90px;
+    margin-left: 160px;
 }
 
 #start-menu .control-label {
@@ -222,14 +215,18 @@ a, a:link, a:visited {
     margin-right: 12px;
 }
 
-#start-menu .radio.inline {
-    margin-right: 1em;
-}
-
 #game-menu
 {
-    margin: .5em;
+    margin-top: .25em;
+    margin-bottom: .5em;
     text-align: center;
+}
+
+#timer-display
+{
+    margin-top: 15px;
+    letter-spacing: .1em;
+    font-size: 30px;
 }
 
 /* Bootstrap -related UI stuff */
@@ -297,3 +294,82 @@ button.close {
 }
 /* end bootstrap-related UI stuff */
 
+
+/* jQuery Tools's rangeinput stuff */
+
+/* slider root element */
+.slider {
+    background:#fff;
+    height:9px;
+    position:relative;
+    cursor:pointer;
+    width:220px;
+    margin-left:160px;
+    margin-top:10px;
+}
+
+/* progress bar (enabled with progress: true) */
+.progress {
+    height:9px;
+    background-color:#DEBB27;
+    opacity:0.8;
+}
+
+/* drag handle */
+.handle {
+    background:#fff;
+    height:28px;
+    width:14px;
+    top:-12px;
+    position:absolute;
+    display:block;
+    margin-top:1px;
+    cursor:move;
+}
+
+/* the input field */
+.range {
+    display:none;
+}
+
+#start-menu #setting-difficulty {
+    display: none;
+}
+
+/* game height styles */
+/* TODO: please move me to proper locaion */
+
+.navbar-inner .container {
+    width: 100% !important;
+    padding-top: 5px;
+}
+
+.navbar-inner {
+    border-bottom-left-radius: 20px !important;
+    margin-left: 280px;
+}
+
+#logo {
+    float: left;
+    margin-left: 10px;
+}
+
+.nav-tabs {
+    margin-bottom: 10px;
+}
+
+#play {
+    margin: 10px;
+    padding: 0px 5px;
+}
+
+/* Leaderboard styles */
+
+#leaderboard_table {
+	width: 75%;
+	margin: auto;
+}
+
+#leaderboard_table td {
+	text-align: center;
+}

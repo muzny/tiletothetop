@@ -2,70 +2,74 @@
     <h2>Start Stacking!</h2>
     <h3>A red wheelbarrow glazed with rainwater...</h3>
 
-    <form id="game-settings" class="form-horizontal">
+    <form class="form-horizontal">
         <fieldset>
             <legend>Game Options</legend>
-            
-            <div id="game-options">
-                <div class="control-group">
-                    <label class="control-label" for="setting-difficulty">
-                        Difficulty:
-                    </label>
-                    <div id="setting-difficulty" class="controls btn-group">
-                        <label class="radio inline">
-                            <input type="radio" name="setting-difficulty" value="0">
-                            Easy
-                        </label>
-                        <label class="radio inline">
-                            <input type="radio" name="setting-difficulty" value="50">
-                            Medium
-                        </label>
-                        <label class="radio inline">
-                            <input type="radio" name="setting-difficulty" value="100">
-                            Hard
-                        </label>
-                        <label class="radio inline">
-                            <input type="radio" name="setting-difficulty" value="*" checked="checked">
-                            Any
-                        </label>
+            <div id="game-options" class="accordion">
+                
+                <div class="accordion-group">
+                    <div class="accordion-heading">
+                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#game-options" href="#dict-game">
+                            Built-in Dictionary
+                        </a>
+                    </div>
+                    <div id="dict-game" class="accordion-body collapse in">
+                        <div class="accordion-inner">
+                            <div class="control-group">
+                                <label class="control-label" for="setting-difficulty">
+                                    Difficulty:
+                                </label>
+                                <div class="controls">
+                                    <label>
+                                        <input id="setting-difficulty" class="controls" type="range" min="0" max="150" step="10" value="75" />
+                                        <span id="difficulty-text" class="help-block controls">Medium</span>
+                                    </label>
+                                </div>
+                                <!--<label>
+                                    <input type="checkbox"> On
+                                </label>-->
+                            </div>
+                            
+                            <div class="control-group">
+                                <label class="control-label" for="setting-tag">
+                                    Filter by Tag:
+                                </label>
+                                <select id="setting-tag" class="controls">
+                                    <option value="">-None-</option>
+                                    {% for tag in tags %}
+                                    <option value="{{ tag.id }}">{{ tag.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
-                <div class="control-group">
-                    <label class="control-label" for="setting-level">
-                        Level:
-                    </label>
-                    <select id="setting-level" class="controls">
-                        {% for i in "0123456789"|make_list %}
-                        <option>{{ forloop.counter }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                
-                <div class="control-group">
-                    <label class="control-label" for="setting-tag">
-                        Filter by Tag:
-                    </label>
-                    <select id="setting-tag" class="controls">
-                        <option value="">-None-</option>
-                        {% for tag in tags %}
-                        <option value="{{ tag.id }}">{{ tag.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
                 
                 {% if user.is_authenticated %}
-                <div class="control-group">
-                    <label class="control-label" for="setting-custom">
-                        Use Custom List:
-                    </label>
-                    <select id="setting-custom" class="controls">
-                        <option value="">-None-</option>
-                        <!-- add others from db... -->
-                    </select>
+                <div class="accordion-group">
+                    <div class="accordion-heading">
+                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#game-options" href="#dict-custom">
+                            Custom Dictionary
+                        </a>
+                    </div>
+                    <div id="dict-custom" class="accordion-body collapse">
+                        <div class="accordion-inner">
+                            <div class="control-group">
+                                <label class="control-label" for="setting-custom">
+                                    Use Custom List:
+                                </label>
+                                <select id="setting-custom" class="controls">
+                                    <option value="">-None-</option>
+                                    {% for list in custom_lists %}
+                                    <option value="{{ list.id }}">{{ list.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 {% endif %}
-                
             </div>
         </fieldset>
     </form>
@@ -94,9 +98,19 @@
                 rel="tooltip" data-title="End game and reveal solution" data-placement="right">
             Quit Game
         </button>
+        <p id="timer-display" class="pull-right">
+            <span id="min">00</span>
+            :
+            <span id="sec">00</span>
+        </p>
     </div>
     <div id="transition-screen">
-        <h1>SCORE: 0</h1>
+        <h1>SCORE: <span id="score-final">0</span></h1>
+        <p>
+            Base (<span id="score-base">0</span>) +
+            Time Bonus (<span id="score-bonus">0</span>) +
+            Penalty (<span id="score-penalty">0</span>)
+        </p>
         <p>Click here to start a new game</p>
     </div>
 </div>
