@@ -434,7 +434,7 @@ function checkGameWon() {
 			base += scoreFunc(solutions[i]);
 		}
 	
-	var timeBonus = (TIMER_CUTOFF - (timer.getMin() * 60 + timer.getSec())) * TIMER_PENALTY;
+	var timeBonus = Math.max(0, (TIMER_CUTOFF - (timer.getMin() * 60 + timer.getSec())) * TIMER_PENALTY);
 	
         // show score components in transition screen
         $('#score-base').text(base);
