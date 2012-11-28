@@ -218,8 +218,7 @@ function TransitionScreen(score) {
 
 	// add the score to the transition screen
     var transitionScreen = $('#transition-screen');
-    var scoreElement = $("#transition-screen h1")[0];
-	$(scoreElement).text("SCORE: " + score);
+	$('#score-final').text(score);
 
 		// Clean up the board
     $('#definitions-answers-area').remove();
@@ -414,9 +413,18 @@ function checkGameWon() {
 		var solutions = window.board.workspace.getSolutions();
 
 		// Calculate score for correct words
+        var base = 0;
 		for (var i = 0; i < solutions.length; i++) {
-			score += scoreFunc(solutions[i]);
+			base += scoreFunc(solutions[i]);
 		}
+
+        // show score components in transition screen
+        $('#score-base').text(base);
+        $('#score-bonus').text(0);  // TODO use something meaningful (time bonus?)
+        // score currently contains accumulated penalties
+        $('#score-penalty').text(score);
+
+        score += base;
 
 		// Show the transition screen
 		TransitionScreen(score);

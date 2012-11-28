@@ -98,9 +98,19 @@
                 rel="tooltip" data-title="End game and reveal solution" data-placement="right">
             Quit Game
         </button>
+        <p id="timer-display" class="pull-right">
+            <span id="min">00</span>
+            :
+            <span id="sec">00</span>
+        </p>
     </div>
     <div id="transition-screen">
-        <h1>SCORE: 0</h1>
+        <h1>SCORE: <span id="score-final">0</span></h1>
+        <p>
+            Base (<span id="score-base">0</span>) +
+            Time Bonus (<span id="score-bonus">0</span>) +
+            Penalty (<span id="score-penalty">0</span>)
+        </p>
         <p>Click here to start a new game</p>
     </div>
 </div>
