@@ -662,7 +662,7 @@ var Workspace = function(words) {
 		}
 		
 	       // User pressed backspace
-		if (num == 8 && !inMenu) {
+		if (num == 8 && !isPaused()) {
 		    e.preventDefault();
 		    //alert("backspace");
 		    var clicked = $(".clicked");
@@ -695,7 +695,7 @@ var Workspace = function(words) {
 		}
 		
 		// The user pressed the up or down arrow keys, or the tab key.
-		if ((num == 38 || num == 40 || num == 9) && !inMenu) {
+		if ((num == 38 || num == 40 || num == 9) && !isPaused()) {
 		    if (num == 9) e.preventDefault(); // Stop tab from selecting elements on the screen.
 		    
 		    var clicked = $(".clicked");
