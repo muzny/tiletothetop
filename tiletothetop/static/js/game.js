@@ -11,6 +11,7 @@ var score = 0;
 var numberHintsUsed = 0;
 var HINT_PENALTY = 100;
 var TILE_SIZE = 60;
+var MAX_FONT = 36;  // max pixels for definitions
 var TIMER_PENALTY = 10;
 var TIMER_CUTOFF = 60;
 
@@ -48,11 +49,10 @@ $(window).load(function() {
     // http://our.game.url/?id=id1-id2-id3-id4
     // dev example:
     // http://127.0.0.1:8000/?id=47-106-8-900
-    createStaticGameIfApplicable()
+    createStaticGameIfApplicable();
 
     //startGame();    // uncomment this to bypass main menu
 });
-
 
 /** Begin Menu / Navigation stuff */
 
@@ -176,6 +176,7 @@ function initializeBoard(data) {
         $('#tiles-area').remove();
     }
     board = new Board(data);
+    $(".jtextfill").textfill({ maxFontPixels: MAX_FONT });
 
     // hide start menu, show board
     //returnToGame(); // Firefox doesn't like having this here for some reason
@@ -552,20 +553,23 @@ var DefinitionArea = function(definitions) {
 	}
 
     $.each(definitions, function(index) {
-		var def = $("<div>");
-		def.addClass("definition");
-		def.attr("id", "def_" + index);
+	var def = $("<div>");
+	def.addClass("definition");
+	def.addClass("jtextfill");
+	def.attr("id", "def_" + index);
 
-		var hint = $("<div>");
-		hint.addClass("hint-box");
-		hint.attr("id", "hint_" + index);
-		hint.bind('click', hintClicked);
-		hint.append("Hint");
-		hint.disableSelection();
+	var hint = $("<div>");
+	hint.addClass("hint-box");
+	hint.attr("id", "hint_" + index);
+	hint.bind('click', hintClicked);
+	hint.append("Hint");
+	hint.disableSelection();
 
-		def.append(hint);
-		def.append(definitions[index]);
-		left.append(def);
+	def.append(hint);
+	var span = $("<span>");
+	span.text(definitions[index]);
+	def.append(span);
+	left.append(def);
     });
     $("#definitions-answers-area").append(left);
 };
