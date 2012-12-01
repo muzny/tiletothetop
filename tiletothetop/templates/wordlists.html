@@ -6,21 +6,25 @@
     {% load crispy_forms_tags %}
     <div>
         <p>Create a new list or edit an existing list:</p>
-        <div id="custom-edit" class="input-append">
+        <div id="custom-edit" class="input-prepend input-append">
+            <button id="new-list" type="button" class="btn btn-primary">
+                New List
+            </button>
             <select id="existing-list-name">
-                <option value="-1">&lt;New List&gt;</option>
                 {% for list in custom_lists %}
                 <option value="{{ list.id }}">{{ list.name }}</option>
+                {% empty %}
+                <option value="">-None-</option>
                 {% endfor %}
             </select>
             <button id="edit-list" type="button" class="btn btn-primary">
                 Edit List
-            </button>            
+            </button>
         </div>
     </div>
     
     <div>
-        <p>Build your list here:</p>
+        <p id="build-help-text">Build your list:</p>
         <form id="custom-form" method="post">
             
             <div id="custom-form-content">
@@ -28,7 +32,6 @@
                 {% csrf_token %}
 
                 <div id="customlist-form">
-                    <!-- TODO better indicator of whether this is create vs. update -->
                     {% crispy customlist_form %}
                 </div>
                 {{ customwords_formset.management_form }}

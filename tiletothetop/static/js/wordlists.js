@@ -4,28 +4,36 @@
  */
 
 function initializeWordListButtons() {
+    $('#new-list').click(createList);
     $('#edit-list').click(editList);
     
     $('#save-list').click(saveList);
     $('#delete-list').click(deleteList);
 }
 
+function createList() {
+    messenger.getCustomListForms(displayForms, -1);
+}
+
 function editList() {
     var customListID = parseInt($('#existing-list-name').val());
     
-    if (customListID === -1) {
-        alert("Can't edit a new list.");
-        return;
-    }
-    
     // get forms from db
-    messenger.getCustomListForms(displayForms, customListID);
+    if (customListID)
+        messenger.getCustomListForms(displayForms, customListID);
 }
 
 // getCustomListForms callback
 function displayForms(data) {
     var result = $('#custom-form-content', data).html();
     $('#custom-form-content').html(result);
+    
+    var listName = $('#id_name').val();
+    if (listName) {
+        $('#build-help-text').text('Editing list "' + listName + '":');
+    } else {
+        $('#build-help-text').text('Build your list:');
+    }
 }
 
 function addWord() {

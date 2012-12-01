@@ -152,7 +152,7 @@ def edit_customlist(request):
     except CustomList.DoesNotExist:
         # return new form
         cl = CustomList()
-        del request.session['custom_list_instance']
+        get_and_delete(request.session, 'custom_list_instance', None)
 
     clform = CustomListForm(instance=cl)
     CustomWordsInlineFormSet = inlineformset_factory(CustomList, CustomWord)
