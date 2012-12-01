@@ -76,7 +76,7 @@ function initializeMenuButtons() {
 
     $('#new-game').click(returnToStart);
     $('#quit-game').click(quitGame);
-    $('#game-menu').tooltip({
+    $('#game-area').tooltip({
         selector: '[rel="tooltip"]'
     });
 
@@ -561,6 +561,11 @@ var DefinitionArea = function(definitions) {
 	var hint = $("<div>");
 	hint.addClass("hint-box");
 	hint.attr("id", "hint_" + index);
+	hint.attr({
+		"type" : "button",
+		"rel" : "tooltip",
+		"data-title" : "Reveals a random letter at the cost of " + HINT_PENALTY + " points.",
+		"data-placement" : "left"});
 	hint.bind('click', hintClicked);
 	hint.append("Hint");
 	hint.disableSelection();
