@@ -656,17 +656,17 @@ var Workspace = function(words) {
     };
 
     // Typing controls for the empty boxes
-    $(document).on('keypress', function(e) {
+    $(document).on('keydown', function(e) {
 	// If not in the "play" tab, the game should be paused
 	// and keypresses should not trigger anything.
 	if (!isPaused()) {
 		// In firefox, e.which gets set instead of e.keypress
 		var num = e.keyCode;
-		if (num == 0) {
-			num = e.which;
-		}
+		//if (num == 0) {
+		//	num = e.which;
+		//}
 		// One of the keys a - z was pressed.
-		if (num >= 97 && num <= 122) {
+		if (num >= 65 && num <= 90) {
 			var clicked = $(".clicked");
 			if (clicked.length == 1) {
 				var t = getTileFromChar((String.fromCharCode(num)).toUpperCase());
