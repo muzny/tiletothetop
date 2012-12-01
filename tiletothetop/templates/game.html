@@ -23,7 +23,7 @@
                 <ul class="nav pull-right">
                     <li><a id="register-button" data-toggle="modal" href="#register-modal">Register</a></li>
                     <li><a id="login-button" data-toggle="modal" href="#login-modal">Login</a></li>
-                    <li><a href="{% url socialauth_begin 'facebook' %}">Login with Facebook</a></li>
+                    <li><a href="{% url socialauth_begin 'facebook' %}"><img id="facebook_login_icon" alt="Facebook Login" src={% static "fb_login_icon.gif" %}/></a></li>
                 </ul>
                 <ul class="nav pull-right">
                     <li><a href="#">Welcome, guest</a></li>
