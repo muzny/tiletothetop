@@ -31,6 +31,7 @@
                     <!-- TODO better indicator of whether this is create vs. update -->
                     {% crispy customlist_form %}
                 </div>
+                {{ customwords_formset.management_form }}
                 <table id="customwords-formset" class="table table-striped">
                     <thead>
                         <tr>
@@ -43,7 +44,7 @@
                     <!--
                     {% crispy customwords_formset %}
                     -->
-                    {{ customwords_formset.management_form }}
+                    
                     <tbody id="list-entries">
                         {% for form in customwords_formset %}
                         <tr>

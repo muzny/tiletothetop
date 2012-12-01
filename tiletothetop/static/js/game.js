@@ -19,9 +19,10 @@ var TIMER_CUTOFF = 60;
 var MODAL_IDS = ["#login-modal", "#register-modal"];
 
 // difficulty constants - maybe not the right place for this
-var NUM_DIFFICULTIES = 3;
 var MAX_DIFFICULTY = 150; // [0,150)
-var INCR_DIFFICULTY = MAX_DIFFICULTY / NUM_DIFFICULTIES;
+var INCR_DIFFICULTY = 5;
+var isPrevStepLess = false;
+var expDifficultyStep = INCR_DIFFICULTY;
 
 // game settings
 var NUM_WORDS = 4;
@@ -66,11 +67,9 @@ function initializeMenuButtons() {
         showGameElements();
     });
     */
-    $('#setting-difficulty').rangeinput({
-        progress: true,
-        speed: 0
-    });
-    $('#setting-difficulty').change(updateDifficultySlider);
+    
+    initializeDifficultyButtons();
+    
     $('#start-button').click(startGame);
     $('#return-button').click(returnToGame);
 
@@ -82,6 +81,48 @@ function initializeMenuButtons() {
 
     
     $('#share').click(generateShareUrl);
+}
+
+function initializeDifficultyButtons() {
+    $('#step-less-exp').click(function() {
+        if (!isPrevStepLess)
+            expDifficultyStep = INCR_DIFFICULTY;
+        isPrevStepLess = true;
+        if (expDifficultyStep < MAX_DIFFICULTY)
+            expDifficultyStep *= 2;
+        incrementDifficulty(-expDifficultyStep);
+    });
+    $('#step-less-const').click(function() {
+        incrementDifficulty(-INCR_DIFFICULTY);
+    });
+    $('#step-more-const').click(function() {
+        incrementDifficulty(INCR_DIFFICULTY);
+    });
+    $('#step-more-exp').click(function() {
+        if (isPrevStepLess)
+            expDifficultyStep = INCR_DIFFICULTY;
+        isPrevStepLess = false;
+        if (expDifficultyStep < MAX_DIFFICULTY)
+            expDifficultyStep *= 2;
+        incrementDifficulty(expDifficultyStep);
+    });
+}
+
+function incrementDifficulty(increment) {
+    var value = parseInt($('#setting-difficulty').val());
+    value += increment;
+    value = Math.max(0, Math.min(MAX_DIFFICULTY, value));
+    $('#setting-difficulty').val(value);
+    
+    var text;
+    if (value < 50) {
+        text = 'Easy';
+    } else if (value >= 50 && value < 100) {
+        text = 'Medium';
+    } else {
+        text = 'Hard';
+    }
+    $('#difficulty-text').text(text);
 }
 
 // Return to game from start menu
@@ -120,24 +161,6 @@ function createStaticGameIfApplicable() {
         var words = messenger.getStaticWords(initializeBoard, params.id);
         returnToGame();
     }
-}
-
-// Update slider appearance according to difficulty category
-function updateDifficultySlider(e, value) {
-    var progressBar = $('#dict-game .progress')[0];
-    var text, color;
-    if (value < 50) {
-        text = 'Easy';
-        color = '#48CA3B';
-    } else if (value >= 50 && value < 100) {
-        text = 'Medium';
-        color = '#DEBB27';
-    } else {
-        text = 'Hard';
-        color = '#AD1D28';
-    }
-    $('#difficulty-text').text(text);
-    progressBar.style.backgroundColor = color;
 }
 
 function startGame() {
