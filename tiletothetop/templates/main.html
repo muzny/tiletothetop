@@ -16,14 +16,18 @@
                     <div id="dict-game" class="accordion-body collapse in">
                         <div class="accordion-inner">
                             <div class="control-group">
-                                <label class="control-label" for="setting-difficulty">
+                                <label class="control-label" for="difficulty-group">
                                     Difficulty:
                                 </label>
-                                <div class="controls">
-                                    <label>
-                                        <input id="setting-difficulty" class="controls" type="range" min="0" max="150" step="10" value="75" />
-                                        <span id="difficulty-text" class="help-block controls">Medium</span>
-                                    </label>
+                                <div id="difficulty-group" class="controls">
+                                    <div id="difficulty-inputs" class="controls input-prepend input-append">
+                                        <button id="step-less-exp" class="btn" type="button">&lt;&lt;</button>
+                                        <button id="step-less-const" class="btn" type="button">&lt;</button>
+                                        <input id="setting-difficulty" type="text" value="75" disabled="disabled">
+                                        <button id="step-more-const" class="btn" type="button">&gt;</button>
+                                        <button id="step-more-exp" class="btn" type="button">&gt;&gt;</button>
+                                    </div>
+                                    <label for="setting-difficulty" id="difficulty-text" class="help-block controls">Medium</label>
                                 </div>
                                 <!--<label>
                                     <input type="checkbox"> On
