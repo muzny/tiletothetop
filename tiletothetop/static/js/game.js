@@ -28,6 +28,7 @@ var expDifficultyStep = INCR_DIFFICULTY;
 // game settings
 var NUM_WORDS = 4;
 var MAX_WORDLEN = 10;
+var custom_list = "";
 var inStartMenu = false;
 var setupEvents = false;
 
@@ -85,12 +86,12 @@ function initializeMenuButtons() {
 
     $('#new-game').click(returnToStart);
     $('#quit-game').click(quitGame);
+	$('#restart').click(restart);
+	$('#share').click(generateShareUrl);
+	$('#transition-screen').click(transitionClick);
     $('#game-area').tooltip({
         selector: '[rel="tooltip"]'
     });
-
-    
-    $('#share').click(generateShareUrl);
 }
 
 function initializeDifficultyButtons() {
@@ -199,18 +200,73 @@ function startGame() {
         custom_list = $('#setting-custom').val();
         messenger.getCustomWords(initializeBoard, custom_list);
     }
+	showGameButtons();
 }
 
 // Show transition screen and reveal solution
 function quitGame() {
-    // TODO
+	// TODO: Fill in answers
+	
+	// TODO: disable dragging
+	
+	
+	// Show transition screen
+    TransitionScreen(false, 0);
+}
+
+// Starts a game with the same settings as the previous game.
+function restart() {
+	showGameButtons();
+	
+	if (custom_list) {
+		messenger.getCustomWords(initializeBoard, custom_list);
+    } else {
+		messenger.getWords(initializeBoard);
+    }
 }
 
 function resetEvents() {
 	$(document).off('keydown');
 	$(document).off('shown');
 	$(document).off('hidden');
-	$('#restart').off('click');
+}
+
+function showGameButtons() {
+	// Show "Return to start menu" and "Quit game" buttons
+
+	$("#new-game").removeClass("hidden-button");
+	$("#new-game").addClass("shown-button");
+	
+	$("#quit-game").removeClass("hidden-button");
+	$("#quit-game").addClass("shown-button");
+	
+	$("#restart").removeClass("shown-button");
+	$("#restart").addClass("hidden-button");
+	
+	$("#share").removeClass("shown-button");
+	$("#share").addClass("hidden-button");
+	$("#share").html("Share");
+}
+
+function showGameOverButtons() {
+	// Show "Return to start menu", "New game" and "Share" buttons
+	
+	$("#new-game").removeClass("hidden-button");
+	$("#new-game").addClass("shown-button");
+	
+	$("#quit-game").removeClass("shown-button");
+	$("#quit-game").addClass("hidden-button");
+	
+	$("#restart").removeClass("hidden-button");
+	$("#restart").addClass("shown-button");
+	
+	$("#share").removeClass("hidden-button");
+	$("#share").addClass("shown-button");
+}
+
+function transitionClick() {
+	// Transition screen was clicked, so hide it.
+	$("#transition-screen").css({'display':'hidden', 'z-index':'-1'});
 }
 
 /** End Menu / Navigation stuff */
@@ -266,22 +322,20 @@ function showGameElements() {
 /* Creates a modal popup that displays the given score and
  * allows the user to restart the game.
  */
-function TransitionScreen(score) {
+function TransitionScreen(won, score) {
     // go ahead an push game data
-    var definitions = window.board.definitions.getDefinitions(),
-	words = window.board.workspace.getSolutions();
-    messenger.pushGameData(score, definitions, words, window.board.mode);
+	if (won) {
+		var definitions = window.board.definitions.getDefinitions(),
+		words = window.board.workspace.getSolutions();
+		messenger.pushGameData(score, definitions, words, window.board.mode);
+	}
 
     timer.pause();
     
-	// add the score to the transition screen
+	// add the message and score to the transition screen
     var transitionScreen = $('#transition-screen');
+	$('#transition-message').text(won ? "Congratulations, you won!" : "Game over");
 	$('#score-final').text(score);
-
-		// Clean up the board
-    $('#definitions-answers-area').remove();
-    $('#tiles-area').remove();
-
 
     // show the transition screen, and load words in the background
     transitionScreen.css({'display':'visible', 'z-index':'100'});
@@ -291,22 +345,7 @@ function TransitionScreen(score) {
     $('#game-area').css({'height':'611px'});
     $('#play').css({'padding':'0px'});
 
-    $('#restart').on('click', function () {
-        transitionScreen.css({'display':'hidden', 'z-index':'-1'});
-		$('#game-area').css({'height':'auto'}); // make height of parent auto again
-		$('#play').css({'padding':'0px 5px'});
-		//messenger.getWords(initializeBoard);
-		startGame();
-			showGameElements(); // animated display of definitions / tiles
-		
-		var button = $('#share');
-		button.click(generateShareUrl);
-		button.removeAttr("disabled");
-		button.removeClass("btn-disabled");
-		button.html("<h2>Share</h2>");
-    });
-    
-
+	showGameOverButtons();
 }
 
 var Board = function(data) {
@@ -506,7 +545,7 @@ function checkGameWon() {
 	score += timeBonus;
 
 		// Show the transition screen
-		TransitionScreen(score);
+		TransitionScreen(true, score);
 	}
 }
 
@@ -544,7 +583,6 @@ function generateShareUrl() {
     button.attr("disabled", "disabled");
     button.addClass("btn-disabled");
     button.text(url);
-    
 }
 
 // Credit: http://sedition.com/perl/javascript-fy.html

@@ -112,29 +112,26 @@
                 rel="tooltip" data-title="End game and reveal solution" data-placement="right">
             Quit Game
         </button>
+        <button class="btn btn-primary" id="restart" type="button"
+                rel="tooltip" data-title="Start new game with same settings" data-placement="right">
+            Start New Game
+        </button>
+        <button class="btn btn-primary" id="share" type="button"
+                rel="tooltip" data-title="Share this game" data-placement="right">
+            Share
+        </button>
         <p id="timer-display" class="pull-right">
             <span id="min">00</span>:<span id="sec">00</span>
         </p>
     </div>
     <div id="transition-screen">
-        <h1>SCORE: <span id="score-final">0</span></h1>
+		<h1 id="transition-message">Message!</h1>
+        <h2>SCORE: <span id="score-final">0</span></h2>
         <p>
             Base (<span id="score-base">0</span>) +
             Time Bonus (<span id="score-bonus">0</span>) +
             Penalty (<span id="score-penalty">0</span>)
         </p>
-        <div class="full-width">
-            <button class="btn btn-primary centered plaqued rounded-rectangle" id="share" type="button"
-                    rel="tooltip" data-title="Share this game" data-placement="right">
-                <h2>Share</h2>
-            </button>
-        </div>
-        <div class="full-width">
-            <button class="btn btn-primary centered plaqued rounded-rectangle" id="restart" type="button"
-                    rel="tooltip" data-title="Share this game" data-placement="right"
-                    style="margin-top: 10px;">
-                <h2>Click here to start a new game</h2>
-            </button>
-        </div>
+		<p>Click anywhere to continue...</p>
     </div>
 </div>
