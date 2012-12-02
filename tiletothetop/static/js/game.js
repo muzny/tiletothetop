@@ -27,9 +27,6 @@ var expDifficultyStep = INCR_DIFFICULTY;
 // game settings
 var NUM_WORDS = 4;
 var MAX_WORDLEN = 10;
-var difficulty = null;
-var tag_filter = null;
-var custom_list = "";
 var inStartMenu = false;
 var setupEvents = false;
 
@@ -51,8 +48,6 @@ $(window).load(function() {
     // dev example:
     // http://127.0.0.1:8000/?id=47-106-8-900
     createStaticGameIfApplicable();
-
-    //startGame();    // uncomment this to bypass main menu
 });
 
 /** Begin Menu / Navigation stuff */
@@ -79,7 +74,10 @@ function initializeMenuButtons() {
 
     initializeDifficultyButtons();
     
-    $('#start-button').click(startGame);
+    $('#start-button').click(function() {
+        startGame();
+        returnToGame();
+    });
     $('#return-button').click(returnToGame);
 
     $('#new-game').click(returnToStart);
@@ -181,20 +179,18 @@ function startGame() {
     
     if (selectedGroup.size() == 0) {
         // don't use any extra parameters
-        difficulty = tag_filter = null;
-        messenger.getWords(initializeBoard);
+        messenger.getWords(initializeBoard, null, null);
     } else if (selectedGroup[0].id == 'dict-game') {
-        difficulty = parseInt($('#setting-difficulty').val());
-        tag_filter = parseInt($('#setting-tag').val());
-        if (isNaN(tag_filter)) {
-            tag_filter = null;
+        var difficulty = parseInt($('#setting-difficulty').val());
+        var tagFilter = parseInt($('#setting-tag').val());
+        if (isNaN(tagFilter)) {
+            tagFilter = null;
         }
-        messenger.getWords(initializeBoard);
+        messenger.getWords(initializeBoard, difficulty, tagFilter);
     } else { // (selectedGroup[0].id == 'dict-custom')
         custom_list = $('#setting-custom').val();
         messenger.getCustomWords(initializeBoard, custom_list);
     }
-    returnToGame();
 }
 
 // Show transition screen and reveal solution
@@ -213,9 +209,6 @@ function initializeBoard(data) {
     }
     board = new Board(data);
     $(".jtextfill").textfill({ maxFontPixels: MAX_FONT });
-
-    // hide start menu, show board
-    //returnToGame(); // Firefox doesn't like having this here for some reason
 }
 
 // called during board creation
@@ -287,7 +280,8 @@ function TransitionScreen(score) {
         transitionScreen.css({'display':'hidden', 'z-index':'-1'});
 	$('#game-area').css({'height':'auto'}); // make height of parent auto again
 	$('#play').css({'padding':'0px 5px'});
-	messenger.getWords(initializeBoard);
+	//messenger.getWords(initializeBoard);
+    startGame();
         showGameElements(); // animated display of definitions / tiles
 	
 	var button = $('#share');
@@ -520,10 +514,11 @@ function scoreFunc(word) {
 
 	// Add difficulty bonus
 	var bonus = 0;
+    /*
 	if (!isNaN(difficulty)) {
 		bonus = difficulty * 10;
 	}
-
+    */
 	return baseScore + bonus;
 }
 

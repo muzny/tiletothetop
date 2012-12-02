@@ -10,15 +10,15 @@ var Messenger = function() {
 
     // Gets random words from the server and creates a new board with these
     // words when they are recieved successfully.
-    this.getWords = function(successFn) {
+    this.getWords = function(successFn, difficulty, tagFilter) {
         var parameters = {
             "word_count" : NUM_WORDS, "max_wordlen" : MAX_WORDLEN
         };
         if (difficulty != null) {
             parameters["difficulty"] = difficulty;
         }
-        if (tag_filter != null) {
-            parameters["tag_filter"] = tag_filter;
+        if (tagFilter != null) {
+            parameters["tag_filter"] = tagFilter;
         }
 
         $.ajax({
