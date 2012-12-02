@@ -771,7 +771,7 @@ var Workspace = function(words) {
 		}
 		
 		// The user pressed the left or right arrow keys.
-		if ((num == 37 || num == 39) && !inMenu) {
+		if ((num == 37 || num == 39) && !isPaused()) {
 			var clicked = $(".clicked");
 			
 			// If a box is "clicked", move which box is "clicked"
