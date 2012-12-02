@@ -205,7 +205,12 @@ function startGame() {
 // Show transition screen and reveal solution
 function quitGame() {
 	// TODO: Fill in answers
-	
+	var answers = window.board.definitions.getDefinitions();
+	for(var i = 0; i < 4; i++) {
+		for(var j = 0; j < answers[i].length; j++) {
+			window.board.definitions.displayHint(i);
+		}
+	}
 	// TODO: disable dragging
 	
 	
@@ -604,6 +609,10 @@ var DefinitionArea = function(definitions) {
 		//get corresponding workspace element
 		var id = $(this).attr("id");
 		var idNum = parseInt(id.charAt(id.length - 1),10);
+		displayHintForWord(idNum);
+	}
+	
+	function displayHintForWord(idNum){
 		var workspaceElementId = "#answer_" + idNum;
 		var workspaceElement = $(workspaceElementId);
 		//count number of empty boxes in that word
@@ -631,7 +640,11 @@ var DefinitionArea = function(definitions) {
 			}
 		}
 	}
-
+	
+	this.displayHint = function(idNum) {
+		return displayHintForWord(idNum);
+	}
+	
     $.each(definitions, function(index) {
 	var def = $("<div>");
 	def.addClass("definition");
