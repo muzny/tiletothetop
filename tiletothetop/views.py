@@ -8,11 +8,10 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth import logout as auth_logout, login as auth_login, authenticate
 from django.contrib.auth.models import User
 from django.core.context_processors import csrf
-from django.forms.models import inlineformset_factory
 from django.db.models import Max, Min
 
 from tiletothetop.models import Word, Tag, CustomList, CustomWord, UserProfile, GameHistory
-from tiletothetop.forms import RegistrationForm, LoginForm, CustomListForm
+from tiletothetop.forms import RegistrationForm, LoginForm, CustomListForm, CustomWordsInlineFormSet
 
 
 def game(request):
@@ -27,8 +26,7 @@ def game(request):
     get_and_delete(request.session, 'custom_list_instance', None)
     cl = CustomList()
     clform = CustomListForm(instance=cl)
-    CustomWordsInlineFormSet = inlineformset_factory(CustomList, CustomWord)
-    cwformset = CustomWordsInlineFormSet(instance=cl)
+    cwformset = CustomWordsInlineFormSet(instance=cl, prefix='cw')
     
     # available lists to edit / use in game
     lists = []
@@ -169,8 +167,7 @@ def edit_customlist(request):
         get_and_delete(request.session, 'custom_list_instance', None)
 
     clform = CustomListForm(instance=cl)
-    CustomWordsInlineFormSet = inlineformset_factory(CustomList, CustomWord)
-    cwformset = CustomWordsInlineFormSet(instance=cl)
+    cwformset = CustomWordsInlineFormSet(instance=cl, prefix='cw')
 
     context = { 'customlist_form' : clform, 'customwords_formset' : cwformset }
     # TODO don't want to render entire page
@@ -282,8 +279,7 @@ def save_customlist(request):
     if clform.is_valid():
         cl = clform.save(commit=False)
         cl.user = request.user
-        CustomWordsInlineFormSet = inlineformset_factory(CustomList, CustomWord)
-        cwformset = CustomWordsInlineFormSet(request.POST, instance=cl)
+        cwformset = CustomWordsInlineFormSet(request.POST, instance=cl, prefix='cw')
         if cwformset.is_valid():
             cl.save()
             cws = cwformset.save(commit=False)

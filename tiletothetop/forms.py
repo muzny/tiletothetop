@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
+from django.forms.models import inlineformset_factory
 from crispy_forms.helper import FormHelper
 from tiletothetop.models import CustomList, CustomWord
 
@@ -94,3 +95,5 @@ class CustomListForm(forms.ModelForm):
     class Meta:
         model = CustomList
         fields = { 'name' }#{ 'name', 'tags', 'is_public' }
+
+CustomWordsInlineFormSet = inlineformset_factory(CustomList, CustomWord, extra=4, max_num=4, can_delete=True)
