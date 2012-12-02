@@ -32,7 +32,7 @@ function displayForms(data) {
     if (listName) {
         $('#build-help-text').text('Editing list "' + listName + '":');
     } else {
-        $('#build-help-text').text('Build your list:');
+        $('#build-help-text').text('Building a new list:');
     }
 }
 

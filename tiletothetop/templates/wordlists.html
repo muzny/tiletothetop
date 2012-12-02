@@ -4,27 +4,31 @@
     
     {% if user.is_authenticated %}
     {% load crispy_forms_tags %}
-    <div>
+    <div class="action-group">
+        <p class="instruction-text">
+            You may use custom word lists in Tile to the Top games.
+            Once you've created a list, click the Play tab to view new game options.
+        </p>
+        {% if custom_lists %}
         <p>Create a new list or edit an existing list:</p>
         <div id="custom-edit" class="input-prepend input-append">
             <button id="new-list" type="button" class="btn btn-primary">
                 New List
             </button>
-            <select id="existing-list-name">
-                {% for list in custom_lists %}
-                <option value="{{ list.id }}">{{ list.name }}</option>
-                {% empty %}
-                <option value="">-None-</option>
-                {% endfor %}
-            </select>
-            <button id="edit-list" type="button" class="btn btn-primary">
-                Edit List
-            </button>
+                <select id="existing-list-name">
+                    {% for list in custom_lists %}
+                    <option value="{{ list.id }}">{{ list.name }}</option>
+                    {% endfor %}
+                </select>
+                <button id="edit-list" type="button" class="btn btn-primary">
+                    Edit List
+                </button>
         </div>
+        {% endif %}
     </div>
     
-    <div>
-        <p id="build-help-text">Build your list:</p>
+    <div class="action-group">
+        <p id="build-help-text">Build a new list:</p>
         <form id="custom-form" method="post">
             
             <div id="custom-form-content">
@@ -38,9 +42,9 @@
                 <table id="customwords-formset" class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Word</th>
+                            <th>Word*</th>
                             <th>Part of Speech</th>
-                            <th>Definition</th>
+                            <th>Definition*</th>
                             <th>Delete</th>
                         </tr>
                     </thead>
