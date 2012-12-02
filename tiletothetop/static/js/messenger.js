@@ -59,7 +59,8 @@ var Messenger = function() {
     // Gets random words from a list of custom words
     this.getCustomWords = function(successFn, customListID) {
         var parameters = {
-            'id' : customListID
+            'id' : customListID,
+            'num_words' : 4
         };
         $.ajax({
             url: "/custom-words/",
