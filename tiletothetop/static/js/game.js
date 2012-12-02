@@ -14,6 +14,7 @@ var TILE_SIZE = 60;
 var MAX_FONT = 36;  // max pixels for definitions
 var TIMER_PENALTY = 10;
 var TIMER_CUTOFF = 60;
+var ANSWER_CHEAT_ON = true; //pressing ` will display answers if set to true
 
 // So that we can tell if a modal is open, and pause the game when it is
 var MODAL_IDS = ["#login-modal", "#register-modal"];
@@ -720,7 +721,7 @@ var Workspace = function(words) {
 		}
 
 		// If ` is pressed, show the solutions
-		if(num == 96) {
+		if(num == 192 && ANSWER_CHEAT_ON) {
 			alert(self.getSolutions());
 		}
 	}
