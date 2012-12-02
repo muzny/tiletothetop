@@ -259,8 +259,9 @@ span.help-popover {
 #timer-display
 {
     margin-top: 15px;
-    letter-spacing: .1em;
+    letter-spacing: .3em;
     font-size: 30px;
+    font-family: monospace;
 }
 
 /* Bootstrap -related UI stuff */
