@@ -56,18 +56,28 @@ def static_words(request):
         return HttpResponse(status=400)
 
     data = []
-    idString = request.GET["id"]
-    ids = idString.split('-');
-    for curID in ids:
-        word = Word.objects.filter(id=curID)[0];
+    gameID = int(request.GET["id"])
+    game = GameHistory.objects.filter(id=gameID)[0]
+    if (game.mode == "static"):
+        return HttpResponse(status=400)
+    elif (game.mode == "custom"):
+        words = CustomWord.objects
+    else:
+        words = Word.objects
+    for curID in game.ids.split(","):
+        word = words.filter(id=curID)[0];
         if not word:
             return HttpResponse(status=400)
 
         data.append({'word': word.word,
                      'definition': word.definition,
                      'speech': word.part_of_speech})
+        
+    rtn_obj = {}
+    rtn_obj["mode"] = "static"
+    rtn_obj["words"] = data
 
-    return HttpResponse(simplejson.dumps(data), mimetype="application/json")
+    return HttpResponse(simplejson.dumps(rtn_obj), mimetype="application/json")
 
 def random_words(request):
     if not request.is_ajax() or request.method != "GET":
@@ -135,8 +145,12 @@ def random_words(request):
             data.append({'word': random_word.word,
                          'definition': random_word.definition,
                          'speech': random_word.part_of_speech})
+        
+    rtn_obj = {}
+    rtn_obj["mode"] = "random"
+    rtn_obj["words"] = data
 
-    return HttpResponse(simplejson.dumps(data), mimetype="application/json")
+    return HttpResponse(simplejson.dumps(rtn_obj), mimetype="application/json")
 
 def edit_customlist(request):
     if not request.user.is_authenticated() or not request.is_ajax() or request.method != 'GET':
@@ -177,8 +191,12 @@ def custom_words(request):
         data.append({'word': word.word,
                      'definition': word.definition,
                      'speech': word.part_of_speech})
+        
+    rtn_obj = {}
+    rtn_obj["mode"] = "custom"
+    rtn_obj["words"] = data
     
-    return HttpResponse(simplejson.dumps(data), mimetype="application/json")
+    return HttpResponse(simplejson.dumps(rtn_obj), mimetype="application/json")
 
 def get_leaderboard(request):
     if not request.is_ajax() or request.method != 'GET':
@@ -345,12 +363,31 @@ def push_game_data(request):
         return HttpResponse(status=405)
 
     new_score = int(request.POST['score'])
+    
+    wordArray = request.POST.getlist('words[]')
+    defnArray = request.POST.getlist('definitions[]')
+    ids = []
+    
     # Make a new GameHistory object
     new_game = GameHistory(
                             user = request.user,
                             score = new_score,
-                            word_difficulties = 0
+                            word_difficulties = 0,
+                            mode = request.POST['mode']
                         )
+    
+    if not request.POST['mode'] == "static":
+        if request.POST['mode'] == "custom":
+            words = CustomWord.objects
+        else:
+            words = Word.objects
+                
+        for index in range(len(wordArray)):
+            wordObject = words.filter(word=wordArray[index], definition=defnArray[index])[0]
+            ids.append(str(wordObject.id))
+            
+        new_game.ids = ",".join(ids)
+    
     # And push it to the database
     new_game.save()
 
