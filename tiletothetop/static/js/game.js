@@ -216,6 +216,7 @@ function quitGame() {
 
 // Starts a game with the same settings as the previous game.
 function restart() {
+	resetEvents();
 	showGameButtons();
 	
 	if (custom_list) {
