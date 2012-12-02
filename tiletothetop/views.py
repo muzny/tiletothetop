@@ -184,7 +184,10 @@ def custom_words(request):
     
     id =int(request.GET['id'])
     list = CustomList.objects.get(id=id)
-    words = CustomWord.objects.filter(custom_list=list).order_by('?')[:4]
+    wordSet = CustomWord.objects.filter(custom_list=list)
+    
+    num_words = min(len(wordSet), int(request.GET['num_words']))
+    words = wordSet.order_by('?')[:num_words]
     
     data = []
     for word in words:
