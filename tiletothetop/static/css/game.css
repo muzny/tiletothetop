@@ -215,6 +215,24 @@ a, a:link, a:visited {
     margin-right: 12px;
 }
 
+span.help-popover {
+    font-family: 'Cabin',Verdana,sans-serif;
+    font-size: 14px;
+    line-height: 1;
+}
+
+#game-help {
+    background-color: transparent;
+}
+
+#game-options .accordion-toggle {
+    opacity: .4;
+}
+
+#game-options .accordion-toggle[href="#dict-game"] {
+    opacity: 1;
+}
+
 #difficulty-inputs .btn {
     width: 34px;
 }
@@ -241,8 +259,9 @@ a, a:link, a:visited {
 #timer-display
 {
     margin-top: 15px;
-    letter-spacing: .1em;
+    letter-spacing: .3em;
     font-size: 30px;
+    font-family: monospace;
 }
 
 /* Bootstrap -related UI stuff */
@@ -330,7 +349,7 @@ button.close {
 }
 
 .btn-disabled {
-    pointer-events: none
+    pointer-events: none;
     cursor: default;
 }
 
@@ -365,6 +384,11 @@ button.close {
     padding: 0px 5px;
 }
 
+/* Word lists stuff */
+#custom-words .action-group {
+    margin: 1em .5em;
+}
+
 /* Leaderboard styles */
 
 #leaderboard_table {
@@ -374,8 +398,4 @@ button.close {
 
 #leaderboard_table td {
 	text-align: center;
-}
-
-#timer-display {
-    width: 130px;
 }
