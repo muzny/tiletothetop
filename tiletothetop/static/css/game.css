@@ -233,6 +233,7 @@ span.help-popover {
 
 #game-help {
     background-color: transparent;
+    margin: 0;
 }
 
 #game-options .accordion-toggle {

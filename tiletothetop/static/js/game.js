@@ -28,7 +28,6 @@ var expDifficultyStep = INCR_DIFFICULTY;
 // game settings
 var NUM_WORDS = 4;
 var MAX_WORDLEN = 10;
-var custom_list = "";
 var inStartMenu = false;
 var setupEvents = false;
 
@@ -216,14 +215,9 @@ function quitGame() {
 
 // Starts a game with the same settings as the previous game.
 function restart() {
-	resetEvents();
-	showGameButtons();
-	
-	if (custom_list) {
-		messenger.getCustomWords(initializeBoard, custom_list);
-    } else {
-		messenger.getWords(initializeBoard);
-    }
+    resetEvents();
+    showGameButtons();
+    startGame();
 }
 
 function resetEvents() {
