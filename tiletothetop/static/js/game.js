@@ -262,7 +262,7 @@ function TransitionScreen(score) {
     // go ahead an push game data
     var definitions = window.board.definitions.getDefinitions(),
 	words = window.board.workspace.getSolutions();
-    messenger.pushGameData(score, definitions, words);
+    messenger.pushGameData(score, definitions, words, window.board.mode);
 
     timer.pause();
     
@@ -305,10 +305,11 @@ var Board = function(data) {
 	score = 0;
     var definitions = new Array();
     var words = new Array();
-    $.each(data, function(index) {
-		definitions[index] = data[index]["definition"]
-		words[index] = data[index]["word"]
+    $.each(data.words, function(index) {
+		definitions[index] = data.words[index]["definition"]
+		words[index] = data.words[index]["word"]
     });
+    this.mode = data.mode;
     var defAnsArea = $("<div>").attr("id", "definitions-answers-area");
     $("#game-area").append(defAnsArea);
     this.definitions = new DefinitionArea(definitions);

@@ -65,6 +65,9 @@ class GameHistory(models.Model):
     # same as a string, just does extra validation on comma separation)
     # to use as tuple: eval(game_history_instance.word_difficulties)
     word_difficulties = models.CommaSeparatedIntegerField(max_length=256)
+    
+    ids = models.CommaSeparatedIntegerField(max_length=256, default="0,0,0,0")
+    mode = models.CharField(max_length=10, default="random")
 
     def __unicode__(self):
         return "User %d; Score %d; Word Difficulties %s" % \

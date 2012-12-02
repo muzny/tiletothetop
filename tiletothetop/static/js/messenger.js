@@ -98,7 +98,7 @@ var Messenger = function() {
 
     // Pushes game data to the server based on the score fed into the
     // function.  To be called on game completion
-    this.pushGameData = function(score, definitions, words) {
+    this.pushGameData = function(score, definitions, words, mode) {
         $.ajax({
             url: "/push-game-data/",
             type: "POST",
@@ -106,7 +106,8 @@ var Messenger = function() {
             data: {
                 "score" : score,
                 "definitions" : definitions,
-                "words" : words
+                "words" : words,
+                "mode" : mode
             },
             headers: {"X-CSRFToken" : $.cookie('csrftoken')},
             success: function(response) {
@@ -175,5 +176,26 @@ var Messenger = function() {
                     alert("getUserRank ajax error");
             }
         });
+    };
+    
+    this.postToFacebook = function(profileID, link, score, access_token) {
+        data = {
+            access_token: access_token,
+            message: "I just got a score of " + score + " on Tile To The Top!  Can you beat my score?",
+            link: link,
+            name: "Tile To The Top Game."
+        };
+        $.ajax({
+            url: "https://graph.facebook.com/" + profileID + "/feed/",
+            type: "POST",
+            dataType: "json",
+            data: data,
+            success: function() {
+                
+            },
+            error: function() {
+                
+            }
+        })
     };
 };
