@@ -4,11 +4,13 @@
     
     {% if user.is_authenticated %}
     {% load crispy_forms_tags %}
+    
+    <p class="instruction-text">
+        You may use custom word lists in Tile to the Top games.
+        Once you've created a list, click the Play tab to view new game options.
+    </p>
+    
     <div class="action-group">
-        <p class="instruction-text">
-            You may use custom word lists in Tile to the Top games.
-            Once you've created a list, click the Play tab to view new game options.
-        </p>
         {% if custom_lists %}
         <p>Create a new list or edit an existing list:</p>
         <div id="custom-edit" class="input-prepend input-append">
@@ -28,16 +30,23 @@
     </div>
     
     <div class="action-group">
-        <p id="build-help-text">Build a new list:</p>
         <form id="custom-form" method="post">
             
             <div id="custom-form-content">
                 {% block custom_form_content %}
                 {% csrf_token %}
-
+                
+                <p id="build-help-text">
+                    {% if customlist_form.instance.pk %}
+                    Editing list <em>{{ customlist_form.name.value }}</em>:
+                    {% else %}
+                    Build a new list:
+                    {% endif %}
+                </p>
                 <div id="customlist-form">
                     {% crispy customlist_form %}
                 </div>
+                
                 {{ customwords_formset.management_form }}
                 <table id="customwords-formset" class="table table-striped">
                     <thead>
@@ -45,7 +54,9 @@
                             <th>Word*</th>
                             <th>Part of Speech</th>
                             <th>Definition*</th>
+                            <!--{% if customlist_form.instance.pk %}-->
                             <th>Delete</th>
+                            <!--{% endif %}-->
                         </tr>
                     </thead>
                     <!--
@@ -55,9 +66,16 @@
                     <tbody id="list-entries">
                         {% for form in customwords_formset %}
                         <tr>
-                            {% for field in form %}
-                            <td>{{ field }}</td>
-                            {% endfor %}
+                            {{ form.id }}
+                            {{ form.custom_list }}
+                            <td>{{ form.word }}</td>
+                            <td>{{ form.part_of_speech }}</td>
+                            <td>{{ form.definition }}</td>
+                            <td class="cell-delete">
+                                {% if form.instance.pk %}
+                                {{ form.DELETE }}
+                                {% endif %}
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -73,8 +91,8 @@
             </button>
         </form>
     </div>
-
+    
     {% else %}
-    <p>Login or register to create your own word lists!</p>
+    <p class="instruction-text">Login or register to create your own word lists!</p>
     {% endif %}
 </div>

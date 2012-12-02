@@ -386,7 +386,19 @@ button.close {
 
 /* Word lists stuff */
 #custom-words .action-group {
-    margin: 1em .5em;
+    margin: 1.5em .5em 1em;
+}
+
+#new-list {
+    margin-right: 2em;
+}
+
+#customwords-formset caption {
+    caption-side: bottom;
+}
+
+#list-entries .cell-delete {
+    text-align: center;
 }
 
 /* Leaderboard styles */
