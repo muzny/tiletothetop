@@ -832,7 +832,7 @@ var Workspace = function(words) {
 				
 				// If there was a previous answer area to move to, find
 				// the first empty box in it and highlight that box.
-				if (nextAnswerArea) {
+				if (nextAnswerArea.length != 0) {
 					var emptyNext = getNextEmpty($(nextAnswerArea).attr("id"));
 					
 					// If there was no empty box in this row, just
