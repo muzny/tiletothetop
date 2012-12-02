@@ -12,11 +12,13 @@ var Messenger = function() {
     // words when they are recieved successfully.
     this.getWords = function(successFn) {
         var parameters = {
-            "word_count" : NUM_WORDS, "max_wordlen" : MAX_WORDLEN,
-            "tag_filter" : tag_filter, "custom_list" : custom_list
+            "word_count" : NUM_WORDS, "max_wordlen" : MAX_WORDLEN
         };
-        if (!isNaN(difficulty) || difficulty == null) {
+        if (difficulty != null) {
             parameters["difficulty"] = difficulty;
+        }
+        if (tag_filter != null) {
+            parameters["tag_filter"] = tag_filter;
         }
 
         $.ajax({

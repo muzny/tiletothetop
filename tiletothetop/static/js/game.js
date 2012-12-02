@@ -27,8 +27,8 @@ var expDifficultyStep = INCR_DIFFICULTY;
 // game settings
 var NUM_WORDS = 4;
 var MAX_WORDLEN = 10;
-var difficulty = 0;
-var tag_filter = 0;
+var difficulty = null;
+var tag_filter = null;
 var custom_list = "";
 var inStartMenu = false;
 var setupEvents = false;
@@ -67,7 +67,16 @@ function initializeMenuButtons() {
         showGameElements();
     });
     */
-    
+
+    $('#game-help').popover();
+
+    $('#game-options .accordion-body').on('shown', function() {
+        $(this).siblings('.accordion-heading').children('.accordion-toggle').css({'opacity':'1'})
+    });
+    $('#game-options .accordion-body').on('hidden', function() {
+        $(this).siblings('.accordion-heading').children('.accordion-toggle').css({'opacity':'.4'})
+    });
+
     initializeDifficultyButtons();
     
     $('#start-button').click(startGame);
@@ -168,18 +177,22 @@ function startGame() {
     // initialize game elements with user settings
     // need to start timer, score tracking logic, etc
 
-    difficulty = parseInt($('#setting-difficulty').val());
-
-    tag_filter = parseInt($('#setting-tag').val());
-    if (isNaN(tag_filter)) {
-        tag_filter = 0;
-    }
+    var selectedGroup = $('#game-options .accordion-body.in');
     
-    custom_list = $('#setting-custom').val();
-    if (custom_list) {
-	messenger.getCustomWords(initializeBoard, custom_list);
-    } else {
-	messenger.getWords(initializeBoard);
+    if (selectedGroup.size() == 0) {
+        // don't use any extra parameters
+        difficulty = tag_filter = null;
+        messenger.getWords(initializeBoard);
+    } else if (selectedGroup[0].id == 'dict-game') {
+        difficulty = parseInt($('#setting-difficulty').val());
+        tag_filter = parseInt($('#setting-tag').val());
+        if (isNaN(tag_filter)) {
+            tag_filter = null;
+        }
+        messenger.getWords(initializeBoard);
+    } else { // (selectedGroup[0].id == 'dict-custom')
+        custom_list = $('#setting-custom').val();
+        messenger.getCustomWords(initializeBoard, custom_list);
     }
     returnToGame();
 }
