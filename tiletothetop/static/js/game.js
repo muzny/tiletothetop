@@ -31,6 +31,8 @@ var MAX_WORDLEN = 10;
 var inStartMenu = false;
 var setupEvents = false;
 
+var gameIsStarted = false;
+
 $(window).load(function() {
     // because IE tries to cache all the things
     $.ajaxSetup({cache:false});
@@ -176,6 +178,11 @@ function startGame() {
     // initialize game elements with user settings
     // need to start timer, score tracking logic, etc
 
+	if(gameIsStarted) {
+		resetEvents();
+	}
+	gameIsStarted = true;
+	
     var selectedGroup = $('#game-options .accordion-body.in');
     
     if (selectedGroup.size() == 0) {
@@ -197,6 +204,13 @@ function startGame() {
 // Show transition screen and reveal solution
 function quitGame() {
     // TODO
+}
+
+function resetEvents() {
+	$(document).off('keydown');
+	$(document).off('shown');
+	$(document).off('hidden');
+	$('#restart').off('click');
 }
 
 /** End Menu / Navigation stuff */
@@ -277,19 +291,19 @@ function TransitionScreen(score) {
     $('#game-area').css({'height':'611px'});
     $('#play').css({'padding':'0px'});
 
-    $('#restart').click(function () {
+    $('#restart').on('click', function () {
         transitionScreen.css({'display':'hidden', 'z-index':'-1'});
-	$('#game-area').css({'height':'auto'}); // make height of parent auto again
-	$('#play').css({'padding':'0px 5px'});
-	//messenger.getWords(initializeBoard);
-    startGame();
-        showGameElements(); // animated display of definitions / tiles
-	
-	var button = $('#share');
-	button.click(generateShareUrl);
-	button.removeAttr("disabled");
-	button.removeClass("btn-disabled");
-	button.html("<h2>Share</h2>");
+		$('#game-area').css({'height':'auto'}); // make height of parent auto again
+		$('#play').css({'padding':'0px 5px'});
+		//messenger.getWords(initializeBoard);
+		startGame();
+			showGameElements(); // animated display of definitions / tiles
+		
+		var button = $('#share');
+		button.click(generateShareUrl);
+		button.removeAttr("disabled");
+		button.removeClass("btn-disabled");
+		button.html("<h2>Share</h2>");
     });
     
 
@@ -738,9 +752,7 @@ var Workspace = function(words) {
 
     // Handle arrow keys being pressed. Note that arrow keys
     // are only triggered using 'keydown', not 'keypress'.
-    if (!setupEvents) { // Check to see if we've already played a game first.
-	setupEvents = true;
-	$(document).keydown(function(e) {
+	$(document).on('keydown', function(e) {
 		// In firefox, e.which gets set instead of e.keypress
 		var num = e.keyCode;
 		if (num == 0) {
@@ -822,7 +834,6 @@ var Workspace = function(words) {
 		    }
 		}
 	});
-    }
     
     //Helper for solutions
     this.getSolutions = function() {
