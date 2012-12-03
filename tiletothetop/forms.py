@@ -8,7 +8,7 @@ class RegistrationForm(forms.Form):
     # all fields are required, but some are checked manually below, to avoid
     # redundant error messages in some situations
     username = forms.CharField(max_length=30, label="Username")
-    email = forms.EmailField(max_length=30, label="Email", required=True)
+    email = forms.EmailField(max_length=75, label="Email", required=True)
     password1 = forms.CharField(widget=forms.PasswordInput(render_value=False), label="Password")
     password2 = forms.CharField(widget=forms.PasswordInput(render_value=False), label="Confirm Password")
 
@@ -86,12 +86,12 @@ class LoginForm(forms.Form):
         return password
 
 class CustomListForm(forms.ModelForm):
-    
+
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
         self.helper.form_tag = False
         super(CustomListForm, self).__init__(*args, **kwargs)
-    
+
     class Meta:
         model = CustomList
         fields = { 'name' }#{ 'name', 'tags', 'is_public' }
