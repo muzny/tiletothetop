@@ -8,6 +8,7 @@ var board = null;
 var messenger = null;
 var timer = null;
 var score = 0;
+var gameOver = false;
 var numberHintsUsed = 0;
 var HINT_PENALTY = 100;
 var TILE_SIZE = 60;
@@ -183,6 +184,9 @@ function startGame() {
 	}
 	gameIsStarted = true;
 	
+	gameOver = false;
+	$("#drag-blocker").css({'display':'hidden', 'z-index':'-1'});
+	
     var selectedGroup = $('#game-options .accordion-body.in');
     
     if (selectedGroup.size() == 0) {
@@ -221,7 +225,6 @@ function quitGame() {
 // Starts a game with the same settings as the previous game.
 function restart() {
     resetEvents();
-    showGameButtons();
     startGame();
 }
 
@@ -335,14 +338,16 @@ function TransitionScreen(won, score) {
 	}
 
     timer.pause();
-    
+	
+	gameOver = true;
+	$('#drag-blocker').css({'display':'visible', 'z-index':'100'});
+	
 	// add the message and score to the transition screen
-    var transitionScreen = $('#transition-screen');
 	$('#transition-message').text(won ? "Congratulations, you won!" : "Game over");
 	$('#score-final').text(score);
 
     // show the transition screen, and load words in the background
-    transitionScreen.css({'display':'visible', 'z-index':'100'});
+    $('#transition-screen').css({'display':'visible', 'z-index':'100'});
     // if we call this immediately, it likely won't get the updated user data
     setTimeout(messenger.getUserData, 2000);
     // manually set height of transition screen's parent
