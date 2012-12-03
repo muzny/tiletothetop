@@ -360,12 +360,15 @@ button.close {
 }
 
 .btn-disabled {
-    pointer-events: none;
     cursor: default;
 }
 
+.btn-disabled:hover {
+    background-color: #AD1D28;
+}
+
 .btn-disabled:active {
-    background-color: #971923;
+    background-color: #AD1D28;
 }
 
 /* game height styles */

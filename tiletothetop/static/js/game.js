@@ -246,6 +246,10 @@ function showGameButtons() {
 	$("#share").removeClass("shown-button");
 	$("#share").addClass("hidden-button");
 	$("#share").html("Share");
+	
+	$('#linkArea').removeClass("shown-button");
+	$('#linkArea').addClass("hidden-button");
+	
 }
 
 function showGameOverButtons() {
@@ -579,10 +583,14 @@ function scoreFunc(word) {
 function generateShareUrl() {
     var url = window.location.origin + "/?id=" + window.__lastGame,
 	button = $('#share');
+	linkArea = $('#linkArea');
     
-    button.attr("disabled", "disabled");
-    button.addClass("btn-disabled");
-    button.text(url);
+    button.addClass("hidden-button");
+    button.removeClass("shown-button");
+    
+    linkArea.addClass("shown-button");
+    linkArea.removeClass("hidden-button");
+    linkArea.text(url);
 }
 
 // Credit: http://sedition.com/perl/javascript-fy.html
