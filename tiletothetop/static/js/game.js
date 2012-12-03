@@ -8,7 +8,6 @@ var board = null;
 var messenger = null;
 var timer = null;
 var score = 0;
-var gameOver = false;
 var numberHintsUsed = 0;
 var HINT_PENALTY = 100;
 var TILE_SIZE = 60;
@@ -184,7 +183,7 @@ function startGame() {
 	}
 	gameIsStarted = true;
 	
-	gameOver = false;
+	// Hide the drag blocker
 	$("#drag-blocker").css({'display':'hidden', 'z-index':'-1'});
 	
     var selectedGroup = $('#game-options .accordion-body.in');
@@ -339,8 +338,17 @@ function TransitionScreen(won, score) {
 
     timer.pause();
 	
-	gameOver = true;
+	// Show the drag blocker
 	$('#drag-blocker').css({'display':'visible', 'z-index':'100'});
+	
+	// remove click/keyboard events
+	resetEvents();
+	
+	// Make it so no spaces are highlighted.
+	var prevClicked = $(".clicked");
+	$.each(prevClicked, function(index) {
+		prevClicked.toggleClass("clicked");
+	});
 	
 	// add the message and score to the transition screen
 	$('#transition-message').text(won ? "Congratulations, you won!" : "Game over");
