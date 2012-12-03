@@ -1,3 +1,5 @@
+// This is the code for the transtion screen object.
+
 /* Creates a modal popup that displays the given score and
  * allows the user to restart the game.
  */

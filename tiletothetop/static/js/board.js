@@ -1,3 +1,6 @@
+// The Board class holds the pieces of the game - the DefinitionArea,
+// the Workspace, and the TileArea.
+
 var Board = function(data) {
 	//reset score
 	score = 0;

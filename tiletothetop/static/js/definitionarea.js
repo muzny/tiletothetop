@@ -1,4 +1,7 @@
-// This is where the definitions of the word go.
+// This file contains the code for the definition area, which is the
+// place where the definitions are displayed to the user. This is also
+// the place where the hint buttons are located.
+
 var DefinitionArea = function(definitions) {
     this.getDefinitions = function() {
 	return definitions;

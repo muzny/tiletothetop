@@ -1,3 +1,7 @@
+// This file contains the code that corresponds to game navigation.
+// This means that most of the button functionality like "start game",
+// "return to game", and "quit game" is contained here.
+
 /** Begin Menu / Navigation stuff */
 
 // Start menu and game menu button event handlers, etc.
@@ -97,25 +101,6 @@ function returnToStart() {
     $('#start-menu').show();
     $('#play.carousel').carousel('prev');
     inStartMenu = true;
-}
-
-function createStaticGameIfApplicable() {
-    var getUrlVars = function() {
-        var vars = [], hash;
-        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-        for(var i = 0; i < hashes.length; i++)
-        {
-            hash = hashes[i].split('=');
-            vars.push(hash[0]);
-            vars[hash[0]] = hash[1];
-        }
-        return vars;
-    }
-    var params = getUrlVars();
-    if (params.id) {
-        var words = messenger.getStaticWords(initializeBoard, params.id);
-        returnToGame();
-    }
 }
 
 function startGame() {

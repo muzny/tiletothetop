@@ -1,3 +1,6 @@
+// This file contains the code for the Timer object that is used
+// to measure (time!) how long a user takes to play a game.
+
 // Timer used when game is running. Can be paused and resumed.
 var Timer = function() {
     var timerId, delay = 1000, start;

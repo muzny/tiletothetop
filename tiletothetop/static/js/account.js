@@ -1,3 +1,6 @@
+// This file contains the code for retrieving and inserting user
+// account data into the game.
+
 /* Gets the account data for the currently logged in user
  * clicking this button while not logged in is not currently
  * handled well

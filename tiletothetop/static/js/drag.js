@@ -1,3 +1,6 @@
+// This file contains all the functions that handle the drag and drop
+// functionality.
+
 //Function for IE9
 function handleDragMouseMove(e) {
     var target = e.target;
@@ -8,7 +11,8 @@ function handleDragMouseMove(e) {
 
 //Called every time the tile is dragged
 function dragTile(ev) {
-    //Saves the id of the currently dragged tile inside the dataTransfer so we can get it later in the dropTile(ev)
+    // Saves the id of the currently dragged tile inside the 
+    // dataTransfer so we can get it later in the dropTile(ev)
     ev.dataTransfer.setData("Text", ev.currentTarget.id);
 }
 
