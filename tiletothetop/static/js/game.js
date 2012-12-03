@@ -183,6 +183,9 @@ function startGame() {
 	}
 	gameIsStarted = true;
 	
+	// Hide the drag blocker
+	$("#drag-blocker").css({'display':'hidden', 'z-index':'-1'});
+	
     var selectedGroup = $('#game-options .accordion-body.in');
     
     if (selectedGroup.size() == 0) {
@@ -221,7 +224,6 @@ function quitGame() {
 // Starts a game with the same settings as the previous game.
 function restart() {
     resetEvents();
-    showGameButtons();
     startGame();
 }
 
@@ -335,14 +337,25 @@ function TransitionScreen(won, score) {
 	}
 
     timer.pause();
-    
+	
+	// Show the drag blocker
+	$('#drag-blocker').css({'display':'visible', 'z-index':'100'});
+	
+	// remove click/keyboard events
+	resetEvents();
+	
+	// Make it so no spaces are highlighted.
+	var prevClicked = $(".clicked");
+	$.each(prevClicked, function(index) {
+		prevClicked.toggleClass("clicked");
+	});
+	
 	// add the message and score to the transition screen
-    var transitionScreen = $('#transition-screen');
 	$('#transition-message').text(won ? "Congratulations, you won!" : "Game over");
 	$('#score-final').text(score);
 
     // show the transition screen, and load words in the background
-    transitionScreen.css({'display':'visible', 'z-index':'100'});
+    $('#transition-screen').css({'display':'visible', 'z-index':'100'});
     // if we call this immediately, it likely won't get the updated user data
     setTimeout(messenger.getUserData, 2000);
     // manually set height of transition screen's parent
