@@ -371,6 +371,19 @@ button.close {
     background-color: #AD1D28;
 }
 
+.fake-button {
+    margin-left: 12px;
+    padding-top: 14px;
+    padding-bottom: 13px;
+}
+
+.fake-button::selection {
+	background: #ffb7b7; /* Webkit */
+	}
+.fake-button::-moz-selection {
+	background: #ffb7b7; /* Firefox */
+}
+
 /* game height styles */
 /* TODO: please move me to proper locaion */
 
