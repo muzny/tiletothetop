@@ -2,7 +2,7 @@ function sendFacebookPost() {
 
     var message = $('#id_message').val(),
         link = $('#id_link').val(),
-        score = $('#score-final'),
+        score = $('#score-final').text(),
         message_parsed = message.replace("{score}", score);
         
     
