@@ -1,0 +1,15 @@
+<div id="facebook-form-container" class="mask hide">
+    <div class="form-center">
+        <form id="facebook-form" method="post">
+            {% csrf_token %}
+            <p id="link-to-game">
+                <input id="id_link" type="hidden" name="link" maxlength="100" />
+            </p>
+            <p>
+                <label for="id_message">Message:</label>
+                <input type="textarea" name="message" id="id_message" />
+            </p>
+            <button class="btn btn-primary" id="facebook-submit" type="button">Submit</button>
+        </form>
+    </div>
+</div>

@@ -214,5 +214,7 @@ function transitionClick() {
 }
 
 function postToFacebook() {
-    messenger.postToFacebook($('#linkArea').text(), $('#score-final').text());
+    $('#facebook-form-container').removeClass("hide");
+    $('#id_link').val($('#linkArea').text());
+    $('#id_message').val("I just got a score of {score} on Tile To The Top!  Can you beat my score?");
 }

@@ -6,6 +6,9 @@
 {% endblock %}
 
 {% block content %}
+    
+    {% include "facebook.html" %}
+    
     <div class="navbar navbar-fixed-top">
         <div id="logo">
             <img src={% static "t4logo_v0.25_50.png" %} />  
@@ -108,4 +111,5 @@
     <script src="{% static "js/utilities.js" %}"></script>
     <script src="{% static "js/wordlists.js" %}"></script>
     <script src="{% static "js/workspace.js" %}"></script>
+    <script src="{% static "js/facebook.js" %}"></script>
 {% endblock %}

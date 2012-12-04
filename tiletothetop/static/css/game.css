@@ -405,6 +405,27 @@ button.close {
     margin-left: 280px;
 }
 
+.mask {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    z-index: 9999;
+    background-color: rgba(0, 0, 0, .5)
+}
+
+.form-center {
+    margin: 250px auto;
+    width: 255px;
+}
+
+#facebook-form {
+    border: solid 3px black;
+    background-color: #ffb7b7;
+    padding: 10px;
+}
+
 #logo {
     float: left;
     margin-left: 10px;

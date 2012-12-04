@@ -179,9 +179,9 @@ var Messenger = function() {
         });
     };
     
-    this.postToFacebook = function(link, score) {
+    this.postToFacebook = function(link, msg) {
         data = {
-            message: "I just got a score of " + score + " on Tile To The Top!  Can you beat my score?",
+            message: msg,
             link: link
         };
         $.ajax({
