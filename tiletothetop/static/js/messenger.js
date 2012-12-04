@@ -179,20 +179,24 @@ var Messenger = function() {
         });
     };
     
-    this.postToFacebook = function(profileID, link, score, access_token) {
+    this.postToFacebook = function(link, score) {
         data = {
-            access_token: access_token,
             message: "I just got a score of " + score + " on Tile To The Top!  Can you beat my score?",
-            link: link,
-            name: "Tile To The Top Game."
+            link: link
         };
         $.ajax({
-            url: "https://graph.facebook.com/" + profileID + "/feed/",
+            url: "/post-to-facebook/",
             type: "POST",
             dataType: "json",
             data: data,
-            success: function() {
-                
+            headers: {"X-CSRFToken" : $.cookie('csrftoken')},
+            success: function(data) {
+                $.ajax({
+                    url: "https://graph.facebook.com/" + data.user_id + "/feed",
+                    type: "POST",
+                    dataType: "json",
+                    data: data
+                })
             },
             error: function() {
                 

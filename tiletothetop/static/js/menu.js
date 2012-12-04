@@ -37,6 +37,7 @@ function initializeMenuButtons() {
     $('#restart').click(restart);
     $('#share').click(generateShareUrl);
     $('#transition-screen').click(transitionClick);
+    $('#post-to-facebook').click(postToFacebook)
     $('#game-area').tooltip({
         selector: '[rel="tooltip"]'
     });
@@ -186,6 +187,9 @@ function showGameButtons() {
     $('#linkArea').removeClass("shown-button");
     $('#linkArea').addClass("hidden-button");
     
+    $('#post-to-facebook').removeClass("shown-button");
+    $('#post-to-facebook').addClass("hidden-button");
+    
 }
 
 function showGameOverButtons() {
@@ -207,4 +211,8 @@ function showGameOverButtons() {
 function transitionClick() {
     // Transition screen was clicked, so hide it.
     $("#transition-screen").css({'display':'hidden', 'z-index':'-1'});
+}
+
+function postToFacebook() {
+    messenger.postToFacebook($('#linkArea').text(), $('#score-final').text());
 }

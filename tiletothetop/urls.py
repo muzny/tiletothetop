@@ -26,6 +26,9 @@ urlpatterns = patterns('tiletothetop.views',
 
     url(r'^get-leaderboard/$', 'get_leaderboard', name='get_leaderboard'),
     url(r'^get-user-rank/$', 'get_user_rank', name='get_user_rank'),
+    
+    # facebook integration
+    url(r'^post-to-facebook/$', 'post_to_facebook', name='post_to_facebook'),
 )
 
 

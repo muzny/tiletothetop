@@ -176,6 +176,7 @@ function generateShareUrl() {
 
     button = $('#share');
     linkArea = $('#linkArea');
+    facebook = $('#post-to-facebook');
     
     button.addClass("hidden-button");
     button.removeClass("shown-button");
@@ -183,6 +184,9 @@ function generateShareUrl() {
     linkArea.addClass("shown-button");
     linkArea.removeClass("hidden-button");
     linkArea.text(url);
+    
+    facebook.addClass("shown-button");
+    facebook.removeClass("hidden-button");
 }
 
 // Create a static game from a word list id.

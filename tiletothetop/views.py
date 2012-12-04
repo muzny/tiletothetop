@@ -13,6 +13,8 @@ from django.db.models import Max, Min
 from tiletothetop.models import Word, Tag, CustomList, CustomWord, UserProfile, GameHistory
 from tiletothetop.forms import RegistrationForm, LoginForm, CustomListForm, CustomWordsInlineFormSet
 
+from social_auth.models import UserSocialAuth
+
 
 def game(request):
     """Renders the main page, with optional bound forms and errors, if they exist. Otherwise
@@ -424,6 +426,20 @@ def get_user_data(request):
         })
 
     return HttpResponse(simplejson.dumps(userData), mimetype="application/json")
+
+
+def post_to_facebook(request):
+    
+    instance = UserSocialAuth.objects.filter(provider='facebook')[0]
+    
+    data = {}
+    data['message'] = request.POST['message']
+    data['link'] = request.POST['link']
+    data['access_token'] = instance.tokens['access_token']
+    data['name'] = "Tile To The Top"
+    data['user_id'] = request.user.username
+    
+    return HttpResponse(simplejson.dumps(data), mimetype="application/json")
 
 
 ##############################################################
