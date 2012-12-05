@@ -442,7 +442,7 @@ def post_to_facebook(request):
     data['name'] = "Tile To The Top"
     
     headers = {
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
     }
     
     jsondata = urllib.urlencode(data)
@@ -455,6 +455,8 @@ def post_to_facebook(request):
         status = 200
     except urllib2.URLError, e:
         status = e.code
+        print e.code
+        print e.read()
     
     return HttpResponse(status=status)
 

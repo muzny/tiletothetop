@@ -1,6 +1,6 @@
 <div id="facebook-form-container" class="mask hide">
     <div class="form-center">
-        <form id="facebook-form" method="post">
+        <div id="facebook-form">
             {% csrf_token %}
             <p id="link-to-game">
                 <input id="id_link" type="hidden" name="link" maxlength="100" />
@@ -11,6 +11,6 @@
             </p>
             <button class="btn btn-primary" id="facebook-submit" type="button">Submit</button>
             <button class="btn btn-primary" id="facebook-cancel" type="button">Cancel</button>
-        </form>
+        </div>
     </div>
 </div>
