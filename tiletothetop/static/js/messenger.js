@@ -189,12 +189,7 @@ var Messenger = function() {
             data: data,
             headers: {"X-CSRFToken" : $.cookie('csrftoken')},
             success: function(data) {
-                $.ajax({
-                    url: "https://graph.facebook.com/" + data.user_id + "/feed",
-                    type: "POST",
-                    dataType: "json",
-                    data: data
-                })
+                
             },
             error: function() {
                 

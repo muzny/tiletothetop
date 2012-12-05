@@ -1,4 +1,5 @@
 from random import randrange
+import urllib, urllib2
 
 from django.shortcuts import render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
@@ -430,16 +431,32 @@ def get_user_data(request):
 
 def post_to_facebook(request):
     
-    instance = UserSocialAuth.objects.filter(provider='facebook')[0]
+    instance = UserSocialAuth.objects.filter(provider='facebook', user=request.user)[0]
     
     data = {}
     data['message'] = request.POST['message']
+    # switch lines to enable dev testing
     data['link'] = request.POST['link']
+    #data['link'] = 'http://tiletothetop.herokuapp.com/'
     data['access_token'] = instance.tokens['access_token']
     data['name'] = "Tile To The Top"
-    data['user_id'] = request.user.username
     
-    return HttpResponse(simplejson.dumps(data), mimetype="application/json")
+    headers = {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+    
+    jsondata = urllib.urlencode(data)
+    url = urllib2.Request("https://graph.facebook.com/" + request.user.username + "/feed/", jsondata, headers)
+    status = 400
+    
+    try:
+        urllib2.urlopen(url)
+        data['success'] = True
+        status = 200
+    except urllib2.URLError, e:
+        status = e.code
+    
+    return HttpResponse(status=status)
 
 
 ##############################################################
