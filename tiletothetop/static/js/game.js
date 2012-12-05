@@ -174,8 +174,6 @@ function scoreFunc(word) {
 
 // Generate the url needed to share a game with a friend.
 function generateShareUrl() {
-    var url = window.location.origin + "/?id=" + window.__lastGame;
-
     button = $('#share');
     linkArea = $('#linkArea');
     facebook = $('#post-to-facebook');
@@ -185,7 +183,6 @@ function generateShareUrl() {
     
     linkArea.addClass("shown-button");
     linkArea.removeClass("hidden-button");
-    linkArea.text(url);
     
     facebook.addClass("shown-button");
     facebook.removeClass("hidden-button");

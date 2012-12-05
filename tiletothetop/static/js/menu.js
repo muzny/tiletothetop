@@ -203,9 +203,6 @@ function showGameOverButtons() {
     
     $("#restart").removeClass("hidden-button");
     $("#restart").addClass("shown-button");
-    
-    $("#share").removeClass("hidden-button");
-    $("#share").addClass("shown-button");
 }
 
 function transitionClick() {

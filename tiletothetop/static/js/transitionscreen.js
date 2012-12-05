@@ -8,7 +8,7 @@ function TransitionScreen(won, score) {
     if (won) {
 	var definitions = window.board.definitions.getDefinitions(),
 	words = window.board.workspace.getSolutions();
-	messenger.pushGameData(score, definitions, words, window.board.mode);
+	messenger.pushGameData(score, definitions, words, window.board.mode, processPushedGame);
     }
 
     timer.pause();
@@ -38,4 +38,15 @@ function TransitionScreen(won, score) {
     $('#play').css({'padding':'0px'});
 
     showGameOverButtons();
+    
+}
+
+function processPushedGame(response) {
+    if (response) {
+	$('#share').removeClass('hidden-button');
+	$('#share').addClass('shown-button');
+    
+        var url = window.location.origin + "/?id=" + response.id;
+	$('#linkArea').text(url);
+    }
 }
