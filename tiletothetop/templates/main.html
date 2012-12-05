@@ -3,7 +3,7 @@
     <h3>
         Game Options
         <span class="help-popover">
-            <button id="game-help" class="btn btn-link" type="button" data-title="Getting Started"
+            <button id="game-help" class="btn btn-link" type="button" data-trigger="hover" data-title="Getting Started"
                     data-content="Select a dictionary to use by expanding a group below (Built-in or Custom, if you have created a list).
                     If no group is expanded, a new game will use the game's built-in dictionary with no additional settings.">
                     ?
@@ -70,7 +70,6 @@
                                     Use Custom List:
                                 </label>
                                 <select id="setting-custom" class="controls">
-                                    <!--<option value="">-None-</option>-->
                                     {% for list in custom_lists %}
                                     <option value="{{ list.id }}">{{ list.name }}</option>
                                     {% endfor %}
@@ -101,7 +100,7 @@
 <div id="game-area" class="item">
     <div id="game-menu">
         <button class="btn btn-primary hidden-button" id="new-game" type="button"
-                rel="tooltip" data-title="Start a new game" data-placement="left">
+                rel="tooltip" data-title="Revise game options" data-placement="left">
             Return to Start Menu
         </button>
         <button class="btn btn-primary" id="quit-game" type="button"

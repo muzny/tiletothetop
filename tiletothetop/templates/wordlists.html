@@ -54,14 +54,9 @@
                             <th>Word*</th>
                             <th>Part of Speech</th>
                             <th>Definition*</th>
-                            <!--{% if customlist_form.instance.pk %}-->
                             <th>Delete</th>
-                            <!--{% endif %}-->
                         </tr>
                     </thead>
-                    <!--
-                    {% crispy customwords_formset %}
-                    -->
                     
                     <tbody id="list-entries">
                         {% for form in customwords_formset %}
@@ -71,11 +66,7 @@
                             <td>{{ form.word }}</td>
                             <td>{{ form.part_of_speech }}</td>
                             <td>{{ form.definition }}</td>
-                            <td class="cell-delete">
-                                {% if form.instance.pk %}
-                                {{ form.DELETE }}
-                                {% endif %}
-                            </td>
+                            <td class="cell-delete">{{ form.DELETE }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
