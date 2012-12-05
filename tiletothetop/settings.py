@@ -193,4 +193,6 @@ except ImportError:
 if os.environ.has_key('LIVE_SITE'):
     FACEBOOK_APP_ID = os.environ['FB_APP_ID']
     FACEBOOK_API_SECRET = os.environ['FB_API_SECRET']
+    
+FACEBOOK_EXTENDED_PERMISSIONS = ['publish_actions']
 

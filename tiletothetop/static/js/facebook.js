@@ -10,3 +10,9 @@ function sendFacebookPost() {
     messenger.postToFacebook(link, message_parsed);
 
 }
+
+function removeFacebookModal() {
+    
+    $('#facebook-form-container').addClass("hide");
+    
+}
