@@ -457,6 +457,10 @@ button.close {
     text-align: center;
 }
 
+#list-entries .dynamic-form td input {
+    border: 2px solid white;
+}
+
 /* Leaderboard styles */
 
 #leaderboard_table {

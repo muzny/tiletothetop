@@ -46,7 +46,16 @@
                 <div id="customlist-form">
                     {% crispy customlist_form %}
                 </div>
-                
+
+                <p id="character-instructions">
+		  Words may contain the letters a-z (lowercase or capital),
+		  spaces, and digit (0-9) characters. Words (including spaces) must
+		  be 10 letters or shorter.
+		</p>
+		<p id="number-instructions">
+		  You must have at least 4 words in a custom word list.
+		  A definition is required for each word in your word list.
+		</p>
                 {{ customwords_formset.management_form }}
                 <table id="customwords-formset" class="table table-striped">
                     <thead>
