@@ -130,6 +130,7 @@ INSTALLED_APPS = (
     'south',
     'social_auth',
     'crispy_forms',
+    'password_reset',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
@@ -193,6 +194,13 @@ except ImportError:
 if os.environ.has_key('LIVE_SITE'):
     FACEBOOK_APP_ID = os.environ['FB_APP_ID']
     FACEBOOK_API_SECRET = os.environ['FB_API_SECRET']
-    
+    EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+
 FACEBOOK_EXTENDED_PERMISSIONS = ['publish_actions']
 
+# password reset stuff
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'tiletothetop@gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"

@@ -1,0 +1,9 @@
+.recover {
+    width: 400px;
+    margin: auto;
+    margin-top: 2em;
+}
+
+.recover p {
+    font-size: 130%;
+}

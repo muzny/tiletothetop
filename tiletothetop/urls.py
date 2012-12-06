@@ -10,6 +10,7 @@ urlpatterns = patterns('tiletothetop.views',
     url(r'^register/$', 'register', name='register'),
     url(r'^login/$', 'login', name='login'),
     url(r'^logout/$', 'logout', name='logout'),
+    url(r'^recover/$', 'recover', name='password_reset_recover'),
 
     # these two route ajax calls to the appropriate views (word services)
     url(r'^random-words/$', 'random_words', name='random_words'),
@@ -26,11 +27,14 @@ urlpatterns = patterns('tiletothetop.views',
 
     url(r'^get-leaderboard/$', 'get_leaderboard', name='get_leaderboard'),
     url(r'^get-user-rank/$', 'get_user_rank', name='get_user_rank'),
-    
+
     # facebook integration
     url(r'^post-to-facebook/$', 'post_to_facebook', name='post_to_facebook'),
 )
 
+urlpatterns += patterns('',
+    url(r'^', include('password_reset.urls')),
+)
 
 if not settings.DEBUG: # not ideal - just a quick fix to get deployment working
     urlpatterns += patterns('',

@@ -8,13 +8,13 @@ from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.contrib.auth import logout as auth_logout, login as auth_login, authenticate
 from django.contrib.auth.models import User
-from django.core.context_processors import csrf
 from django.db.models import Max, Min
 
 from tiletothetop.models import Word, Tag, CustomList, CustomWord, UserProfile, GameHistory
 from tiletothetop.forms import RegistrationForm, LoginForm, CustomListForm, CustomWordsInlineFormSet
 
 from social_auth.models import UserSocialAuth
+from password_reset.views import Recover
 
 
 def game(request):
@@ -30,12 +30,12 @@ def game(request):
     cl = CustomList()
     clform = CustomListForm(instance=cl)
     cwformset = CustomWordsInlineFormSet(instance=cl, prefix='cw')
-    
+
     # available lists to edit / use in game
     lists = []
     if (request.user.is_authenticated()):
         lists = CustomList.objects.filter(user=request.user)
-    
+
     # tags that have at least one word associated with them
     tags = Tag.objects.raw('''select * from tiletothetop_tag t
                               where exists
@@ -73,7 +73,7 @@ def static_words(request):
         data.append({'word': word.word,
                      'definition': word.definition,
                      'speech': word.part_of_speech})
-        
+
     rtn_obj = {}
     rtn_obj["mode"] = "static"
     rtn_obj["words"] = data
@@ -144,7 +144,7 @@ def random_words(request):
             data.append({'word': random_word.word,
                          'definition': random_word.definition,
                          'speech': random_word.part_of_speech})
-        
+
     rtn_obj = {}
     rtn_obj["mode"] = "random"
     rtn_obj["words"] = data
@@ -179,24 +179,24 @@ def edit_customlist(request):
 def custom_words(request):
     if not request.user.is_authenticated() or not request.is_ajax() or request.method != 'GET':
         return HttpResponse(status=400)
-    
+
     id =int(request.GET['id'])
     list = CustomList.objects.get(id=id)
     wordSet = CustomWord.objects.filter(custom_list=list)
-    
+
     num_words = min(len(wordSet), int(request.GET['num_words']))
     words = wordSet.order_by('?')[:num_words]
-    
+
     data = []
     for word in words:
         data.append({'word': word.word,
                      'definition': word.definition,
                      'speech': word.part_of_speech})
-        
+
     rtn_obj = {}
     rtn_obj["mode"] = "custom"
     rtn_obj["words"] = data
-    
+
     return HttpResponse(simplejson.dumps(rtn_obj), mimetype="application/json")
 
 def get_leaderboard(request):
@@ -350,6 +350,9 @@ def register(request):
 
     return HttpResponseRedirect(reverse('game'))
 
+class RecoverView(Recover):
+    search_fields = ['username']
+recover = RecoverView.as_view()
 
 ##############################################################
 # User Data Views                                            #
@@ -363,11 +366,11 @@ def push_game_data(request):
         return HttpResponse(status=405)
 
     new_score = int(request.POST['score'])
-    
+
     wordArray = request.POST.getlist('words[]')
     defnArray = request.POST.getlist('definitions[]')
     ids = []
-    
+
     # Make a new GameHistory object
     new_game = GameHistory(
                             user = request.user,
@@ -375,19 +378,19 @@ def push_game_data(request):
                             word_difficulties = 0,
                             mode = request.POST['mode']
                         )
-    
+
     if not request.POST['mode'] == "static":
         if request.POST['mode'] == "custom":
             words = CustomWord.objects
         else:
             words = Word.objects
-                
+
         for index in range(len(wordArray)):
             wordObject = words.filter(word=wordArray[index], definition=defnArray[index])[0]
             ids.append(str(wordObject.id))
-            
+
         new_game.ids = ",".join(ids)
-    
+
     # And push it to the database
     new_game.save()
 
@@ -428,9 +431,9 @@ def get_user_data(request):
 
 
 def post_to_facebook(request):
-    
+
     instance = UserSocialAuth.objects.filter(provider='facebook', user=request.user)[0]
-    
+
     data = {}
     data['message'] = request.POST['message']
     # switch lines to enable dev testing
@@ -438,15 +441,15 @@ def post_to_facebook(request):
     #data['link'] = 'http://tiletothetop.herokuapp.com/'
     data['access_token'] = instance.tokens['access_token']
     data['name'] = "Tile To The Top"
-    
+
     headers = {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
     }
-    
+
     jsondata = urllib.urlencode(data)
     url = urllib2.Request("https://graph.facebook.com/" + request.user.username + "/feed/", jsondata, headers)
     status = 400
-    
+
     try:
         urllib2.urlopen(url)
         data['success'] = True
@@ -455,7 +458,7 @@ def post_to_facebook(request):
         status = e.code
         print e.code
         print e.read()
-    
+
     return HttpResponse(status=status)
 
 

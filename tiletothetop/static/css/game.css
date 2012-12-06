@@ -470,3 +470,13 @@ button.close {
 .navbar .container {
     width: 940px;
 }
+
+.recover {
+    width: 350px;
+    margin: auto;
+    margin-top: 2em;
+    line-height: 1.2;
+    margin-bottom: 2em;
+}
+
+
