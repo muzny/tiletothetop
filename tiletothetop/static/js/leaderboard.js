@@ -10,15 +10,16 @@ function getUserRank() {
 }
 
 function insertLeaderboardData(data) {
+    $("#leaderboard_table").html("");
     for (var i = 0; i < data.length; i++) {
 	var d = data[i];
-	
+
 	// create row element, append rank, user, and score elements
 	var row = $("<tr>");
 	row.append($("<td>").text(d.rank));
 	row.append($("<td>").text(d.user));
 	row.append($("<td>").text(d.score));
-	
+
 	// Now just add the row to the table
 	$("#leaderboard_table").append(row);
     }
