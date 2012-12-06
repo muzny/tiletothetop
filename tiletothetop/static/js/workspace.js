@@ -92,17 +92,24 @@ var Workspace = function(words) {
 	if(active.tagName.toUpperCase() == "HTML") {
 	    return;
 	}
-	
+
+	var num = e.keyCode;
+	// Stop space bar from moving the scroll bar down the page.
+	if (num == 32) {
+	    e.preventDefault();
+	}	
 	// If not in the "play" tab, the game should be paused
 	// and keypresses should not trigger anything.
 	if (!isPaused()) {
 	    // In firefox, e.which gets set instead of e.keypress
-	    var num = e.keyCode;
+	 
 	    //if (num == 0) {
 	    //	num = e.which;
 	    //}
-	    // One of the keys a - z was pressed.
-	    if (num >= 65 && num <= 90) {
+	    // 65 - 90: One of the keys a - z was pressed.
+	    // 32: space
+	    // 48 - 57 digits
+	    if ((num >= 65 && num <= 90) || num == 32 || (num <= 57 && num >= 48)) {
 		var clicked = $(".clicked");
 		if (clicked.length == 1) {
 		    var t = getTileFromChar((String.fromCharCode(num)).toUpperCase());
