@@ -10,11 +10,11 @@
     {% include "facebook.html" %}
     
     <div class="navbar">
-        <div id="logo">
-            <img src={% static "t4logo_v0.25_50.png" %} />  
-        </div>
         <div class="navbar-inner">
             <div class="container">
+                <div class="nav pull-left" id="logo">
+                    <img src={% static "t4logo_v0.25_50.png" %} />
+                </div>
                 {% if user.is_authenticated %}
                 <ul class="nav pull-right">
                     <li><a id="logout-button" href="{% url logout %}">Logout</a></li>
