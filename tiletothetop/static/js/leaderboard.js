@@ -26,9 +26,13 @@ function insertLeaderboardData(data) {
 }
 
 function insertUserRank(data) {
-    return; // Don't do anything for now.
-    if (data !== null)
-	alert("rank: " + data.rank + "\nhigh score: " + data.score);
-    else
-	alert("no rank, user not authenticated");
+    if (data === null)
+        return;
+
+    $("#user_rank").html("");
+    var div = $('<div id="user_rank">');
+    var rank = $("<p>").text("Your Rank: " + data.rank).css({'float':'left'});
+    var score = ($("<p>").text("Your High Score: " + data.score).css({'float':'right'}));
+    div.append(rank).append(score);
+    div.insertBefore($("#leaderboard_table"));
 }

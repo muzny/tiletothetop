@@ -463,9 +463,10 @@ button.close {
 
 /* Leaderboard styles */
 
-#leaderboard_table {
+#leaderboard_table, #user_rank {
 	width: 75%;
 	margin: auto;
+    margin-bottom: 1em;
 }
 
 #leaderboard_table td {
