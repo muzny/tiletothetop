@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.forms.models import inlineformset_factory
+from django.forms.widgets import TextInput, Textarea
 from crispy_forms.helper import FormHelper
 from tiletothetop.models import CustomList, CustomWord
 
@@ -95,5 +96,22 @@ class CustomListForm(forms.ModelForm):
     class Meta:
         model = CustomList
         fields = { 'name' }#{ 'name', 'tags', 'is_public' }
+        
+class CustomWordForm(forms.ModelForm):
+    # override from models.BasicWord
+    word = forms.CharField(max_length=10, 
+                           widget=TextInput(attrs={'class': 'span3'}))
+    
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        super(CustomWordForm, self).__init__(*args, **kwargs)
+        
+    class Meta:
+        model = CustomWord
+        widgets = {
+            'part_of_speech': TextInput(attrs={'class': 'span2'}),
+            'definition': Textarea(attrs={'class': 'span5', 'rows': '1'})
+        }
 
-CustomWordsInlineFormSet = inlineformset_factory(CustomList, CustomWord, extra=4, max_num=4, can_delete=True)
+CustomWordsInlineFormSet = inlineformset_factory(CustomList, CustomWord, form=CustomWordForm, extra=4, max_num=4)

@@ -461,6 +461,10 @@ button.close {
     border: 2px solid white;
 }
 
+#list-entries td {
+    vertical-align: middle;
+}
+
 /* Leaderboard styles */
 
 #leaderboard_table, #user_rank {
