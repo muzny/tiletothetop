@@ -27,7 +27,7 @@ class RandomWordsTest(TestCase):
         response = self.client.get("/random-words/", args,
                 HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
-        return eval(response.content)
+        return eval(response.content)['words']
     
     def test_expected_num_words(self):
         """

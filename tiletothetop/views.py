@@ -88,9 +88,7 @@ def random_words(request):
     num_words = int(request.GET["word_count"])
     num_words = max(min(num_words, MAXWORDS), 0)
 
-    # FIXME distinct will always return the same definition for a word
-    words = Word.objects.distinct("word")
-    # exception if num_words cannot be satisfied?
+    words = Word.objects.all()
 
     if "max_wordlen" in request.GET:
         max_wordlen = int(request.GET["max_wordlen"])
