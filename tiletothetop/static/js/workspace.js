@@ -75,7 +75,7 @@ var Workspace = function(words) {
                 var answerTile = $(answerTiles[i]);
                 // letters are now wrapped in a paragraph tag as well
                 var letter = $($(answerTile.children()[0]).html()).text().toLowerCase();
-                var correctLetter = solutions[index][i];
+                var correctLetter = solutions[index][i].toLowerCase();
                 if(letter != correctLetter) {
                     gameWon = false;
                 }
