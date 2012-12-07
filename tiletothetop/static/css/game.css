@@ -447,8 +447,10 @@ button.close {
     text-align: center;
 }
 
-#list-entries .dynamic-form td input {
-    border: 2px solid white;
+#list-entries .control-group,
+#list-entries input,
+#list-entries textarea {
+    margin: 0;
 }
 
 #list-entries td {

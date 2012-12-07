@@ -98,20 +98,22 @@ class CustomListForm(forms.ModelForm):
         fields = { 'name' }#{ 'name', 'tags', 'is_public' }
         
 class CustomWordForm(forms.ModelForm):
-    # override from models.BasicWord
-    word = forms.CharField(max_length=10, 
+    # overrides field default from models.BasicWord
+    word = forms.CharField(max_length=10, label='',
                            widget=TextInput(attrs={'class': 'span3'}))
     
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
         self.helper.form_tag = False
         super(CustomWordForm, self).__init__(*args, **kwargs)
+        self.fields['part_of_speech'].label = ''
+        self.fields['definition'].label = ''
         
     class Meta:
         model = CustomWord
         widgets = {
             'part_of_speech': TextInput(attrs={'class': 'span2'}),
-            'definition': Textarea(attrs={'class': 'span5', 'rows': '1'})
+            'definition': TextInput(attrs={'class': 'span5'})
         }
 
 CustomWordsInlineFormSet = inlineformset_factory(CustomList, CustomWord, form=CustomWordForm, extra=4, max_num=4)

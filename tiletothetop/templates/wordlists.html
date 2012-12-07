@@ -10,8 +10,8 @@
         Once you've created a list, click the Play tab to view new game options.
     </p>
     
+    {% if custom_lists %}
     <div class="action-group">
-        {% if custom_lists %}
         <p>Create a new list or edit an existing list:</p>
         <div id="custom-edit" class="input-prepend input-append">
             <button id="new-list" type="button" class="btn btn-primary">
@@ -26,8 +26,8 @@
                     Edit List
                 </button>
         </div>
-        {% endif %}
     </div>
+    {% endif %}
     
     <div class="action-group">
         <form id="custom-form" method="post">
@@ -72,9 +72,9 @@
                         <tr>
                             {{ form.id }}
                             {{ form.custom_list }}
-                            <td>{{ form.word }}</td>
-                            <td>{{ form.part_of_speech }}</td>
-                            <td>{{ form.definition }}</td>
+                            <td>{{ form.word|as_crispy_field }}</td>
+                            <td>{{ form.part_of_speech|as_crispy_field }}</td>
+                            <td>{{ form.definition|as_crispy_field }}</td>
                             <td class="cell-delete">{{ form.DELETE }}</td>
                         </tr>
                         {% endfor %}
