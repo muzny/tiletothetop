@@ -35,8 +35,6 @@ function TransitionScreen(won, score) {
     setTimeout(messenger.getUserData, 2000);
     setTimeout(messenger.getLeaderboard, 2000);
     setTimeout(messenger.getUserRank, 2000);
-    // manually set height of transition screen's parent
-    $('#game-area').css({'height':'611px'});
     $('#play').css({'padding':'0px'});
 
     showGameOverButtons();
