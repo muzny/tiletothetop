@@ -29,8 +29,8 @@ function insertUserRank(data) {
     if (data === null)
         return;
 
-    $("#user_rank").html("");
-    var div = $('<div id="user_rank">');
+    var div = $('#user_rank');
+    div.html("");
     var rank = $("<p>").text("Your Rank: " + data.rank).css({'float':'left'});
     var score = ($("<p>").text("Your High Score: " + data.score).css({'float':'right'}));
     div.append(rank).append(score);
