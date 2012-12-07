@@ -42,41 +42,93 @@ function displayForms(data) {
     initializeFormset();
 }
 
+function displayError(message) {
+    var errorAlert = $('<div>').attr('class', 'alert alert-error fade in').text(message);
+    var close = $('<a>').attr({'class': 'close', 'data-dismiss':'alert'}).text('x');
+    errorAlert.prepend($('<strong>').text('Error: '));
+    errorAlert.append(close);
+    errorAlert.alert();
+    $('#customwords-formset').after(errorAlert);
+}
+
 // Validate, push to server
 function saveList() {
+    $('#custom-words .alert').alert('close');
+    
     // Check to make sure that all words are only composed of
     // characters that we support.
-    var pattern = new RegExp("^[a-zA-Z 0-9]+$");
-    var list = $("#list-entries").children();
+    var pattern = new RegExp("^[a-zA-Z 0-9]*$");
+    var list = $("#list-entries").children("tr");
     var okay = true;
     var count = 0;
-    // go to length - 1 because the add row box is at the end of this list
-    for (var i = 0; i < list.length - 1; i++) {
+    var emptyRows = [];
+
+    // Must have a list name
+    var nameControl = $('#div_id_name');
+    var name = nameControl.children().children("#id_name").val().trim();
+    if (name.length == 0) {
+        okay = false;
+        nameControl.addClass("error");
+    } else {
+        nameControl.removeClass("error");
+    }
+    if (!okay)
+        displayError("Enter a list name");
+
+    for (var i = 0; i < list.length; i++) {
         if ($(list[i]).is(":visible")) {
-            var input = $($(list[i]).children()[2]).children();
-            var text = input.val(); // dependent on the form of the form
-            if (!pattern.test(text) || text.length > 10) {
+            var cols = $(list[i]).children("td");
+            var input = $(cols[0]).children();
+            var text = input.children().children().val().trim(); // dependent on the form of the form
+            var def = $(cols[2]).children();
+            var defText = def.children().children().val().trim();
+            
+            // invalid or empty when required
+            if ((!pattern.test(text) || text.length > 10) || text.length == 0 && defText.length != 0) {
                 okay = false;
-                input.css("border", "2px solid red");
+                input.addClass("error");
             } else {
-                input.css("border", "2px solid white");
+                input.removeClass("error")
             }
             // There also must be a definition present
-            var def = $($(list[i]).children()[4]).children();
-            var defText = def.val();
-            if (defText.length == 0) {
+            if (defText.length == 0 && text.length != 0) {
                 okay = false;
-                def.css("border", "2px solid red");
+                def.addClass("error");
             } else {
-                def.css("border", "2px solid white");
+                def.removeClass("error");
             }
-                count += 1;
+            
+            // Count only non-empty rows
+            if (text.length != 0 && defText.length != 0) {
+                count++;
+            } else if (emptyRows.length < NUM_WORDS && text.length == 0 && defText.length == 0) {
+                emptyRows.push([input, def]);
+            }
         }
     }
+    
+    // Check whether empty rows are errors
+    for (var i = 0; i < emptyRows.length; i++) {
+        if (i < NUM_WORDS-count) {
+            $.each(emptyRows[i], function(index, col) {
+                col.addClass("error");
+            });
+        } else {
+            $.each(emptyRows[i], function(index, col) {
+                col.removeClass("error");
+            });
+        }
+    }
+    
     if (okay && count >= NUM_WORDS) {
         $('#custom-form').attr('action', '/save-customlist/');
         $('#custom-form').submit();
     }
+    
+    if (!okay)
+        displayError("Each word must be paired with a definition.");
+    if (count < NUM_WORDS)
+        displayError("Enter at least 4 words.");
 }
 
 // If list already exists, request to delete

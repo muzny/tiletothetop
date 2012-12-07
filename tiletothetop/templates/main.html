@@ -100,7 +100,7 @@
 <div id="game-area" class="item">
     <div id="game-menu">
         <button class="btn btn-primary hidden-button" id="new-game" type="button"
-                rel="tooltip" data-title="Revise game options" data-placement="left">
+                rel="tooltip" data-title="Change settings" data-placement="left">
             Return to Start Menu
         </button>
         <button class="btn btn-primary" id="quit-game" type="button"
@@ -108,8 +108,8 @@
             Quit Game
         </button>
         <button class="btn btn-primary" id="restart" type="button"
-                rel="tooltip" data-title="Start new game with same settings" data-placement="right">
-            Restart
+                rel="tooltip" data-title="New game with same settings" data-placement="right">
+            Play Again
         </button>
         <button class="btn btn-primary hidden-button" id="share" type="button"
                 rel="tooltip" data-title="Share this game" data-placement="right">
@@ -132,7 +132,7 @@
     <div id="transition-screen">
 		<h1 id="transition-message">Message!</h1>
         <h2>SCORE: <span id="score-final">0</span></h2>
-        <p>
+        <p id="score-breakdown">
             Base (<span id="score-base">0</span>) +
             Time Bonus (<span id="score-bonus">0</span>) +
             Penalty (<span id="score-penalty">0</span>)
