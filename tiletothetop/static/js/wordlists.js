@@ -42,8 +42,19 @@ function displayForms(data) {
     initializeFormset();
 }
 
+function displayError(message) {
+    var errorAlert = $('<div>').attr('class', 'alert alert-error fade in').text(message);
+    var close = $('<a>').attr({'class': 'close', 'data-dismiss':'alert'}).text('x');
+    errorAlert.prepend($('<strong>').text('Error: '));
+    errorAlert.append(close);
+    errorAlert.alert();
+    $('#customwords-formset').after(errorAlert);
+}
+
 // Validate, push to server
 function saveList() {
+    $('#custom-words .alert').alert('close');
+    
     // Check to make sure that all words are only composed of
     // characters that we support.
     var pattern = new RegExp("^[a-zA-Z 0-9]*$");
@@ -61,6 +72,8 @@ function saveList() {
     } else {
         nameControl.removeClass("error");
     }
+    if (!okay)
+        displayError("Enter a list name");
 
     for (var i = 0; i < list.length; i++) {
         if ($(list[i]).is(":visible")) {
@@ -111,6 +124,11 @@ function saveList() {
         $('#custom-form').attr('action', '/save-customlist/');
         $('#custom-form').submit();
     }
+    
+    if (!okay)
+        displayError("Each word must be paired with a definition.");
+    if (count < NUM_WORDS)
+        displayError("Enter at least 4 words.");
 }
 
 // If list already exists, request to delete
