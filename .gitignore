@@ -1,5 +1,7 @@
 # Ignore the virtual environment directory
 venv
+local_settings.py
+heroku_settings.py
 
 ##### The following are from gitignore-boilerplates #####
 # gibo Python Django > .gitignore
@@ -48,5 +50,5 @@ nosetests.xml
 *.log
 *.pot
 *.pyc
-local_settings.py
+
 
