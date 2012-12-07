@@ -149,6 +149,7 @@ function quitGame() {
     
     
     // Show transition screen
+    $('#score-breakdown').hide();
     TransitionScreen(false, 0);
 }
 

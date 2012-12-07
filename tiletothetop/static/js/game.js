@@ -130,9 +130,10 @@ function checkGameWon() {
 	
         // show score components in transition screen
         $('#score-base').text(base);
-        $('#score-bonus').text(timeBonus);  // TODO use something meaningful (time bonus?)
+        $('#score-bonus').text(timeBonus);
         // score currently contains accumulated penalties
         $('#score-penalty').text(score);
+        $('#score-breakdown').show();
 
         score += base;
 	score += timeBonus;
