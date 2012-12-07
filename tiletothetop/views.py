@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 from django.db.models import Max, Min
 
 from tiletothetop.models import Word, Tag, CustomList, CustomWord, UserProfile, GameHistory
-from tiletothetop.forms import RegistrationForm, LoginForm, CustomListForm, CustomWordsInlineFormSet
+from tiletothetop.forms import RegistrationForm, LoginForm, CustomListForm, CustomWordsInlineFormSet, CustomRecoveryForm
 
 from social_auth.models import UserSocialAuth
 from password_reset.views import Recover
@@ -351,6 +351,7 @@ def register(request):
     return HttpResponseRedirect(reverse('game'))
 
 class RecoverView(Recover):
+    form_class = CustomRecoveryForm  # to disallow social users from attempting password reset
     search_fields = ['username']
 recover = RecoverView.as_view()
 
