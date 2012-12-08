@@ -68,10 +68,10 @@ function initializeDifficultyButtons() {
     });
     $('#toggle-difficulty').click(function() {
         if ($(this).is(':checked')) {
-            $('#setting-difficulty').css('background-color', 'white')
+            $('#setting-difficulty').css('background-color', '#ddd')
 
         } else {
-            $('#setting-difficulty').css('background-color', '#ddd')
+            $('#setting-difficulty').css('background-color', 'white')
         }
     });
 }
