@@ -83,7 +83,7 @@ function saveList() {
             var cols = $(list[i]).children("td");
             var input = $(cols[0]).children();
             var text = input.children().children().val().trim(); // dependent on the form of the form
-            var def = $(cols[2]).children();
+            var def = $(cols[1]).children();
             var defText = def.children().children().val().trim();
             
             // invalid or empty when required

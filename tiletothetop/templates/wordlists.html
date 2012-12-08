@@ -61,7 +61,7 @@
                     <thead>
                         <tr>
                             <th>Word*</th>
-                            <th>Part of Speech</th>
+                            <!--<th>Part of Speech</th>-->
                             <th>Definition*</th>
                             <th>Delete</th>
                         </tr>
@@ -73,7 +73,7 @@
                             {{ form.id }}
                             {{ form.custom_list }}
                             <td>{{ form.word|as_crispy_field }}</td>
-                            <td>{{ form.part_of_speech|as_crispy_field }}</td>
+                            <!--<td>{{ form.part_of_speech|as_crispy_field }}</td>-->
                             <td>{{ form.definition|as_crispy_field }}</td>
                             <td class="cell-delete">{{ form.DELETE }}</td>
                         </tr>
