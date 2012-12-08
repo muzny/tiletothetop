@@ -65,3 +65,27 @@
         </form>
     </div>
 
+    <div id="facebook-modal" class="modal hide">
+        <form action="" class="form-horizontal" id="registration-form" method="post">
+            {% csrf_token %}
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3>Post to Facebook</h3>
+            </div>
+
+            <div class="modal-body">
+                <div style="display:none">
+                    <input type="hidden" id="id_link" />
+                </div>
+                <p id="base_message"></p>
+                {% crispy facebook_form %}
+            </div>
+
+
+            <div class="modal-footer">
+                <button id="facebook-submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
+
+

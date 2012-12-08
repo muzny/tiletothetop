@@ -211,7 +211,9 @@ function transitionClick() {
 }
 
 function postToFacebook() {
-    $('#facebook-form-container').removeClass("hide");
     $('#id_link').val($('#linkArea').text());
-    $('#id_message').val("I just got a score of {score} on Tile To The Top!  Can you beat my score?");
+    $('#fb_description').val("I just got a score of " + $('#score-final').text() + " on Tile To The Top!  Can you beat my score?");
+    $('#fb_description').attr('readonly', 'readonly');
+    $('#fb_message').val('');
+    $('#facebook-modal').modal('show');
 }

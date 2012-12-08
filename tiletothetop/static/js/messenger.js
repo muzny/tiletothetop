@@ -177,10 +177,11 @@ var Messenger = function() {
         });
     };
 
-    this.postToFacebook = function(link, msg) {
+    this.postToFacebook = function(link, msg, description) {
         data = {
             message: msg,
-            link: link
+            link: link,
+            description: description
         };
         $.ajax({
             url: "/post-to-facebook/",

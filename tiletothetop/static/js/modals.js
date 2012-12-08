@@ -8,6 +8,16 @@ $(function () {
 		$("#login-modal").modal("show");
 	}
 
+    // facebook modal
+    $('#facebook-submit').click(function() {
+         // This part is fixed
+         var description = 'I just got a score of ' + $('#score-final').text() + ' on Tile To The Top! Can you beat my score?';
+            link = $('#id_link').val(),
+            message = $('#fb_message').val();
+         messenger.postToFacebook(link, message, description);
+    });
+
+
     // this is just a quick fix to an old bug in facebook authentication where it appends
     // #_=_ to the redirect url
     if (window.location.hash == "#_=_" || window.location.hash == "#") {

@@ -53,9 +53,6 @@ $(window).load(function() {
     getUserRank();
     getLeaderboard(10);
 
-    $('#facebook-submit').click(sendFacebookPost);
-    $('#facebook-cancel').click(removeFacebookModal)
-
     //if we're fed static ids, automagically create game from them
     //argument done as id parameter, which is hyphen separated ids.
     // example:

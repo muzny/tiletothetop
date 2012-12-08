@@ -1,8 +1,9 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.forms.models import inlineformset_factory
-from django.forms.widgets import TextInput, Textarea
+from django.forms.widgets import TextInput
 from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Field
 from tiletothetop.models import CustomList, CustomWord
 from password_reset.forms import PasswordRecoveryForm
 
@@ -137,3 +138,18 @@ class CustomWordForm(forms.ModelForm):
         }
 
 CustomWordsInlineFormSet = inlineformset_factory(CustomList, CustomWord, form=CustomWordForm, extra=4, max_num=4)
+
+class FacebookPostForm(forms.Form):
+    description = forms.CharField(widget=forms.Textarea(attrs={'rows':3}), required=False)
+    message = forms.CharField(widget=forms.Textarea(attrs={'rows':3}))
+
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.layout = Layout(
+            Field('description', id='fb_description'),
+            Field('message', id='fb_message'),
+        )
+        super(FacebookPostForm, self).__init__(*args, **kwargs)
+
+

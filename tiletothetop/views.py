@@ -12,7 +12,7 @@ from django.db.models import Max, Min
 from django.conf import settings
 
 from tiletothetop.models import Word, Tag, CustomList, CustomWord, UserProfile, GameHistory
-from tiletothetop.forms import RegistrationForm, LoginForm, CustomListForm, CustomWordsInlineFormSet, CustomRecoveryForm
+from tiletothetop.forms import RegistrationForm, LoginForm, CustomListForm, CustomWordsInlineFormSet, CustomRecoveryForm, FacebookPostForm
 
 from social_auth.models import UserSocialAuth
 from password_reset.views import Recover
@@ -31,6 +31,7 @@ def game(request):
     cl = CustomList()
     clform = CustomListForm(instance=cl)
     cwformset = CustomWordsInlineFormSet(instance=cl, prefix='cw')
+    fbform = FacebookPostForm()
 
     # available lists to edit / use in game
     lists = []
@@ -45,7 +46,7 @@ def game(request):
                               order by t.name''');
 
 
-    context = {'login_form' : lform, 'registration_form' : rform, 'login_errors' : lform_errors, 'registration_errors' : rform_errors,
+    context = {'login_form' : lform, 'registration_form' : rform, 'login_errors' : lform_errors, 'registration_errors' : rform_errors, 'facebook_form' : fbform,
                'customlist_form' : clform, 'customwords_formset' : cwformset, 'custom_lists' : lists, 'tags' : tags, 'debug_mode' : settings.DEBUG}
     return render_to_response('game.html', context, context_instance=RequestContext(request))
 
@@ -449,11 +450,17 @@ def post_to_facebook(request):
 
     data = {}
     data['message'] = request.POST['message']
-    # switch lines to enable dev testing
+    data['description'] = request.POST['description']
+
+    # so it'll work in dev environment
     data['link'] = request.POST['link']
-    #data['link'] = 'http://tiletothetop.herokuapp.com/'
+    data['picture'] = 'http://tiletothetop.herokuapp.com/static/t4logo_v0.25_50.png'
+    if settings.DEBUG:
+        data['link'] = 'http://tiletothetop.herokuapp.com/'
+
     data['access_token'] = instance.tokens['access_token']
     data['name'] = "Tile To The Top"
+    data['caption'] = 'tiletothetop.herokuapp.com'
 
     headers = {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
