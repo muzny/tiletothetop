@@ -16,7 +16,6 @@ HEROKU_CONFIGS = (
 
 def deploy():
     """Deploy the app to Heroku"""
-    compress()
     backup()
     local('git push heroku master -f')
     local('heroku run ./manage.py syncdb')
