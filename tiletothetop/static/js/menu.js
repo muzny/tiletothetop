@@ -68,11 +68,9 @@ function initializeDifficultyButtons() {
     });
     $('#toggle-difficulty').click(function() {
         if ($(this).is(':checked')) {
-            $('#difficulty-inputs .btn').removeAttr('disabled');
             $('#setting-difficulty').css('background-color', 'white')
             
         } else {
-            $('#difficulty-inputs .btn').attr('disabled', 'disabled');
             $('#setting-difficulty').css('background-color', '#ddd')
         }
     });
