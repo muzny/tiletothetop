@@ -64,13 +64,16 @@
     {% include "modals.html" %}
 {% endblock %}
 {% block js %}
+    <script src="{% static "js/jquery-1.8.2.min.js" %}"></script>
+    <script src="{% static "js/bootstrap.min.js" %}"></script>
+    {% if debug %}
     <script src="{% static "js/account.js" %}"></script>
     <script src="{% static "js/board.js" %}"></script>
-    <script src="{% static "js/bootstrap.min.js" %}"></script>
     <script src="{% static "js/definitionarea.js" %}"></script>
     <script src="{% static "js/drag.js" %}"></script>
     <script src="{% static "js/game.js" %}"></script>
     <script src="{% static "js/jquery.formset.min.js" %}"></script>
+    <script src="{% static "js/jquery-cookie-master/jquery.cookie.js" %}"></script>
     <script src="{% static "js/leaderboard.js" %}"></script>
     <script src="{% static "js/menu.js" %}"></script>
     <script src="{% static "js/messenger.js" %}"></script>
@@ -83,4 +86,7 @@
     <script src="{% static "js/wordlists.js" %}"></script>
     <script src="{% static "js/workspace.js" %}"></script>
     <script src="{% static "js/facebook.js" %}"></script>
+    {% else %}
+    <script src="{% static "js/tiletothetop.min.js" %}"></script>
+    {% endif %}
 {% endblock %}

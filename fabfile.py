@@ -16,6 +16,7 @@ HEROKU_CONFIGS = (
 
 def deploy():
     """Deploy the app to Heroku"""
+    compress()
     backup()
     local('git push heroku master -f')
     local('heroku run ./manage.py syncdb')
@@ -36,6 +37,30 @@ def bootstrap():
              "Couldn't add %s to your Heroku app, continue anyway?" % config)
 
     deploy()
+
+def compress():
+    """Compile and minify our javascript."""
+    print('\n\nCompiling/Minifying Javascript\n')
+    local('java -jar tools/compiler.jar --js tiletothetop/static/js/account.js ' +
+                                       '--js tiletothetop/static/js/board.js ' +
+                                       '--js tiletothetop/static/js/definitionarea.js ' +
+                                       '--js tiletothetop/static/js/drag.js ' +
+                                       '--js tiletothetop/static/js/game.js ' +
+                                       '--js tiletothetop/static/js/jquery.formset.min.js ' +
+                                       '--js tiletothetop/static/js/jquery-cookie-master/jquery.cookie.js ' +
+                                       '--js tiletothetop/static/js/leaderboard.js ' +
+                                       '--js tiletothetop/static/js/menu.js ' +
+                                       '--js tiletothetop/static/js/messenger.js ' +
+                                       '--js tiletothetop/static/js/modals.js ' +
+                                       '--js tiletothetop/static/js/textfill.js ' +
+                                       '--js tiletothetop/static/js/tilearea.js ' +
+                                       '--js tiletothetop/static/js/timer.js ' +
+                                       '--js tiletothetop/static/js/transitionscreen.js ' +
+                                       '--js tiletothetop/static/js/utilities.js ' +
+                                       '--js tiletothetop/static/js/wordlists.js ' +
+                                       '--js tiletothetop/static/js/workspace.js ' +
+                                       '--js tiletothetop/static/js/facebook.js ' +
+                                       '--js_output_file tiletothetop/static/js/tiletothetop.min.js')
 
 def backup():
     """Backup the live database"""
