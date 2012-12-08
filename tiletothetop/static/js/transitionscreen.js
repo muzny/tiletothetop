@@ -44,7 +44,7 @@ function processPushedGame(response) {
 	$('#share').removeClass('hidden-button');
 	$('#share').addClass('shown-button');
 
-        var url = window.location.origin + "/?id=" + response.id;
+        var url = window.location.hostname + "/?id=" + response.id;
 	$('#linkArea').text(url);
     }
 }
