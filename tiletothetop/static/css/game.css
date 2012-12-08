@@ -255,11 +255,14 @@ a, a:link, a:visited {
     width: 34px;
 }
 
-#difficulty-inputs input {
+#difficulty-inputs input[type="text"] {
     width: 78px;
     text-align: center;
-    background-color: white;
     cursor: default;
+}
+
+#difficulty-inputs label {
+    margin-left: 15px;
 }
 
 #difficulty-text {

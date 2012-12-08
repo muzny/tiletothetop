@@ -66,6 +66,16 @@ function initializeDifficultyButtons() {
             expDifficultyStep *= 2;
         incrementDifficulty(expDifficultyStep);
     });
+    $('#toggle-difficulty').click(function() {
+        if ($(this).is(':checked')) {
+            $('#difficulty-inputs .btn').removeAttr('disabled');
+            $('#setting-difficulty').css('background-color', 'white')
+            
+        } else {
+            $('#difficulty-inputs .btn').attr('disabled', 'disabled');
+            $('#setting-difficulty').css('background-color', '#ddd')
+        }
+    });
 }
 
 function incrementDifficulty(increment) {
@@ -115,7 +125,7 @@ function startGame() {
     gameIsStarted = true;
 
     // Hide the drag blocker
-    $("#drag-blocker").css({'display':'hidden', 'z-index':'-1'});
+    $("#drag-blocker").css({'z-index':'-1'});
 
     var selectedGroup = $('#game-options .accordion-body.in');
 
@@ -124,6 +134,9 @@ function startGame() {
         messenger.getWords(initializeBoard, null, null);
     } else if (selectedGroup[0].id == 'dict-game') {
         var difficulty = parseInt($('#setting-difficulty').val());
+        if (!$('#toggle-difficulty').is(':checked')) {
+            difficulty = null;
+        }
         var tagFilter = parseInt($('#setting-tag').val());
         if (isNaN(tagFilter)) {
             tagFilter = null;
