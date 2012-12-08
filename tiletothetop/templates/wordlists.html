@@ -86,7 +86,8 @@
             <button id="save-list" type="button" class="btn btn-primary">
                 Save List
             </button>
-            <button id="delete-list" type="button" class="btn">
+            <button id="delete-list" type="button" class="btn" 
+                    {% if not customlist_form.instance.pk %}disabled{% endif %}>
                 Delete List
             </button>
         </form>
