@@ -98,10 +98,8 @@ function getTileFromChar(tchar) {
 // Adds the tile t to the tile area.
 function addToTileArea(t) {
     var tileArea = $(".tile-box");
-
-    for (var i = 0; i < tileArea.children().length; ++i) {
+    for (var i = 0; i < tileArea.length; ++i) {
 	var tileBox = $(tileArea.get(i));
-
 	if (tileBox.children().length == 0) {
 	    tileBox.append(t);
 	    break;

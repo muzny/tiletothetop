@@ -162,7 +162,6 @@ var Workspace = function(words) {
 	// User pressed backspace
 	if (num == 8 && !isPaused()) {
 	    e.preventDefault();
-	    //alert("backspace");
 	    var clicked = $(".clicked");
 	    if (clicked.length == 1) {
 		deleteBoxAt($(clicked[0]).attr("id"));
@@ -335,11 +334,7 @@ function deleteBoxAt(prevId) {
     // in the tile area.
     if(numChildren == 1) {
 	var t = currentBox.children()[0];
-
-	//$(t).appendTo($("#tile-area"));
 	addToTileArea(t);
-
-	//currentBox.empty();
     }
 
     if (decrementHighlighted) {
