@@ -1,13 +1,10 @@
 function sendFacebookPost() {
 
     var message = $('#id_message').val(),
-        link = $('#id_link').val(),
-        score = $('#score-final').text(),
-        message_parsed = message.replace("{score}", score);
-        
+        link = $('#id_link').val();
     
     $('#facebook-form-container').addClass("hide");
-    messenger.postToFacebook(link, message_parsed);
+    messenger.postToFacebook(link, message);
 
 }
 
