@@ -457,7 +457,7 @@ def post_to_facebook(request):
 
     # so it'll work in dev environment
     data['link'] = request.POST['link']
-    data['picture'] = 'http://tiletothetop.herokuapp.com/static/t4logo_v0.25_50.png'
+    data['picture'] = 'http://tiletothetop.herokuapp.com/static/t4icon.png'
     if settings.DEBUG:
         data['link'] = 'http://tiletothetop.herokuapp.com/'
 
