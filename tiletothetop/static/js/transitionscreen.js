@@ -14,7 +14,7 @@ function TransitionScreen(won, score) {
     timer.pause();
 
     // Show the drag blocker
-    $('#drag-blocker').css({'display':'visible', 'z-index':'100'});
+    $('#drag-blocker').css({'z-index':'100'});
 
     // remove click/keyboard events
     resetEvents();
@@ -30,15 +30,13 @@ function TransitionScreen(won, score) {
     $('#score-final').text(score);
 
     // show the transition screen, and load words in the background
-    $('#transition-screen').css({'display':'visible', 'z-index':'100'});
+    $('#transition-screen').css({'z-index':'100'});
     // if we call this immediately, it likely won't get the updated user data
     setTimeout(messenger.getUserData, 2000);
     setTimeout(messenger.getLeaderboard, 2000);
     setTimeout(messenger.getUserRank, 2000);
-    $('#play').css({'padding':'0px'});
 
     showGameOverButtons();
-
 }
 
 function processPushedGame(response) {

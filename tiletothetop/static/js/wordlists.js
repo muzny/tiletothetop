@@ -48,7 +48,6 @@ function displayForms(data) {
 function getErrorAlert(message) {
     var errorAlert = $('<div>').attr('class', 'alert alert-error').text(message);
     var close = $('<a>').attr({'class': 'close', 'data-dismiss':'alert'}).text('x');
-    errorAlert.prepend($('<strong>').text('Error: '));
     errorAlert.append(close);
     errorAlert.alert();
     return errorAlert;
