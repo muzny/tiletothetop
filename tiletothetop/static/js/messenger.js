@@ -55,7 +55,7 @@ var Messenger = function() {
             }
         });
     };
-    
+
     // Gets random words from a list of custom words
     this.getCustomWords = function(successFn, customListID) {
         var parameters = {
@@ -176,7 +176,7 @@ var Messenger = function() {
             }
         });
     };
-    
+
     this.postToFacebook = function(link, msg) {
         data = {
             message: msg,
@@ -189,10 +189,10 @@ var Messenger = function() {
             data: data,
             headers: {"X-CSRFToken" : $.cookie('csrftoken')},
             success: function(data) {
-                
+
             },
             error: function() {
-                
+
             }
         })
     };

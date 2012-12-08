@@ -10,6 +10,8 @@ function getAccountData() {
 }
 
 function insertAccountData(data) {
+    USER_DATA = data; // store for later use
+
     if (!data.hasOwnProperty('username')) {
         return; // not what we expected
     }

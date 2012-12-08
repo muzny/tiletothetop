@@ -25,7 +25,7 @@ function initializeMenuButtons() {
     });
 
     initializeDifficultyButtons();
-    
+
     $('#start-button').click(function() {
         startGame();
         returnToGame();
@@ -73,7 +73,7 @@ function incrementDifficulty(increment) {
     value += increment;
     value = Math.max(0, Math.min(MAX_DIFFICULTY, value));
     $('#setting-difficulty').val(value);
-    
+
     var text;
     if (value < 50) {
         text = 'Easy';
@@ -113,12 +113,12 @@ function startGame() {
 	resetEvents();
     }
     gameIsStarted = true;
-    
+
     // Hide the drag blocker
     $("#drag-blocker").css({'display':'hidden', 'z-index':'-1'});
-    
+
     var selectedGroup = $('#game-options .accordion-body.in');
-    
+
     if (selectedGroup.size() == 0) {
         // don't use any extra parameters
         messenger.getWords(initializeBoard, null, null);
@@ -146,8 +146,8 @@ function quitGame() {
 	}
     }
     // TODO: disable dragging
-    
-    
+
+
     // Show transition screen
     $('#score-breakdown').hide();
     TransitionScreen(false, 0);
@@ -174,34 +174,33 @@ function showGameButtons() {
 
     $("#new-game").removeClass("hidden-button");
     $("#new-game").addClass("shown-button");
-    
+
     $("#quit-game").removeClass("hidden-button");
     $("#quit-game").addClass("shown-button");
-    
+
     $("#restart").removeClass("shown-button");
     $("#restart").addClass("hidden-button");
-    
+
     $("#share").removeClass("shown-button");
     $("#share").addClass("hidden-button");
     $("#share").html("Share");
-    
+
     $('#linkArea').removeClass("shown-button");
     $('#linkArea').addClass("hidden-button");
-    
+
     $('#post-to-facebook').removeClass("shown-button");
     $('#post-to-facebook').addClass("hidden-button");
-    
 }
 
 function showGameOverButtons() {
     // Show "Return to start menu", "New game" and "Share" buttons
-    
+
     $("#new-game").removeClass("hidden-button");
     $("#new-game").addClass("shown-button");
-    
+
     $("#quit-game").removeClass("shown-button");
     $("#quit-game").addClass("hidden-button");
-    
+
     $("#restart").removeClass("hidden-button");
     $("#restart").addClass("shown-button");
 }

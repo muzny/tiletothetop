@@ -9,6 +9,7 @@ var timer = null;
 var score = 0;
 var numberHintsUsed = 0;
 var HINT_PENALTY = 100;
+var USER_DATA = {};
 
 var MAX_FONT = 36;  // max pixels for definitions
 var TILE_SIZE = 60;
@@ -38,7 +39,7 @@ var setupEvents = false;
 
 var gameIsStarted = false;
 
-/* Functions for loading the game, initializing the board, and 
+/* Functions for loading the game, initializing the board, and
 showing the elements of the game.*/
 
 $(window).load(function() {
@@ -51,7 +52,7 @@ $(window).load(function() {
     getAccountData();
     getUserRank();
     getLeaderboard(10);
-    
+
     $('#facebook-submit').click(sendFacebookPost);
     $('#facebook-cancel').click(removeFacebookModal)
 
@@ -125,9 +126,9 @@ function checkGameWon() {
 	for (var i = 0; i < solutions.length; i++) {
 	    base += scoreFunc(solutions[i]);
 	}
-	
+
 	var timeBonus = Math.max(0, (TIMER_CUTOFF - (timer.getMin() * 60 + timer.getSec())) * TIMER_PENALTY);
-	
+
         // show score components in transition screen
         $('#score-base').text(base);
         $('#score-bonus').text(timeBonus);
@@ -179,15 +180,17 @@ function generateShareUrl() {
     button = $('#share');
     linkArea = $('#linkArea');
     facebook = $('#post-to-facebook');
-    
+
     button.addClass("hidden-button");
     button.removeClass("shown-button");
-    
+
     linkArea.addClass("shown-button");
     linkArea.removeClass("hidden-button");
-    
-    facebook.addClass("shown-button");
-    facebook.removeClass("hidden-button");
+
+    if (USER_DATA.is_facebook_user) {
+        facebook.addClass("shown-button");
+        facebook.removeClass("hidden-button");
+    }
 }
 
 // Create a static game from a word list id.

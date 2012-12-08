@@ -63,7 +63,7 @@ def compress():
 
 def backup():
     """Backup the live database"""
-    local('heroku pgbackups:capture')
+    local('heroku pgbackups:capture --expire')
 
 def view_backups():
     """Show the available database backups"""

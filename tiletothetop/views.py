@@ -9,6 +9,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth import logout as auth_logout, login as auth_login, authenticate
 from django.contrib.auth.models import User
 from django.db.models import Max, Min
+from django.conf import settings
 
 from tiletothetop.models import Word, Tag, CustomList, CustomWord, UserProfile, GameHistory
 from tiletothetop.forms import RegistrationForm, LoginForm, CustomListForm, CustomWordsInlineFormSet, CustomRecoveryForm
@@ -43,8 +44,9 @@ def game(request):
                                 where w.id= wt.word_id and t.id=wt.tag_id)
                               order by t.name''');
 
+
     context = {'login_form' : lform, 'registration_form' : rform, 'login_errors' : lform_errors, 'registration_errors' : rform_errors,
-                'customlist_form' : clform, 'customwords_formset' : cwformset, 'custom_lists' : lists, 'tags' : tags }
+               'customlist_form' : clform, 'customwords_formset' : cwformset, 'custom_lists' : lists, 'tags' : tags, 'debug_mode' : settings.DEBUG}
     return render_to_response('game.html', context, context_instance=RequestContext(request))
 
 
@@ -413,6 +415,10 @@ def get_user_data(request):
     # make a new dictionary object, and return it
     # NOTE: currently returns all returnable fields (minus pwd)
     user = request.user
+    is_fb_user = False
+    if user.social_auth.filter(provider='facebook'):
+        is_fb_user = True
+
     games_played = UserProfile.objects.filter(user__username=request.user)[0].games_played
     userData = ({
             'username': user.username,
@@ -424,6 +430,7 @@ def get_user_data(request):
             'is_active': user.is_active,
             'is_staff': user.is_staff,
             'is_superuser': user.is_superuser,
+            'is_facebook_user': is_fb_user,
             'last_login': str(user.last_login),
             'games_played': games_played
         })
