@@ -36,9 +36,10 @@ p {
 .hint-box{
 	background-color: #00BBEE;
 	float: right;
-	height: 20px;
-	width: 30px;
+	height: 16px;
+	width: 27px;
 	font-size: 16px;
+    padding: 2px;
 	cursor: hand;
 	cursor: pointer;
 }
@@ -92,8 +93,7 @@ p {
 }
 
 #game-area {
-    position: relative; // for absolutely position child (start-screen)
-    background-color: cyan;
+    position: relative; /* for absolutely position child (start-screen) */
     overflow: hidden;
     padding: 5px;
     width: 900px;
@@ -120,18 +120,18 @@ p {
     background-color: yellow;
     width: 99%;
     clear: both;
+    margin: auto;
     margin-top: 10px;
     overflow: hidden;
 }
 
 #transition-screen, #drag-blocker {
     position: absolute;
-    left: 0px;
+    left: 0;
     z-index: -1;
     width: 100%;
     height: 100%;
-    background-color: #403136;
-    display: hidden;
+    background-color: rgb(64, 49, 54);
 }
 
 #drag-blocker {
@@ -140,8 +140,8 @@ p {
 }
 
 #transition-screen {
-    top: 0px;
-	opacity: 0.7;
+    top: 0;
+    background-color: rgba(64, 49, 54, .7);
 }
 
 #transition-screen h1,
@@ -208,8 +208,7 @@ a, a:link, a:visited {
 }
 
 /* Menu stuff */
-#start-game-inprogress
-{
+#start-game-inprogress {
     display: none;
 }
 
@@ -233,7 +232,7 @@ a, a:link, a:visited {
     margin-right: 12px;
 }
 
-span.help-popover {
+#help-popover {
     font-family: 'Cabin',Verdana,sans-serif;
     font-size: 14px;
     line-height: 1;
@@ -256,11 +255,14 @@ span.help-popover {
     width: 34px;
 }
 
-#difficulty-inputs input {
+#difficulty-inputs input[type="text"] {
     width: 78px;
     text-align: center;
-    background-color: white;
     cursor: default;
+}
+
+#difficulty-inputs label {
+    margin-left: 15px;
 }
 
 #difficulty-text {
@@ -268,15 +270,13 @@ span.help-popover {
     text-align: center;
 }
 
-#game-menu
-{
+#game-menu {
     margin-top: .25em;
     margin-bottom: .5em;
     text-align: center;
 }
 
-#timer-display
-{
+#timer-display {
     margin-top: 15px;
     letter-spacing: .3em;
     font-size: 30px;
@@ -397,12 +397,12 @@ button.close {
 
 .mask {
     position: absolute;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     z-index: 9999;
-    background-color: rgba(0, 0, 0, .5)
+    background-color: rgba(0, 0, 0, .5);
 }
 
 .form-center {
@@ -425,22 +425,17 @@ button.close {
     margin-bottom: 10px;
 }
 
-#play {
-    margin: 10px;
-    padding: 0px 5px;
+/* Word lists stuff */
+.action-group {
+    margin: 1.5em .5em 1em;
 }
 
-/* Word lists stuff */
-#custom-words .action-group {
-    margin: 1.5em .5em 1em;
+.alert {
+    font-size: 18px;
 }
 
 #new-list {
     margin-right: 2em;
-}
-
-#customwords-formset caption {
-    caption-side: bottom;
 }
 
 #list-entries .cell-delete {

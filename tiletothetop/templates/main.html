@@ -2,7 +2,7 @@
     <h2>Start Stacking!</h2>
     <h3>
         Game Options
-        <span class="help-popover">
+        <span id="help-popover">
             <button id="game-help" class="btn btn-link" type="button" data-trigger="hover" data-title="Getting Started"
                     data-content="Select a dictionary to use by expanding a group below (Built-in or Custom, if you have created a list).
                     If no group is expanded, a new game will use the game's built-in dictionary with no additional settings.">
@@ -30,15 +30,15 @@
                                     <div id="difficulty-inputs" class="controls input-prepend input-append">
                                         <button id="step-less-exp" class="btn btn-inverse" type="button">&lt;&lt;</button>
                                         <button id="step-less-const" class="btn btn-inverse" type="button">&lt;</button>
-                                        <input id="setting-difficulty" type="text" value="75" disabled="disabled">
+                                        <input id="setting-difficulty" type="text" value="75" disabled>
                                         <button id="step-more-const" class="btn btn-inverse" type="button">&gt;</button>
                                         <button id="step-more-exp" class="btn btn-inverse" type="button">&gt;&gt;</button>
+                                        <label class="checkbox inline">
+                                            <input id="toggle-difficulty" type="checkbox">On
+                                        </label>
                                     </div>
                                     <label for="setting-difficulty" id="difficulty-text" class="help-block controls">Medium</label>
                                 </div>
-                                <!--<label>
-                                    <input type="checkbox"> On
-                                </label>-->
                             </div>
                             
                             <div class="control-group">

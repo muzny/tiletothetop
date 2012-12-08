@@ -27,8 +27,10 @@ def game(request):
     lform_errors = get_and_delete(request.session, 'lform_errors', None)
     rform_errors = get_and_delete(request.session, 'rform_errors', None)
 
-    get_and_delete(request.session, 'custom_list_instance', None)
-    cl = CustomList()
+    if 'custom_list_instance' in request.session:
+        cl = request.session['custom_list_instance']
+    else:
+        cl = CustomList()
     clform = CustomListForm(instance=cl)
     cwformset = CustomWordsInlineFormSet(instance=cl, prefix='cw')
     fbform = FacebookPostForm()
@@ -267,7 +269,6 @@ def get_user_rank(request):
 # User Custom Words Views                                    #
 ##############################################################
 
-# ajax vs. redirect??
 def save_customlist(request):
     if not request.user.is_authenticated() or request.method != 'POST':
         return HttpResponse(status=400)
@@ -290,6 +291,7 @@ def save_customlist(request):
             for cw in cws:
                 cw.custom_list = cl
                 cw.save()
+            request.session['custom_list_instance'] = cl
             return HttpResponseRedirect('/#wordlists')
         else:
             return HttpResponse(content='cw formset not valid: %s\n list: %s' % (cwformset.errors, cl), status=400)
@@ -310,7 +312,8 @@ def delete_customlist(request):
 
     cws.delete()
     cl.delete()
-
+    del request.session['custom_list_instance']
+    
     # see modals.js  This isn't ideal, but close to
     # expected functionality
     return HttpResponseRedirect('/#wordlists')

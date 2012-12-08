@@ -66,6 +66,14 @@ function initializeDifficultyButtons() {
             expDifficultyStep *= 2;
         incrementDifficulty(expDifficultyStep);
     });
+    $('#toggle-difficulty').click(function() {
+        if ($(this).is(':checked')) {
+            $('#setting-difficulty').css('background-color', 'white')
+
+        } else {
+            $('#setting-difficulty').css('background-color', '#ddd')
+        }
+    });
 }
 
 function incrementDifficulty(increment) {
@@ -115,7 +123,7 @@ function startGame() {
     gameIsStarted = true;
 
     // Hide the drag blocker
-    $("#drag-blocker").css({'display':'hidden', 'z-index':'-1'});
+    $("#drag-blocker").css({'z-index':'-1'});
 
     var selectedGroup = $('#game-options .accordion-body.in');
 
@@ -124,6 +132,9 @@ function startGame() {
         messenger.getWords(initializeBoard, null, null);
     } else if (selectedGroup[0].id == 'dict-game') {
         var difficulty = parseInt($('#setting-difficulty').val());
+        if (!$('#toggle-difficulty').is(':checked')) {
+            difficulty = null;
+        }
         var tagFilter = parseInt($('#setting-tag').val());
         if (isNaN(tagFilter)) {
             tagFilter = null;
@@ -138,16 +149,13 @@ function startGame() {
 
 // Show transition screen and reveal solution
 function quitGame() {
-    // TODO: Fill in answers
+    // Fill in answers
     var answers = window.board.definitions.getDefinitions();
-    for(var i = 0; i < 4; i++) {
-	for(var j = 0; j < answers[i].length; j++) {
-	    window.board.definitions.displayHint(i);
-	}
+    for(var i = 0; i < answers.length; i++) {
+        for(var j = 0; j < answers[i].length; j++) {
+            window.board.definitions.displayHint(i);
+        }
     }
-    // TODO: disable dragging
-
-
     // Show transition screen
     $('#score-breakdown').hide();
     TransitionScreen(false, 0);
@@ -207,7 +215,7 @@ function showGameOverButtons() {
 
 function transitionClick() {
     // Transition screen was clicked, so hide it.
-    $("#transition-screen").css({'display':'hidden', 'z-index':'-1'});
+    $("#transition-screen").css({'z-index':'-1'});
 }
 
 function postToFacebook() {

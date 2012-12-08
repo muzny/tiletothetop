@@ -134,7 +134,7 @@ class CustomWordForm(forms.ModelForm):
         model = CustomWord
         widgets = {
             'part_of_speech': TextInput(attrs={'class': 'span2'}),
-            'definition': TextInput(attrs={'class': 'span5'})
+            'definition': TextInput(attrs={'class': 'span7'})
         }
 
 CustomWordsInlineFormSet = inlineformset_factory(CustomList, CustomWord, form=CustomWordForm, extra=4, max_num=4)

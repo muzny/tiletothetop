@@ -14,7 +14,8 @@
     <div class="action-group">
         <p>Create a new list or edit an existing list:</p>
         <div id="custom-edit" class="input-prepend input-append">
-            <button id="new-list" type="button" class="btn btn-primary">
+            <button id="new-list" type="button" class="btn btn-primary"
+                    data-loading-text="Loading...">
                 New List
             </button>
                 <select id="existing-list-name">
@@ -22,7 +23,8 @@
                     <option value="{{ list.id }}">{{ list.name }}</option>
                     {% endfor %}
                 </select>
-                <button id="edit-list" type="button" class="btn btn-primary">
+                <button id="edit-list" type="button" class="btn btn-primary"
+                        data-loading-text="Loading...">
                     Edit List
                 </button>
         </div>
@@ -61,7 +63,7 @@
                     <thead>
                         <tr>
                             <th>Word*</th>
-                            <th>Part of Speech</th>
+                            <!--<th>Part of Speech</th>-->
                             <th>Definition*</th>
                             <th>Delete</th>
                         </tr>
@@ -73,7 +75,7 @@
                             {{ form.id }}
                             {{ form.custom_list }}
                             <td>{{ form.word|as_crispy_field }}</td>
-                            <td>{{ form.part_of_speech|as_crispy_field }}</td>
+                            <!--<td>{{ form.part_of_speech|as_crispy_field }}</td>-->
                             <td>{{ form.definition|as_crispy_field }}</td>
                             <td class="cell-delete">{{ form.DELETE }}</td>
                         </tr>
@@ -83,10 +85,12 @@
                 {% endblock %}
             </div>
             
-            <button id="save-list" type="button" class="btn btn-primary">
+            <button id="save-list" type="button" class="btn btn-primary"
+                    data-loading-text="Saving...">
                 Save List
             </button>
-            <button id="delete-list" type="button" class="btn">
+            <button id="delete-list" type="button" class="btn" data-loading-text="Deleting..."
+                    {% if not customlist_form.instance.pk %}disabled{% endif %}>
                 Delete List
             </button>
         </form>

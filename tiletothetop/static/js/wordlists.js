@@ -23,14 +23,19 @@ function initializeFormset() {
 
 function createList() {
     messenger.getCustomListForms(displayForms, -1);
+    $('#delete-list').attr('disabled', 'disabled');
+    $('#new-list').button('loading');
 }
 
 function editList() {
     var customListID = parseInt($('#existing-list-name').val());
     
     // get forms from db
-    if (customListID)
+    if (customListID) {
         messenger.getCustomListForms(displayForms, customListID);
+        $('#delete-list').removeAttr('disabled');
+        $('#edit-list').button('loading');
+    }
 }
 
 // getCustomListForms callback
@@ -40,15 +45,16 @@ function displayForms(data) {
     
     // update re-rendered form
     initializeFormset();
+    $('#new-list').button('reset');
+    $('#edit-list').button('reset');
 }
 
-function displayError(message) {
-    var errorAlert = $('<div>').attr('class', 'alert alert-error fade in').text(message);
+function getErrorAlert(message) {
+    var errorAlert = $('<div>').attr('class', 'alert alert-error').text(message);
     var close = $('<a>').attr({'class': 'close', 'data-dismiss':'alert'}).text('x');
-    errorAlert.prepend($('<strong>').text('Error: '));
     errorAlert.append(close);
     errorAlert.alert();
-    $('#customwords-formset').after(errorAlert);
+    return errorAlert;
 }
 
 // Validate, push to server
@@ -73,14 +79,14 @@ function saveList() {
         nameControl.removeClass("error");
     }
     if (!okay)
-        displayError("Enter a list name");
+        $('#customlist-form').after(getErrorAlert("Enter a list name."));
 
     for (var i = 0; i < list.length; i++) {
         if ($(list[i]).is(":visible")) {
             var cols = $(list[i]).children("td");
             var input = $(cols[0]).children();
             var text = input.children().children().val().trim(); // dependent on the form of the form
-            var def = $(cols[2]).children();
+            var def = $(cols[1]).children();
             var defText = def.children().children().val().trim();
             
             // invalid or empty when required
@@ -123,16 +129,18 @@ function saveList() {
     if (okay && count >= NUM_WORDS) {
         $('#custom-form').attr('action', '/save-customlist/');
         $('#custom-form').submit();
+        $('#save-list').button('loading');
     }
     
     if (!okay)
-        displayError("Each word must be paired with a definition.");
+        $('#customwords-formset').after(getErrorAlert("Each word must be paired with a definition."));
     if (count < NUM_WORDS)
-        displayError("Enter at least 4 words.");
+        $('#customwords-formset').after(getErrorAlert("Enter at least 4 words."));
 }
 
 // If list already exists, request to delete
 function deleteList() {
     $('#custom-form').attr('action', '/delete-customlist/');
     $('#custom-form').submit();
+    $('#delete-list').button('loading');
 }
