@@ -149,7 +149,10 @@ can push to it:
 Then it's a simple as navigating to the top-level `tiletothetop` directory
 and running the following command:
 
-     git push heroku master
+     fab deploy
+     
+This command takes care of backup up the Heroku db, pushing the repo to Heroku, and
+syncing/migrating the db. For a complete list of tasks, run `fab -l`.
 
 Check it out at [http://tiletothetop.herokuapp.com](http://tiletothetop.herokuapp.com)
 
