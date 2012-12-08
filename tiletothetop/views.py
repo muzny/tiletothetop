@@ -290,6 +290,7 @@ def save_customlist(request):
             for cw in cws:
                 cw.custom_list = cl
                 cw.save()
+            request.session['custom_list_instance'] = cl
             return HttpResponseRedirect('/#wordlists')
         else:
             return HttpResponse(content='cw formset not valid: %s\n list: %s' % (cwformset.errors, cl), status=400)

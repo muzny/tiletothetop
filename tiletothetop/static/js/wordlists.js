@@ -23,7 +23,8 @@ function initializeFormset() {
 
 function createList() {
     messenger.getCustomListForms(displayForms, -1);
-    $('#delete-list').attr('disabled', 'disabled')
+    $('#delete-list').attr('disabled', 'disabled');
+    $('#new-list').button('loading');
 }
 
 function editList() {
@@ -32,7 +33,8 @@ function editList() {
     // get forms from db
     if (customListID) {
         messenger.getCustomListForms(displayForms, customListID);
-        $('#delete-list').removeAttr('disabled')
+        $('#delete-list').removeAttr('disabled');
+        $('#edit-list').button('loading');
     }
 }
 
@@ -43,6 +45,8 @@ function displayForms(data) {
     
     // update re-rendered form
     initializeFormset();
+    $('#new-list').button('reset');
+    $('#edit-list').button('reset');
 }
 
 function getErrorAlert(message) {
@@ -125,6 +129,7 @@ function saveList() {
     if (okay && count >= NUM_WORDS) {
         $('#custom-form').attr('action', '/save-customlist/');
         $('#custom-form').submit();
+        $('#save-list').button('loading');
     }
     
     if (!okay)
@@ -137,4 +142,5 @@ function saveList() {
 function deleteList() {
     $('#custom-form').attr('action', '/delete-customlist/');
     $('#custom-form').submit();
+    $('#delete-list').button('loading');
 }
