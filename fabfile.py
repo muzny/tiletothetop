@@ -58,7 +58,6 @@ def compress():
                                        '--js tiletothetop/static/js/utilities.js ' +
                                        '--js tiletothetop/static/js/wordlists.js ' +
                                        '--js tiletothetop/static/js/workspace.js ' +
-                                       '--js tiletothetop/static/js/facebook.js ' +
                                        '--js_output_file tiletothetop/static/js/tiletothetop.min.js')
 
 def backup():
