@@ -132,7 +132,7 @@ function startGame() {
         messenger.getWords(initializeBoard, null, null);
     } else if (selectedGroup[0].id == 'dict-game') {
         var difficulty = parseInt($('#setting-difficulty').val());
-        if (!$('#toggle-difficulty').is(':checked')) {
+        if ($('#toggle-difficulty').is(':checked')) {
             difficulty = null;
         }
         var tagFilter = parseInt($('#setting-tag').val());
