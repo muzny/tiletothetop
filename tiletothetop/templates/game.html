@@ -66,7 +66,7 @@
 {% block js %}
     <script src="{% static "js/jquery-1.8.2.min.js" %}"></script>
     <script src="{% static "js/bootstrap.min.js" %}"></script>
-    {% if debug %}
+
     <script src="{% static "js/account.js" %}"></script>
     <script src="{% static "js/board.js" %}"></script>
     <script src="{% static "js/definitionarea.js" %}"></script>
@@ -86,7 +86,7 @@
     <script src="{% static "js/wordlists.js" %}"></script>
     <script src="{% static "js/workspace.js" %}"></script>
     <script src="{% static "js/facebook.js" %}"></script>
-    {% else %}
+    <!--
     <script src="{% static "js/tiletothetop.min.js" %}"></script>
-    {% endif %}
+    -->
 {% endblock %}
