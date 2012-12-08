@@ -141,10 +141,10 @@ function quitGame() {
     // Fill in answers
     var answers = window.board.definitions.getDefinitions();
     for(var i = 0; i < answers.length; i++) {
-	for(var j = 0; j < answers[i].length; j++) {
-	    window.board.definitions.displayHint(i);
-	}
-    
+        for(var j = 0; j < answers[i].length; j++) {
+            window.board.definitions.displayHint(i);
+        }
+    }
     // Show transition screen
     $('#score-breakdown').hide();
     TransitionScreen(false, 0);
