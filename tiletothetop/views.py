@@ -289,15 +289,18 @@ def save_customlist(request):
             for cw in cws:
                 cw.custom_list = cl
                 cw.save()
-            return HttpResponseRedirect(reverse('game'))
+            return HttpResponseRedirect('/#wordlists')
         else:
             return HttpResponse(content='cw formset not valid: %s\n list: %s' % (cwformset.errors, cl), status=400)
     # TODO better error handling
     return HttpResponse(content='cl form not valid: %s' % (clform.errors), status=400)
 
 def delete_customlist(request):
-    if not request.user.is_authenticated() or request.method != 'POST' or not 'custom_list_instance' in request.session:
+    if not request.user.is_authenticated() or request.method != 'POST':
         return HttpResponse(status=400)
+
+    if 'custom_list_instance' not in request.session:
+        return HttpResponseRedirect('/#wordlists')
 
     cl = request.session['custom_list_instance']
     if cl.user != request.user:
@@ -307,7 +310,9 @@ def delete_customlist(request):
     cws.delete()
     cl.delete()
 
-    return HttpResponseRedirect(reverse('game'))
+    # see modals.js  This isn't ideal, but close to
+    # expected functionality
+    return HttpResponseRedirect('/#wordlists')
 
 
 ##############################################################

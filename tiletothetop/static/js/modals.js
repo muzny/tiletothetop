@@ -23,4 +23,10 @@ $(function () {
         $("#login-modal").modal("show");
         window.location.hash = "";
     }
+
+    // Switch to appropriate tab based on the hash
+    if (window.location.hash == "#wordlists") {
+        $('a[href="#wordlists"]').tab('show'); // Select tab by name
+        window.location.hash = "";
+    }
 });
