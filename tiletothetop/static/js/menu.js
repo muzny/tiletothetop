@@ -138,16 +138,13 @@ function startGame() {
 
 // Show transition screen and reveal solution
 function quitGame() {
-    // TODO: Fill in answers
+    // Fill in answers
     var answers = window.board.definitions.getDefinitions();
-    for(var i = 0; i < 4; i++) {
+    for(var i = 0; i < answers.length; i++) {
 	for(var j = 0; j < answers[i].length; j++) {
 	    window.board.definitions.displayHint(i);
 	}
-    }
-    // TODO: disable dragging
-
-
+    
     // Show transition screen
     $('#score-breakdown').hide();
     TransitionScreen(false, 0);
@@ -207,7 +204,7 @@ function showGameOverButtons() {
 
 function transitionClick() {
     // Transition screen was clicked, so hide it.
-    $("#transition-screen").css({'display':'hidden', 'z-index':'-1'});
+    $("#transition-screen").css({'z-index':'-1'});
 }
 
 function postToFacebook() {
