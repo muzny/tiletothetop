@@ -8,13 +8,17 @@ $(function () {
 		$("#login-modal").modal("show");
 	}
 
-    // facebook modal
-    $('#facebook-submit').click(function() {
-         // This part is fixed
+    $('#facebook-form').submit(function() {
          var description = 'I just got a score of ' + $('#score-final').text() + ' on Tile To The Top! Can you beat my score?';
             link = $('#id_link').val(),
             message = $('#fb_message').val();
          messenger.postToFacebook(link, message, description);
+
+         // reset and prevent default
+        $('#id_link').val('');
+        $('#fb_message').val('');
+        $('#facebook-modal').modal('hide');
+        return false;
     });
 
 

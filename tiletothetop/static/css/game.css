@@ -300,7 +300,7 @@ a, a:link, a:visited {
     color: black;
 }
 
-#login-form, #registration-form {
+#login-form, #registration-form, #facebook-form {
     margin-bottom: 0px;
 }
 
@@ -408,12 +408,6 @@ button.close {
 .form-center {
     margin: 250px auto;
     width: 255px;
-}
-
-#facebook-form {
-    border: solid 3px black;
-    background-color: #12A5B0;
-    padding: 10px;
 }
 
 #logo {
